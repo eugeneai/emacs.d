@@ -62,6 +62,7 @@
 (setq package-archives '(
                          ("melpa" . "http://melpa.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("elpa" . "http://elpa.gnu.org/packages/")
                          ("elpy" . "http://jorgenschaefer.github.io/packages/")
                          ("org" . "http://orgmode.org/elpa/")
                          ))
@@ -454,6 +455,11 @@
   (add-hook 'html-mode-hook 'rainbow-mode-quietly)
   (add-hook 'css-mode-hook 'rainbow-mode-quietly))
 
+;; TODO: May be set some nice palette.
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  )
 
 ;; Support markdown, for goodness sake.
 (use-package markdown-mode
