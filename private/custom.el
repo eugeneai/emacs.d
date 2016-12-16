@@ -36,7 +36,7 @@
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
  '(package-selected-packages
    (quote
-    (htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(python-shell-completion-native-disabled-interpreters (quote ("python" "pypy")))
  '(python-shell-interpreter "python3")
  '(rw-hunspell-default-dictionary "russian")
@@ -77,4 +77,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(font-latex-verbatim-face ((t (:inherit Fira Sans Mono :foreground "burlywood"))))
+ '(hl-line ((t (:inherit highlight :background "black"))))
  '(tex-verbatim ((t (:family "Inconsolata LGC Medium")))))

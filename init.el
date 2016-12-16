@@ -663,7 +663,23 @@
 
 (use-package ace-jump-mode
   :bind
-  ("M-<f1>" . ace-jump-mode)
+  ("M-<f1> a" . ace-jump-mode)
+  )
+
+(use-package avy
+  :bind
+  ("M-<f1> c" . avy-goto-char)
+  ("M-<f1> w" . avy-goto-word-1)
+  ("M-<f1> l" . avy-goto-line)
+  )
+
+(use-package anzu
+  :config
+  (global-anzu-mode)
+  :diminish anzu-mode
+  :bind
+  ("M-%" . anzu-query-replace)
+  ("C-M-%" . anzu-query-replace-regexp)
   )
 
 (use-package htmlize
@@ -706,6 +722,34 @@
   ; ispell-alternate-dictionary
   )
 
+(use-package smart-mode-line
+  :config
+  (setq sml/no-confirm-load-theme t)
+  ;; delegate theming to the currently active theme
+  ;(setq sml/theme nil)
+  (setq sml/theme 'dark)
+  ;(setq sml/theme 'light)
+  ;(setq sml/theme 'respectful)
+  (sml/setup)
+)
+
+
+;; show the cursor when moving after big movements in the window
+(use-package beacon
+  :config
+  (beacon-mode +1)
+  )
+
+;; show available keybindings after you start typing
+(use-package which-key
+  :config
+  (which-key-mode +1)
+  ;(which-key-setup-side-window-right)
+  (which-key-setup-side-window-bottom)
+  (setq which-key-idle-delay 0.1)
+  )
+
+
 ;; TODO: My stuff
 
 ;; Some almost mystic setup
@@ -725,6 +769,45 @@
       whitespace-line-column 80
       ediff-window-setup-function 'ediff-setup-windows-plain
       xterm-mouse-mode t
+      size-indication-mode t
+      )
+
+(global-auto-revert-mode t)
+
+;; savehist keeps track of some history
+(require 'savehist)
+(setq savehist-additional-variables
+      ;; search entries
+      '(search-ring regexp-search-ring)
+      ;; save every minute
+      savehist-autosave-interval 60
+      ;; keep the home clean
+      savehist-file "~/.emacs.d/private/savehist.txt")
+(savehist-mode +1)
+
+;; bookmarks
+(require 'bookmark)
+(setq bookmark-default-file "~/.emacs.d/private/bookmarks.txt"
+      bookmark-save-flag 1)
+
+;; highlight the current line
+(global-hl-line-mode +1)
+
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
+(diminish 'volatile-highlights-mode)
+
+;; tramp, for sudo access
+(require 'tramp)
+;; keep in mind known issues with zsh - see emacs wiki
+(setq tramp-default-method "ssh")
+
+(require 'compile)
+(setq compilation-ask-about-save nil  ; Just save before compiling
+      compilation-always-kill t       ; Just kill old compile processes before
+                                        ; starting the new one
+      compilation-scroll-output 'first-error ; Automatically scroll to first
+                                        ; error
       )
 
 (defun kill-current-buffer ()
