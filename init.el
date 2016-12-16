@@ -210,6 +210,9 @@
 ;; INSTALL PACKAGES
 ;; --------------------------------------
 
+(use-package better-defaults)
+(use-package ag)
+
 ;; `smartparens` manages parens well.
 (use-package smartparens
   :config
@@ -254,7 +257,7 @@
 
 ;; expand-region is that new hotness.
 (use-package expand-region
-  :bind ("M-o" . er/expand-region))
+  :bind ("M-p" . er/expand-region))
 
 
 ;; Use nice colors.
@@ -292,6 +295,15 @@
   ;; Don't use tabs, magit!
   (add-hook 'git-commit-mode-hook
             '(lambda () (untabify (point-min) (point-max))) t))
+
+(use-package magit-filenotify
+  :config
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status)
+  (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)
+  )
+
+(use-package magithub
+  :after magit)
 
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
@@ -416,7 +428,8 @@
   ;; Don't use flymake if flycheck is available.
   (when (require 'flycheck nil t)
     (setq elpy-modules
-          (delq 'elpy-module-flymake elpy-modules)))
+          (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode))
   ;; Don't use highlight-indentation-mode.
   (delete 'elpy-module-highlight-indentation elpy-modules)
   ;; this is messed with by emacs if you let it...
@@ -433,7 +446,13 @@
   (define-key yas-minor-mode-map (kbd "TAB") nil)
   (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
   (add-hook 'after-init-hook 'global-company-mode)
+  (elpy-enable)
   :diminish elpy-mode)
+
+(use-package py-autopep8
+  :config
+  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+  )
 
 ;; Emacs Speaks Statistics includes support for R.
 (use-package ess-site
@@ -467,44 +486,95 @@
   (define-key markdown-mode-map (kbd "M-n") nil)
   (define-key markdown-mode-map (kbd "M-p") nil))
 
+(use-package markdown-mode+)
+
+(use-package goto-last-change
+  :config
+  (global-set-key (kbd "C-x C-\\") 'goto-last-change)
+)
+
+(use-package ac-ispell
+  :config
+  (add-hook 'text-mode-hook '(lambda ()
+                               (custom-set-variables
+                                '(ac-ispell-requires 3)
+                                '(ac-ispell-fuzzy-limit 2))
+                               (auto-complete-mode)
+                               (ac-ispell-ac-setup)
+                               ))
+  (ac-ispell-setup)
+  ; TODO Does not work now
+  )
+
+;; FIXME: Does not install
+(use-package tex
+  :ensure auctex)
+(use-package auctex-latexmk
+  :config
+  (auctex-latexmk-setup)
+  )
 
 ;; TODO: My stuff
 
+(require 'open-next-line)
+(global-set-key (kbd "C-j") 'newline-and-indent)
+(global-set-key (kbd "RET") 'newline-and-indent)
 
+;; Some almost mystic setup
+(setq echo-keystrokes 0.1
+      font-lock-maximum-decoration t
+      inhibit-startup-message t
+      transient-mark-mode t
+      color-theme-is-global t
+      delete-by-moving-to-trash t
+      shift-select-mode nil
+      mouse-yank-at-point nil
+      require-final-newline t
+      truncate-partial-width-windows nil
+      ;uniquify-buffer-name-style 'forward
+      ;whitespace-style '(trailing lines space-before-tab
+      ;                            indentation space-after-tab)
+      whitespace-line-column 80
+      ediff-window-setup-function 'ediff-setup-windows-plain
+      xterm-mouse-mode t
+      )
+
+(defun kill-current-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+(global-set-key (kbd "C-x C-k") 'kill-current-buffer)
+(global-set-key (kbd "C-x c") 'compile)
+(global-set-key (kbd "C-x h") 'view-url)
+(global-set-key (kbd "C-x !") 'shell)
+
+;; SCITE like
+;(global-set-key [f7] 'split-window-vertically)
+;(global-set-key [f8] 'delete-other-windows)
+;(global-set-key [f9] 'split-window-horizontally)
+
+
+(setq default-frame-alist '((vertical-scroll-bars . nil)
+                            (tool-bar-lines . 0)
+                            (menu-bar-lines . 0)
+                            (fullscreen . nil)))
+;; Do not blink
+(blink-cursor-mode -1)
 
 ;; Set path to dependencies
 
 (defvar myPackages
-  '(better-defaults
-    ein
-    py-autopep8
-    ac-ispell
+  '(
+    ;ein
     ;ace-jump
-    ag
-    auctex
-    auctex-latexmk
     flyspell
-    flycheck
-    ;helm
-    ;helm-ag
-    ;helm-company
-    ;helm-core
-    ;helm-pydoc
-    ;helm-themes
-    helm-ls-git
     swiper
-    magit-filenotify
     magithub
     color-theme
     color
-    cursor-chg
     fiplr
     gh
-    goto-last-change
-    markdown-mode+
-    markdown-mode
                                         ; python-
-    s
     w3m
     htmlize
                                         ;flycheck
@@ -527,47 +597,52 @@
 ;; PYTHON CONFIGURATION
 ;; --------------------------------------
 
-(elpy-enable)
-;; (elpy-use-ipython)
-
-;; use flycheck not flymake with elpy
-(when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
-
 ;; enable autopep8 formatting on save
-(require 'py-autopep8)
-(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-(require 'helm-config)
 
-(setq default-frame-alist '((vertical-scroll-bars . nil)
-                            (tool-bar-lines . 0)
-                            (menu-bar-lines . 0)
-                            (fullscreen . nil)))
-;(blink-cursor-mode -1)
-(require 'helm-config)
-(helm-mode 1)
-(define-key global-map [remap find-file] 'helm-find-files)
-(define-key global-map [remap occur] 'helm-occur)
-(define-key global-map [remap list-buffers] 'helm-buffers-list)
-(define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(unless (boundp 'completion-in-region-function)
-  (define-key lisp-interaction-mode-map [remap completion-at-point] 'helm-lisp-completion-at-point)
-  (define-key emacs-lisp-mode-map       [remap completion-at-point] 'helm-lisp-completion-at-point))
 
-(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
-(global-set-key (kbd "C-x C-d") 'helm-browse-project)
+(use-package helm
+  :config
+  (require 'helm-config)
+  (helm-mode 1)
+  (define-key global-map [remap find-file] 'helm-find-files)
+  (define-key global-map [remap occur] 'helm-occur)
+  (define-key global-map [remap list-buffers] 'helm-buffers-list)
+  (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (unless (boundp 'completion-in-region-function)
+    (define-key lisp-interaction-mode-map [remap completion-at-point] 'helm-lisp-completion-at-point)
+    (define-key emacs-lisp-mode-map       [remap completion-at-point] 'helm-lisp-completion-at-point))
+  (global-set-key (kbd "C-x C-d") 'helm-browse-project)
+  )
 
-(require 'cursor-chg)
-(setq curchg-default-cursor-color "LightSkyBlue1")
-(setq curchg-input-method-cursor-color "red")
-(setq curchg-default-cursor-type '(hbar . 5))
-(change-cursor-mode 1) ; On for overwrite/read-only/input mode
-(toggle-cursor-type-when-idle 1) ; On when idle
+(use-package helm-ls-git
+  :config
+  (global-set-key (kbd "C-<f7>") 'helm-ls-git-ls)
+  )
 
-;(setq backup-directory-alist `(("." . ,(expand-file-name
-   ;(concat dotfiles-dir "backups")))))
+(use-package helm-ispell)
+;(use-package helm-git)
+(use-package helm-ag)
+(use-package helm-company
+  :config
+  (define-key company-mode-map (kbd "C-:") 'helm-company)
+  (define-key company-active-map (kbd "C-:") 'helm-company)
+  )
+
+(use-package helm-pydoc
+  :config
+  (define-key python-mode-map (kbd "C-c C-d") 'helm-pydoc))
+(use-package helm-themes)
+
+
+(use-package cursor-chg
+  :config
+  (setq curchg-default-cursor-color "LightSkyBlue1")
+  (setq curchg-input-method-cursor-color "red")
+  (setq curchg-default-cursor-type '(hbar . 7))
+  (change-cursor-mode 1) ; On for overwrite/read-only/input mode
+  (toggle-cursor-type-when-idle 1) ; On when idle
+  )
 
 (require 'linum+)
 (defun linum-update-window-scale-fix (win)
@@ -579,17 +654,19 @@
                                   (if (car (window-margins))
                                       (car (window-margins)) 1)
                                   ))))
+
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
 (autoload 'mercury-mode "prolog" "Major mode for editing Mercury programs." t)
 (setq prolog-system 'swi) ;; swi
-(setq auto-mode-alist (append '(("\\.pl$" . prolog-mode)
-                                ("\\.pro$" . prolog-mode)
-                                ("\\.m$" . mercury-mode)
-                                ("\\.P$" . prolog-mode)
-                                ("\\.tex$" . latex-mode)
-                                )
-                              auto-mode-alist)
+(setq auto-mode-alist
+      (append '(("\\.pl$" . prolog-mode)
+                ("\\.pro$" . prolog-mode)
+                ("\\.m$" . mercury-mode)
+                ("\\.P$" . prolog-mode)
+                ("\\.tex$" . latex-mode)
+                )
+              auto-mode-alist)
       )
 
 (global-set-key (kbd "C-c q") 'auto-fill-mode)
@@ -603,8 +680,9 @@
 ;;  recentf-menu-path '("File")
 ;;  recentf-menu-title "Recent"
   recentf-max-saved-items 200
-;;  recentf-max-menu-items 20
+  recentf-max-menu-items 10
   )
+
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 
@@ -710,41 +788,7 @@
 (global-set-key (kbd "s-<left>") 'previous-buffer)
 (global-set-key (kbd "C-<return>") 'open-next-line)
 
-(defun kill-current-buffer ()
-  (interactive)
-  (kill-buffer (current-buffer)))
 
-(global-set-key (kbd "C-x C-k") 'kill-current-buffer)
-(global-set-key (kbd "C-x c") 'compile)
-(global-set-key (kbd "C-x h") 'view-url)
-(global-set-key (kbd "C-x M-m") 'shell)
-;(global-set-key [f7] 'split-window-vertically)
-;(global-set-key [f8] 'delete-other-windows)
-;(global-set-key [f9] 'split-window-horizontally)
-(global-set-key (kbd "C-j") 'newline-and-indent)
-(global-set-key (kbd "RET") 'newline-and-indent)
-
-(require 'open-next-line)
-
-(setq visible-bell 1)
-
-(setq echo-keystrokes 0.1
-      font-lock-maximum-decoration t
-      inhibit-startup-message t
-      transient-mark-mode t
-      color-theme-is-global t
-      delete-by-moving-to-trash t
-      shift-select-mode nil
-      mouse-yank-at-point t
-      require-final-newline t
-      truncate-partial-width-windows nil
-      uniquify-buffer-name-style 'forward
-      whitespace-style '(trailing lines space-before-tab
-                                  indentation space-after-tab)
-      whitespace-line-column 80
-      ediff-window-setup-function 'ediff-setup-windows-plain
-      xterm-mouse-mode t
-      )
 
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
@@ -961,9 +1005,6 @@ ov)
 ;;-------------------------------------------------------------
 
 (put 'erase-buffer 'disabled nil)
-
-(require 'goto-last-change)
-(global-set-key (kbd "C-x C-\\") 'goto-last-change)
 
 ;; Some additional features
 (defalias 'qrr 'query-replace-regexp)
