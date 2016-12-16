@@ -626,6 +626,8 @@
    recentf-max-saved-items 200
    recentf-max-menu-items 10
    )
+  :bind
+  ("C-x C-r" . recentf-open-files)
   )
 
 (use-package yasnippet
@@ -747,36 +749,6 @@
 ;; Do not blink
 (blink-cursor-mode -1)
 
-;; Set path to dependencies
-
-(defvar myPackages
-  '(
-    ;ein
-                                        ; python-
-
-                                        ;flycheck
-                                        ;company-racer
-                                        ;racer
-                                        ;flycheck-rust
-
-
-                                      ; company-jedi
-                                      ; wcheck-mode
-    ))
-
-;(mapc #'(lambda (package)
-;    (unless (package-installed-p package)
-;      (package-install package)))
-;      myPackages)
-
-
-
-;; PYTHON CONFIGURATION
-;; --------------------------------------
-
-;; enable autopep8 formatting on save
-
-
 (use-package helm
   :config
   (require 'helm-config)
@@ -855,7 +827,6 @@
 (add-to-list 'file-coding-system-alist '("\.vapi$" . utf-8))
 
 
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 
 (if
@@ -872,8 +843,6 @@
 (setq-default
  default-truncate-lines t
  ; blink-cursor-alist '((t . hollow))
- user-full-name "Evgeny Cherkashin"
- user-mail-address "eugeneai@irnok.net"
  column-number-mode t
  line-number-mode t
  page-delimiter "^\\s *\n\\s *"
@@ -956,12 +925,6 @@
 (global-set-key (kbd "C-q") 'quoted-insert)
 (global-set-key (kbd "C-z") 'undo)
 
-(global-set-key (kbd "s-<right>") 'next-buffer)
-(global-set-key (kbd "s-<left>") 'previous-buffer)
-(global-set-key (kbd "C-<return>") 'open-next-line)
-
-
-
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
 
@@ -982,8 +945,6 @@
 (global-set-key [f1] 'bookmark-jump)
 
 ;; Strange colous
-
-(setq inhibit-startup-message   t)   ; Don't want any startup message
 
 ;(require 'highlight-indentation)
 ;(add-hook 'python-mode-hook 'highlight-indentation)
@@ -1029,10 +990,9 @@
   (interactive)
   (insert "~-- "))
 
-(add-hook 'late-mode-hook (lambda ()
+(add-hook 'latex-mode-hook (lambda ()
                             (local-set-key (kbd "C-=") #'tex-add-russian-dash)
                             (local-set-key (kbd "C-c C-=") 'tex-add-verb-environment))
-
           )
 
 (defun tex-add-verb-environment ()
@@ -1180,50 +1140,6 @@ ov)
 
 ;; Some additional features
 
-; ########### HUNSPELL in EMACS ########################
-
-;; список используемых нами словарей
-(setq ispell-local-dictionary-alist
-      '(("russian"
-         "[АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыъэюя]"
-         "[^АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыъэюя]"
-         "[-]"  nil ("-d" "ru_RU") nil utf-8)
-        ("english"
-         "[A-Za-z]" "[^A-Za-z]"
-         "[']"  nil ("-d" "en_US") nil iso-8859-1)))
-
-;; вместо aspell использовать hunspell
-(setq ispell-really-aspell nil
-      ispell-really-hunspell t
-      ispell-dictionary "english")
-
-(setq ispell-program-name "/usr/local/bin/hunspell")
-
-;; ;(require 'ispell)
-
-(defun fd-switch-dictionary()
-  (interactive)
-  (let* ((dic ispell-current-dictionary)
-         (change (if (string= dic "russian") "english" "russian")))
-    (ispell-change-dictionary change)
-    (message "Dictionary switched from %s to %s" dic change)
-    ))
-
-(global-set-key (kbd "<f8>")   'fd-switch-dictionary)
-
-;; ;; полный путь к нашему пропатченному hunspell
-;; ;;(setq ispell-program-name "/usr/bin/hunspell")
-
-;(load "enchant.el")
-
-(if (eq window-system 'w32)
-    (progn
-      (custom-set-variables
-       '(rw-hunspell-dicpath-list (quote ("c:/GNU/share/hunspell")))
-       )
-      )
-  )
-
 
 ;; Save point position between sessions
 (require 'saveplace)
@@ -1237,33 +1153,11 @@ ov)
                       '(isearch-abort abort-recursive-edit exit-minibuffer keyboard-quit))
           (ding))))
 
-;(add-hook 'after-init-hook 'spaceline-spacemacs-theme)
-
-
-
-; ########### END HUNSPELL in EMACS ########################
-
-
-
-
-
-
-
-;; init.el ends here
-
   ;;(add-to-list 'company-backends 'company-jedi)
 
 
-  ;; (add-hook 'LaTeX-mode-hook 'turn-on-visual-line-mode)
-
   ;(add-hook 'python-mode-hook 'jedi-mode)
   ;; (setq reftex-plug-into-AUCTeX t)
-
-  ;; (setq curchg-default-cursor-color "LightSkyBlue1")
-  ;; (setq curchg-input-method-cursor-color "red")
-  ;; (setq curchg-default-cursor-type '(hbar . 5))
-  ;; (change-cursor-mode 1) ; On for overwrite/read-only/input mode
-  ;; (toggle-cursor-type-when-idle 1) ; On when idle
 
 ;; That's need to be here
 (require 'open-next-line)
