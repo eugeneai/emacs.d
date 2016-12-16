@@ -1,23 +1,38 @@
+;;; Configuration --- Summary
+;;; Commentary:
+;; This is configuration for Emacs.
+;;; Code:
 ;; init.el --- Emacs configuration
 
+(setq debug-on-error t)
 
+;; Just a sec - have to clean things up a little!
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(setq inhibit-startup-screen t)
+
+
+;; Welcome!
+(setq user-full-name "Evgeny Cherkashin"
+      user-mail-address "eugeneai@irnok.net")
 
 ;; BASIC CUSTOMIZATION
 ;; --------------------------------------
 
-(setq inhibit-startup-message t) ;; hide the startup message
-(menu-bar-mode -1) ;; hide menu bar
-(load-theme 'eugeneai-theme t) ;; load material theme
 ;(global-linum-mode t) ;; enable line numbers globally
 
 ;; If async is installed
+(add-to-list 'load-path "~/.emacs.d/site-lisp")
+(add-to-list 'load-path "~/.emacs.d/private")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/helm")
 (add-to-list 'load-path "~/.emacs.d/site-lisp/async")
 
-(add-to-list 'load-path "~/.emacs.d/site-lisp/helm")
+(load-theme 'eugeneai-theme t)
 
 
-;; INSTALL PACKAGES
-;; --------------------------------------
+;; Proxy Settings
+
 (setq windowed-system (or (eq window-system 'x) (eq window-system 'w32)))
 (setq win32-system (eq window-system 'w32))
 
@@ -34,23 +49,420 @@
       )
   )
 
+
+
+;; This package called package comes with Emacs.
+(require 'package)
+
+(setq package-archives '(
+                         ("melpa" . "http://melpa.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("elpy" . "http://jorgenschaefer.github.io/packages/")
+                         ("org" . "http://orgmode.org/elpa/")
+                         ))
+
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+
+
+;; From github.com/magnars/.emacs.d:
+;; Ensure we have MELPA package awareness.
+(unless (file-exists-p "~/.emacs.d/elpa/archives/melpa")
+  (package-refresh-contents))
+;; Turn on packaging.
+(package-initialize)
+
+;; From github.com/sachac/.emacs.d:
+;; Bootstrap install of use-package,
+;; which also installs diminish.
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(setq use-package-verbose t)
+(require 'use-package)
+(setq use-package-always-ensure t)
+;; After this, use-package will install things as needed.
+
+
+;; ThisIsFourWords
+(global-subword-mode t) ;; CamelCaseSubword
+
+;; Consider using abbreviations.
+(abbrev-mode)
+;; TODO: Study abbrev mode
+
+;; Be aware of whitespace.
+(setq whitespace-style '(face trailing tabs tab-mark))
+(global-whitespace-mode)
+(diminish 'global-whitespace-mode)
+
+;; Don't insert tabs.
+(setq-default indent-tabs-mode nil)
+
+;; Use just 'y' or 'n', not 'yes' or 'no'.
+(defalias 'yes-or-no-p 'y-or-n-p)
+;; Do the same for running elisp in org-mode.
+(setq org-confirm-elisp-link-function 'y-or-n-p)
+
+
+;; Don't show so many stars in org-mode.
+;(setq org-hide-leading-stars t)
+
+
+;; Improve mode-line:
+;; Show system time.
+(display-time-mode t)
+;; Show column number.
+(setq column-number-mode t)
+;; Don't show trailing dashes.
+(setq mode-line-end-spaces "")
+
+
+;; Blink, don't beep.
+(setq visible-bell t)
+;; A good setting, but resulting in visual artifacts.
+
+;; One space after sentences. Two.
+(setq sentence-end-double-space t)
+
+
+;; Update the screen by one line, not one page.
+(setq scroll-step 1)
+
+;; Allow region downcase w/ C-x C-l, upcase w/ C-x C-u.
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+
+;; Make nice buffer names when multiple files have the same name.
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+
+
+
+;; Use spell-checking.
+;; The aspell executable may be in /usr/local/bin.
+;(setq exec-path (append exec-path '("/usr/local/bin")))
+(add-hook 'text-mode-hook (lambda ()
+                            (flyspell-mode)
+                            (diminish 'flyspell-mode)))
+(add-hook 'prog-mode-hook (lambda ()
+                            (flyspell-prog-mode)
+                            (diminish 'flyspell-mode)))
+
+(defvar --backup-directory (concat user-emacs-directory "backups"))
+(if (not (file-exists-p --backup-directory))
+            (make-directory --backup-directory t))
+(setq backup-directory-alist `(("." . ,--backup-directory)))
+(setq make-backup-files t          ; backup file the first time it is saved
+      backup-by-copying t          ; don't clobber symlinks
+      version-control t            ; version numbers for backup files
+      delete-old-versions t        ; delete excess backup files silently
+      delete-by-moving-to-trash t  ; system recycle bin or whatever
+      auto-save-default t          ; auto-save every buffer that visits file
+      vc-make-backup-files t       ; backup version-controlled files too
+      )
+
+
+;;; Set some keybindings.
+
+;; Use shift-arrows for changing windows.
+(windmove-default-keybindings)
+
+;; Use Mac keys:
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'super)
+(setq ns-function-modifier 'hyper)
+
+
+;; Jump easily to beginning and end.
+(global-set-key (kbd "C-|") 'beginning-of-buffer)
+(global-set-key (kbd "C-}") 'end-of-buffer)
+
+;; Easily memorable whole-buffer selection.
+(global-set-key (kbd "M-A") 'mark-whole-buffer)
+
+;; Easily turn line numbers on and off.
+(global-set-key (kbd "C-`") 'linum-mode)
+
+;; switch point into buffer list
+(global-set-key (kbd "C-x C-b") 'buffer-menu)
+
+;; dired at point is nice
+(global-set-key (kbd "C-x C-j") 'dired-at-point)
+
+
+
+;; Make C-h and M-h backspace; move help to C-x h.
+;; (On some systems, C-h already sends DEL.)
+;(global-set-key (kbd "C-x h") 'help-command)
+
+
+;; Highlight where matching parens are.
+(show-paren-mode t)
+
+
+
+;; `smartparens` manages parens well.
+(use-package smartparens
+  :config
+  (require 'smartparens-config)
+  (smartparens-global-mode t)
+  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-forward-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-sexp)
+  ;; C-M-j isn't standard, but C-M-d doesn't work for me.
+  (define-key smartparens-mode-map (kbd "C-M-j") 'sp-down-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-[") 'sp-rewrap-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-]") 'sp-backward-unwrap-sexp)
+  ;; markdown-mode
+  (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+    (sp-local-pair "*" "*"
+                   :wrap "C-*"
+                   :unless '(sp-point-after-word-p sp-point-at-bol-p)
+                   :post-handlers '(("[d1]" "SPC"))
+                   :skip-match 'sp--gfm-skip-asterisk)
+    (sp-local-pair "**" "**")
+    (sp-local-pair "_" "_" :wrap "C-_" :unless '(sp-point-after-word-p)))
+  (defun sp--gfm-skip-asterisk (ms mb me)
+    (save-excursion
+      (goto-char mb)
+      (save-match-data (or (looking-at "^\\* ")
+                           (looking-at "^ \\* ")))))
+  ;; Don't highlight when wrapping.
+  (setq sp-highlight-pair-overlay nil)
+  (setq sp-highlight-wrap-overlay nil)
+  (setq sp-highlight-wrap-tag-overlay nil)
+  :diminish smartparens-mode)
+
+
+;; Move things around intuitively.
+(use-package drag-stuff
+  :config
+  (drag-stuff-global-mode)
+  (drag-stuff-define-keys)
+  :diminish drag-stuff-mode)
+
+
+;; expand-region is that new hotness.
+(use-package expand-region
+  :bind ("M-o" . er/expand-region))
+
+
+;; Use nice colors.
+(use-package zenburn-theme
+  :config
+  ;(load-theme 'zenburn t)
+  )
+;; Themes can be disabled with disable-theme.
+
+
+;; Get useful line behaviors when region is not active.
+(use-package whole-line-or-region
+  :config (whole-line-or-region-mode t)
+  :diminish whole-line-or-region-mode)
+
+
+;; Work with git with magic ease.
+(use-package magit
+  :bind
+  ("C-x g" . magit-status)
+  ("C-x C-RET" . magit-status)
+  :config
+  (setq magit-push-always-verify nil)
+  (set-default 'magit-unstage-all-confirm t)
+  (set-default 'magit-stage-all-confirm t)
+  (set-default 'magit-revert-buffers 'silent)
+  ;; Don't use tabs, magit!
+  (add-hook 'git-commit-mode-hook
+            '(lambda () (untabify (point-min) (point-max))) t))
+
+;; Fix to git-gutter+
+;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
+;; Use the fringe if in graphical mode (not terminal).
+(if (or (display-graphic-p) (daemonp))
+    (require 'git-gutter-fringe+)
+  (require 'git-gutter+))
+(global-git-gutter+-mode)
+(diminish 'git-gutter+-mode)
+;; ;; Eventually may be able to return to something like this:
+;; (use-package git-gutter-fringe+
+;;   :init (global-git-gutter+-mode)
+;;   :diminish git-gutter+-mode)
+
+;; Interactive selection of things.
+;; TODO: consider helm instead (see Sacha's config)
+;; NOTE: "C-j: Use the current input string verbatim."
+(ido-mode t)
+(ido-everywhere t)
+;; disable ido faces to see flx highlights.
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)
+;(global-set-key (kbd "M-l") 'other-window)
+;(global-set-key (kbd "C-M-l") 'ido-switch-buffer)
+
+;; list vertically (so much nicer!)
+(use-package ido-vertical-mode
+  :config
+  (ido-vertical-mode t)
+  (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
+
+(use-package flx-ido
+  :config (flx-ido-mode 1))
+
+;; Smart M-x
+(use-package smex
+  :config
+  (smex-initialize)
+  (global-set-key (kbd "M-x") 'smex)
+  ;; take Yegge's advice and don't require M for M-x
+  ;;; (global-set-key (kbd "C-x C-m") 'smex)
+  ;; This is the old M-x.
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands))
+
+
+;; See the undo history and move through it.
+;(use-package undo-tree
+;  :config (global-undo-tree-mode t)
+;  :diminish undo-tree-mode)
+
+;; Add nice project functions for git repos.
+(use-package projectile
+  :config
+  (projectile-global-mode)
+  (global-set-key (kbd "C-<f6>") 'projectile-find-file)
+  :diminish projectile-mode)
+;; TODO: rojectile-helm
+
+;; Un-namespaced Common Lisp names.
+;; https://github.com/browse-kill-ring/browse-kill-ring/pull/56
+(require 'cl)
+(use-package browse-kill-ring
+  :config
+  ;; Bind M-y to visual interactive kill ring.
+  (browse-kill-ring-default-keybindings))
+
+;; Display lines for ^L characters.
+(use-package page-break-lines
+  :config (global-page-break-lines-mode t)
+  :diminish page-break-lines-mode)
+
+;; Edit in multiple places at the same time.
+(use-package multiple-cursors
+  :bind
+  ("C-x r t" . mc/edit-lines)
+  ("C-x C-x" . mc/mark-more-like-this-extended))
+
+
+;; (Near) simultaneous keypresses create new keys.
+;(use-package key-chord
+;  :config
+;  (key-chord-mode t)
+;  (key-chord-define-global "hj" 'undo))
+
+
+;; Flip through buffers with ease.
+;(use-package buffer-stack
+;  :config
+;  (key-chord-define-global "jk" 'buffer-stack-down))
+
+
+
+;; Conveniently zoom all of Emacs.
+(use-package zoom-frm
+  :bind
+  ("C-=" . zoom-in/out)
+  ("C-+" . zoom-in/out)
+  ("C--" . zoom-in/out))
+
+
+;; Check syntax, make life better.
+(use-package flycheck
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  (define-key flycheck-mode-map
+    (kbd "C-c C-n")
+    'flycheck-next-error)
+  (define-key flycheck-mode-map
+    (kbd "C-c C-p")
+    'flycheck-previous-error)
+  :diminish flycheck-mode)
+
+
+;; Elpy the Emacs Lisp Python Environment.
+(use-package elpy
+  :config
+  (elpy-enable)
+  ;; Use ipython if available.
+  ;(when (executable-find "ipython")
+  ;  (elpy-use-ipython))
+  ;; Don't use flymake if flycheck is available.
+  (when (require 'flycheck nil t)
+    (setq elpy-modules
+          (delq 'elpy-module-flymake elpy-modules)))
+  ;; Don't use highlight-indentation-mode.
+  (delete 'elpy-module-highlight-indentation elpy-modules)
+  ;; this is messed with by emacs if you let it...
+  (custom-set-variables
+   '(elpy-rpc-backend "jedi")
+   '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
+   '(help-at-pt-timer-delay 0.9)
+   '(tab-width 4))
+  (define-key elpy-mode-map (kbd "C-c C-n") 'next-error)
+  (define-key elpy-mode-map (kbd "C-c C-p") 'previous-error)
+  ;; Elpy also installs yasnippets.
+  ;; Don't use tab for yasnippets, use shift-tab.
+  (define-key yas-minor-mode-map (kbd "<tab>") nil)
+  (define-key yas-minor-mode-map (kbd "TAB") nil)
+  (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
+  :diminish elpy-mode)
+
+;; Emacs Speaks Statistics includes support for R.
+(use-package ess-site
+  :ensure ess)
+
+
+;; Use a nice JavaScript mode.
+(use-package js2-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+
+;; See colors specified with text.
+(use-package rainbow-mode
+  :config
+  (defun rainbow-mode-quietly ()
+    (rainbow-mode)
+    (diminish 'rainbow-mode))
+  (add-hook 'html-mode-hook 'rainbow-mode-quietly)
+  (add-hook 'css-mode-hook 'rainbow-mode-quietly))
+
+
+;; Support markdown, for goodness sake.
+(use-package markdown-mode
+  :config
+  (define-key markdown-mode-map (kbd "M-n") nil)
+  (define-key markdown-mode-map (kbd "M-p") nil))
+
+
+(require `hhh)
+
+
+
+
+;; INSTALL PACKAGES
+;; --------------------------------------
+
+
+
+
+
 ;; Set path to dependencies
 (setq dotfiles-dir (expand-file-name "~/.emacs.d/"))
 (setq site-lisp-dir (expand-file-name "site-lisp" dotfiles-dir))
 (add-to-list 'load-path site-lisp-dir)
-
-(require 'package)
-
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
-                         ("elpy" . "https://jorgenschaefer.github.io/packages/")
-                         ("org" . "http://orgmode.org/elpa/")
-                         ))
-
-(package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents))
 
 (defvar myPackages
   '(better-defaults
@@ -101,10 +513,10 @@
                                       ; wcheck-mode
     ))
 
-(mapc #'(lambda (package)
-    (unless (package-installed-p package)
-      (package-install package)))
-      myPackages)
+;(mapc #'(lambda (package)
+;    (unless (package-installed-p package)
+;      (package-install package)))
+;      myPackages)
 
 
 

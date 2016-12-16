@@ -15,6 +15,6 @@
  '(region ((((class color) (min-colors 88) (background dark)) (:background "orange3"))))
  '(tex-verbatim ((t (:family "Ubuntu Mono"))))
  '(tooltip ((((class color)) (:inherit variable-pitch :background "lightyellow" :foreground "black" :height 0.5))))
- '(default ((t (:inherit nil :stipple nil :background "gray20" :foreground "wheat1" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 101 :width normal :foundry "unknown" :family "Fira Sans Mono")))))
+ '(default ((t (:inherit nil :stipple nil :background "gray20" :foreground "wheat1" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 151 :width normal :foundry "unknown" :family "Fira Sans Mono")))))
 
 (provide-theme 'eugeneai-theme)
