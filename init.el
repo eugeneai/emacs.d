@@ -205,7 +205,12 @@
 ;; --------------------------------------
 
 (use-package better-defaults)
-(use-package ag)
+(use-package ag
+  :commands
+  (ag
+   helm-ag
+   )
+  )
 
 ;; `smartparens` manages parens well.
 (use-package smartparens
@@ -287,6 +292,8 @@
 (use-package magit
   :bind
   ("C-x g" . magit-status)
+  :commands
+  (magit-status)
   :config
   (setq magit-push-always-verify nil)
   (set-default 'magit-unstage-all-confirm t)
@@ -298,6 +305,9 @@
             '(lambda () (untabify (point-min) (point-max))) t))
 
 (use-package magit-filenotify
+  :commands
+  (magit-after-save-refresh-status
+   magit-filenotify-mode)
   :config
   (add-hook 'after-save-hook 'magit-after-save-refresh-status)
   (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)
@@ -360,10 +370,13 @@
 
 ;; Add nice project functions for git repos.
 (use-package projectile
+  :commands
+  (projectile-find-file)
   :config
   (projectile-global-mode)
   (global-set-key (kbd "C-<f6>") 'projectile-find-file)
-  :diminish projectile-mode)
+  :diminish projectile-mode
+  )
 ;; TODO: rojectile-helm
 
 ;; Un-namespaced Common Lisp names.
@@ -425,6 +438,8 @@
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
+  :commands
+  (python-mode)
   :config
   (elpy-enable)
   ;; Use ipython if available.
@@ -480,6 +495,17 @@
   ("M-RET t a" . nosetests-all)
   )
 
+(use-package pyenv-mode
+  :if (executable-find "pyenv")
+  :commands (pyenv-mode-versions)
+  )
+
+(use-package pyenv-mode-auto
+  :if (executable-find "pyenv")
+  :defer t
+  :after pyenv-mode
+  )
+
 ;; Emacs Speaks Statistics includes support for R.
 (use-package ess-site
   :ensure ess)
@@ -487,6 +513,7 @@
 
 ;; Use a nice JavaScript mode.
 (use-package js2-mode
+  :defer t
   :config
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
@@ -508,11 +535,15 @@
 
 ;; Support markdown, for goodness sake.
 (use-package markdown-mode
+  :defer t
   :config
   (define-key markdown-mode-map (kbd "M-n") nil)
   (define-key markdown-mode-map (kbd "M-p") nil))
 
-(use-package markdown-mode+)
+(use-package markdown-mode+
+  :defer t
+  :after markdown-mode
+  )
 
 (use-package goto-last-change
   :config
@@ -534,6 +565,7 @@
 
 ;; FIXME: Does not install
 (use-package tex
+  :defer t
   :ensure auctex
   :config
   (custom-set-variables
@@ -550,6 +582,7 @@
 )
 
 (use-package auctex-latexmk
+  :defer t
   :after tex
   :config
   (auctex-latexmk-setup)
@@ -566,6 +599,7 @@
   )
 
 (use-package w3m
+  :if (executable-find "w3m")
   :config
   ;; Multitran dictionary lookup
   (defun multitran-lookup-english (keyword)
@@ -580,6 +614,7 @@
     )
   (global-set-key (kbd "C-c m") 'multitran-lookup-english)
   )
+
 (use-package recentf
   :config
   (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
@@ -622,6 +657,18 @@
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+  )
+
+(use-package ace-jump-mode
+  :bind
+  ("M-<f1>" . ace-jump-mode)
+  )
+
+(use-package htmlize
+  :commands
+  (htmlize-buffer
+   htmlfontify-buffer)
+  :after rainbow-delimiters
   )
 
 (use-package flyspell
@@ -705,15 +752,14 @@
 (defvar myPackages
   '(
     ;ein
-    ;ace-jump
                                         ; python-
-    htmlize
+
                                         ;flycheck
                                         ;company-racer
                                         ;racer
                                         ;flycheck-rust
-    ace-jump-mode
-    pyenv-mode-auto
+
+
                                       ; company-jedi
                                       ; wcheck-mode
     ))
@@ -1178,13 +1224,6 @@ ov)
       )
   )
 
-(autoload
-  'ace-jump-mode
-  "ace-jump-mode"
-  "Emacs quick move minor mode"
-  t)
-
-(define-key global-map (kbd "M-SPC") 'ace-jump-mode)
 
 ;; Save point position between sessions
 (require 'saveplace)
