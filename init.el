@@ -11,6 +11,8 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (setq inhibit-startup-screen t)
+(setq custom-file "~/.emacs.d/private/custom.el")
+(load-file custom-file)
 
 
 ;; Welcome!
@@ -144,18 +146,6 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
-
-
-;; Use spell-checking.
-;; The aspell executable may be in /usr/local/bin.
-;(setq exec-path (append exec-path '("/usr/local/bin")))
-(add-hook 'text-mode-hook (lambda ()
-                            (flyspell-mode)
-                            (diminish 'flyspell-mode)))
-(add-hook 'prog-mode-hook (lambda ()
-                            (flyspell-prog-mode)
-                            (diminish 'flyspell-mode)))
-
 (defvar --backup-directory (concat user-emacs-directory "backups"))
 (if (not (file-exists-p --backup-directory))
             (make-directory --backup-directory t))
@@ -260,20 +250,21 @@
   :bind ("M-p" . er/expand-region))
 
 
-;; Use nice colors.
+;;Use nice colors.
 (use-package zenburn-theme
+  :disabled t
   :config
-  ;(load-theme 'zenburn t)
+  (load-theme 'zenburn t)
   )
-;; Themes can be disabled with disable-theme.
 
 ;; Use nice colors.
 (use-package material-theme
+  :disabled t
   :config
-  ;(load-theme 'material t)
+  (load-theme 'material t)
   )
 ;; Themes can be disabled with disable-theme.
-;;  
+;;
 
 
 ;; Get useful line behaviors when region is not active.
@@ -286,13 +277,13 @@
 (use-package magit
   :bind
   ("C-x g" . magit-status)
-  ("C-x C-RET" . magit-status)
   :config
   (setq magit-push-always-verify nil)
   (set-default 'magit-unstage-all-confirm t)
   (set-default 'magit-stage-all-confirm t)
   (set-default 'magit-revert-buffers 'silent)
-  ;; Don't use tabs, magit!
+  (global-set-key "\C-x\ \C-m" 'magit-status)
+;; Don't use tabs, magit!
   (add-hook 'git-commit-mode-hook
             '(lambda () (untabify (point-min) (point-max))) t))
 
@@ -303,6 +294,7 @@
   )
 
 (use-package magithub
+  :disabled 1
   :after magit)
 
 ;; Fix to git-gutter+
@@ -351,9 +343,10 @@
 
 
 ;; See the undo history and move through it.
-;(use-package undo-tree
-;  :config (global-undo-tree-mode t)
-;  :diminish undo-tree-mode)
+(use-package undo-tree
+  :disabled t
+  :config (global-undo-tree-mode t)
+  :diminish undo-tree-mode)
 
 ;; Add nice project functions for git repos.
 (use-package projectile
@@ -384,16 +377,18 @@
 
 
 ;; (Near) simultaneous keypresses create new keys.
-;(use-package key-chord
-;  :config
-;  (key-chord-mode t)
-;  (key-chord-define-global "hj" 'undo))
+(use-package key-chord
+  :disabled t
+  :config
+  (key-chord-mode t)
+  (key-chord-define-global "hj" 'undo))
 
 
 ;; Flip through buffers with ease.
-;(use-package buffer-stack
-;  :config
-;  (key-chord-define-global "jk" 'buffer-stack-down))
+(use-package buffer-stack
+  :disabled 1
+  :config
+  (key-chord-define-global "jk" 'buffer-stack-down))
 
 
 
@@ -446,6 +441,8 @@
   (define-key yas-minor-mode-map (kbd "TAB") nil)
   (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
   (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 1)
   (elpy-enable)
   :diminish elpy-mode)
 
@@ -508,10 +505,126 @@
 
 ;; FIXME: Does not install
 (use-package tex
-  :ensure auctex)
+  :ensure auctex
+  :config
+  (custom-set-variables
+                                        ; '(TeX-install-font-lock 'tex-font-setup)
+   '(TeX-auto-save t)
+   '(TeX-parse-self t)
+   '(TeX-master nil)
+   '(TeX-save-query nil)
+   '(TeX-source-correlate-method (quote synctex))
+   '(TeX-source-correlate-mode t)
+   '(TeX-source-correlate-start-server (quote ask)))
+  (setq font-latex-fontify-script nil
+        font-latex-fontify-sectioning 'color)
+)
+
 (use-package auctex-latexmk
+  :after tex
   :config
   (auctex-latexmk-setup)
+  )
+
+(use-package color-theme)
+(use-package color)
+(use-package fiplr
+  :config
+  (setq fiplr-root-markers '(".git" ".svn"))
+  (setq fiplr-ignored-globs '((directories (".git" ".svn"))
+                              (files ("*.jpg" "*.png" "*.zip" "*~"))))
+  (global-set-key (kbd "C-x f") 'fiplr-find-file)
+  )
+
+(use-package w3m
+  :config
+  ;; Multitran dictionary lookup
+  (defun multitran-lookup-english (keyword)
+    (interactive (list (thing-at-point 'word)))
+    (switch-to-buffer-other-window
+     (eww
+      ;; (w3m-goto-url
+      (concat "http://multitran.ru/c/m.exe?l1=1&s=" keyword "&%CF%EE%E8%F1%EA=%CF%EE%E8%F1%EA")
+      )
+     )
+    ;;(run-at-time 4 nil 'iconify-frame)
+    )
+  (global-set-key (kbd "C-c m") 'multitran-lookup-english)
+  )
+(use-package recentf
+  :config
+  (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
+  (recentf-mode t)
+  (recentf-load-list)
+  (setq
+   ;;  recentf-menu-path '("File")
+   ;;  recentf-menu-title "Recent"
+   recentf-max-saved-items 200
+   recentf-max-menu-items 10
+   )
+  )
+
+(use-package yasnippet
+  :config
+  (setq yas-snippet-dirs (append yas-snippet-dirs
+                                 '("~/.emacs.d/snippets")))
+  (yas-reload-all)
+  (yas-global-mode 1)
+)
+
+(use-package swiper
+  :disabled t
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (global-set-key "\C-s" 'swiper)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  (global-set-key (kbd "<f6>") 'ivy-resume)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c k") 'counsel-ag)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+  )
+
+(use-package flyspell
+  :config
+  (setq ispell-local-dictionary-alist
+        '(("russian"
+           "[АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыъэюя]"
+           "[^АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыъэюя]"
+           "[-]"  nil ("-d" "ru_RU") nil utf-8)
+          ("english"
+           "[A-Za-z]" "[^A-Za-z]"
+           "[']"  nil ("-d" "en_US") nil iso-8859-1)))
+  ;; вместо aspell использовать hunspell
+  (setq ispell-really-aspell nil
+        ispell-really-hunspell t
+        ispell-dictionary "english")
+  (setq ispell-program-name "/usr/local/bin/hunspell")
+  ;; ;(require 'ispell)
+  (defun fd-switch-dictionary()
+    (interactive)
+    (let* ((dic ispell-current-dictionary)
+           (change (if (string= dic "russian") "english" "russian")))
+      (ispell-change-dictionary change)
+      (message "Dictionary switched from %s to %s" dic change)
+      ))
+  (global-set-key (kbd "<f8>")   'fd-switch-dictionary)
+  (add-hook 'text-mode-hook (lambda ()
+                              (flyspell-mode)
+                              (diminish 'flyspell-mode)))
+  (add-hook 'prog-mode-hook (lambda ()
+                              (flyspell-prog-mode)
+                              (diminish 'flyspell-mode)))
   )
 
 ;; TODO: My stuff
@@ -519,6 +632,7 @@
 (require 'open-next-line)
 (global-set-key (kbd "C-j") 'newline-and-indent)
 (global-set-key (kbd "RET") 'newline-and-indent)
+(defalias 'qrr 'query-replace-regexp)
 
 ;; Some almost mystic setup
 (setq echo-keystrokes 0.1
@@ -567,15 +681,7 @@
   '(
     ;ein
     ;ace-jump
-    flyspell
-    swiper
-    magithub
-    color-theme
-    color
-    fiplr
-    gh
                                         ; python-
-    w3m
     htmlize
                                         ;flycheck
                                         ;company-racer
@@ -676,12 +782,7 @@
 (add-to-list 'auto-mode-alist '("\.vapi$" . vala-mode))
 (add-to-list 'file-coding-system-alist '("\.vala$" . utf-8))
 (add-to-list 'file-coding-system-alist '("\.vapi$" . utf-8))
-(setq
-;;  recentf-menu-path '("File")
-;;  recentf-menu-title "Recent"
-  recentf-max-saved-items 200
-  recentf-max-menu-items 10
-  )
+
 
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
@@ -1007,7 +1108,6 @@ ov)
 (put 'erase-buffer 'disabled nil)
 
 ;; Some additional features
-(defalias 'qrr 'query-replace-regexp)
 
 ; ########### HUNSPELL in EMACS ########################
 
@@ -1061,42 +1161,20 @@ ov)
 
 (define-key global-map (kbd "M-SPC") 'ace-jump-mode)
 
-(global-set-key (kbd "C-x f") 'fiplr-find-file)
-
-
 ;; Save point position between sessions
 (require 'saveplace)
 (setq-default save-place t)
 (setq save-place-file (expand-file-name ".places" user-emacs-directory))
 
-(global-set-key "\C-x\ \C-m" 'magit-status)
 
 (setq ring-bell-function
       (lambda ()
-	(unless (memq this-command
-		      '(isearch-abort abort-recursive-edit exit-minibuffer keyboard-quit))
-	  (ding))))
+        (unless (memq this-command
+                      '(isearch-abort abort-recursive-edit exit-minibuffer keyboard-quit))
+          (ding))))
 
-;; Multitran dictionary lookup
-(defun multitran-lookup-english (keyword)
-  (interactive (list (thing-at-point 'word)))
-  (switch-to-buffer-other-window
-   (eww
-   ;; (w3m-goto-url
-    (concat "http://multitran.ru/c/m.exe?l1=1&s=" keyword "&%CF%EE%E8%F1%EA=%CF%EE%E8%F1%EA")
-    )
-   )
-  ;;(run-at-time 4 nil 'iconify-frame)
-  )
-
-(add-hook 'after-init-hook 'global-company-mode)
 ;(add-hook 'after-init-hook 'spaceline-spacemacs-theme)
 
-(global-set-key (kbd "C-c m") 'multitran-lookup-english)
-(require 'recentf)
-(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
-(recentf-mode t)
-(recentf-load-list)
 
 
 ; ########### END HUNSPELL in EMACS ########################
@@ -1104,38 +1182,15 @@ ov)
 
 
 
-(custom-set-variables
-; '(TeX-install-font-lock 'tex-font-setup)
- '(TeX-auto-save t)
- '(TeX-parse-self t)
- '(TeX-master nil)
- '(TeX-save-query nil)
- '(TeX-source-correlate-method (quote synctex))
- '(TeX-source-correlate-mode t)
- '(TeX-source-correlate-start-server (quote ask)))
+
 
 
 ;; init.el ends here
-  (setq custom-file "~/.emacs.d/custom.el")
-  (load-file custom-file)
 
-  (add-hook 'after-init-hook 'global-auto-complete-mode)
-  (require 'yasnippet)
-  (setq yas-snippet-dirs (append yas-snippet-dirs
-                                 '("~/.emacs.d/snippets")))
-  (yas-reload-all)
-  (yas-global-mode 1)
   ;;(add-to-list 'company-backends 'company-jedi)
-  (global-set-key (kbd "M-p") 'mark-paragraph)
 
-  ;; (add-hook 'after-init-hook 'global-company-mode)
-  ;; (setq company-idle-delay 0.2)
-  ;; (setq company-minimum-prefix-length 1)
 
-  (add-hook 'LaTeX-mode-hook 'turn-off-auto-fill)
   ;; (add-hook 'LaTeX-mode-hook 'turn-on-visual-line-mode)
-  ;(add-hook 'LaTeX-mode-hook 'turn-on-flyspell)
-  ;(add-hook 'after-init-hook 'turn-on-flyspell)
 
   ;(add-hook 'python-mode-hook 'jedi-mode)
   ;; (setq reftex-plug-into-AUCTeX t)
@@ -1145,5 +1200,3 @@ ov)
   ;; (setq curchg-default-cursor-type '(hbar . 5))
   ;; (change-cursor-mode 1) ; On for overwrite/read-only/input mode
   ;; (toggle-cursor-type-when-idle 1) ; On when idle
-  (setq font-latex-fontify-script nil
-        font-latex-fontify-sectioning 'color)
