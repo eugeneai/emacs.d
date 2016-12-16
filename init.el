@@ -28,6 +28,11 @@
 (add-to-list 'load-path "~/.emacs.d/site-lisp/helm")
 (add-to-list 'load-path "~/.emacs.d/site-lisp/async")
 
+;(setq dotfiles-dir (expand-file-name "~/.emacs.d/"))
+;(setq site-lisp-dir (expand-file-name "site-lisp" dotfiles-dir))
+;(add-to-list 'load-path site-lisp-dir)
+
+
 (load-theme 'eugeneai-theme t)
 
 
@@ -201,7 +206,8 @@
 ;; Highlight where matching parens are.
 (show-paren-mode t)
 
-
+;; INSTALL PACKAGES
+;; --------------------------------------
 
 ;; `smartparens` manages parens well.
 (use-package smartparens
@@ -256,6 +262,14 @@
   ;(load-theme 'zenburn t)
   )
 ;; Themes can be disabled with disable-theme.
+
+;; Use nice colors.
+(use-package material-theme
+  :config
+  ;(load-theme 'material t)
+  )
+;; Themes can be disabled with disable-theme.
+;;  
 
 
 ;; Get useful line behaviors when region is not active.
@@ -417,6 +431,7 @@
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
   (define-key yas-minor-mode-map (kbd "TAB") nil)
   (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
+  (add-hook 'after-init-hook 'global-company-mode)
   :diminish elpy-mode)
 
 ;; Emacs Speaks Statistics includes support for R.
@@ -447,30 +462,15 @@
   (define-key markdown-mode-map (kbd "M-p") nil))
 
 
-(require `hhh)
-
-
-
-
-;; INSTALL PACKAGES
-;; --------------------------------------
-
-
+;; TODO: My stuff
 
 
 
 ;; Set path to dependencies
-(setq dotfiles-dir (expand-file-name "~/.emacs.d/"))
-(setq site-lisp-dir (expand-file-name "site-lisp" dotfiles-dir))
-(add-to-list 'load-path site-lisp-dir)
 
 (defvar myPackages
   '(better-defaults
-    s
     ein
-    elpy
-    flycheck
-;;    material-theme
     py-autopep8
     ac-ispell
     ;ace-jump
@@ -487,7 +487,6 @@
     ;helm-themes
     helm-ls-git
     swiper
-    magit
     magit-filenotify
     magithub
     color-theme
@@ -506,7 +505,6 @@
                                         ;company-racer
                                         ;racer
                                         ;flycheck-rust
-    projectile
     ace-jump-mode
     pyenv-mode-auto
                                       ; company-jedi
