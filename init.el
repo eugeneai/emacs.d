@@ -14,7 +14,6 @@
 (setq custom-file "~/.emacs.d/private/custom.el")
 (load-file custom-file)
 
-
 ;; Welcome!
 (setq user-full-name "Evgeny Cherkashin"
       user-mail-address "eugeneai@irnok.net")
@@ -60,6 +59,8 @@
 
 ;; This package called package comes with Emacs.
 (require 'package)
+;; Turn on packaging.
+(package-initialize)
 
 (setq package-archives '(
                          ("melpa" . "http://melpa.org/packages/")
@@ -78,8 +79,6 @@
 ;; Ensure we have MELPA package awareness.
 (unless (file-exists-p "~/.emacs.d/elpa/archives/melpa")
   (package-refresh-contents))
-;; Turn on packaging.
-(package-initialize)
 
 ;; From github.com/sachac/.emacs.d:
 ;; Bootstrap install of use-package,
@@ -96,7 +95,12 @@
 (global-subword-mode t) ;; CamelCaseSubword
 
 ;; Consider using abbreviations.
-(abbrev-mode)
+(add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
+(setq abbrev-file-name             ;; tell emacs where to read abbrev
+      "~/.emacs.d/private/abbrev_defs")    ;; definitions from...
+(setq save-abbrevs t)              ;; save abbrevs when files are saved
+;; you will be asked before the abbreviations are saved
+
 ;; TODO: Study abbrev mode
 
 ;; Be aware of whitespace.
@@ -257,14 +261,20 @@
   (load-theme 'zenburn t)
   )
 
-;; Use nice colors.
 (use-package material-theme
   :disabled t
   :config
   (load-theme 'material t)
   )
+
+;; FIXME: Cannot load it
+(use-package spacemacs-theme
+  :disabled t
+  :config
+  (load-theme 'spacemacs-dark t)
+  )
+
 ;; Themes can be disabled with disable-theme.
-;;
 
 
 ;; Get useful line behaviors when region is not active.
@@ -496,8 +506,8 @@
                                (custom-set-variables
                                 '(ac-ispell-requires 3)
                                 '(ac-ispell-fuzzy-limit 2))
-                               (auto-complete-mode)
-                               (ac-ispell-ac-setup)
+                               ;(auto-complete-mode)
+                               ;(ac-ispell-ac-setup)
                                ))
   (ac-ispell-setup)
   ; TODO Does not work now
