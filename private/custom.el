@@ -34,6 +34,7 @@
  '(markdown-command-needs-filename t)
  '(minibuffer-auto-raise t)
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
+ '(python-shell-completion-native-disabled-interpreters (quote ("python" "pypy")))
  '(python-shell-interpreter "python3")
  '(rw-hunspell-default-dictionary "russian")
  '(rw-hunspell-dicpath-list (quote ("/usr/share/hunspell")))

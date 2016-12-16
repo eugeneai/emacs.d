@@ -625,14 +625,10 @@
   (add-hook 'prog-mode-hook (lambda ()
                               (flyspell-prog-mode)
                               (diminish 'flyspell-mode)))
+  ; ispell-alternate-dictionary
   )
 
 ;; TODO: My stuff
-
-(require 'open-next-line)
-(global-set-key (kbd "C-j") 'newline-and-indent)
-(global-set-key (kbd "RET") 'newline-and-indent)
-(defalias 'qrr 'query-replace-regexp)
 
 ;; Some almost mystic setup
 (setq echo-keystrokes 0.1
@@ -1200,3 +1196,12 @@ ov)
   ;; (setq curchg-default-cursor-type '(hbar . 5))
   ;; (change-cursor-mode 1) ; On for overwrite/read-only/input mode
   ;; (toggle-cursor-type-when-idle 1) ; On when idle
+
+;; That's need to be here
+(require 'open-next-line)
+(global-set-key (kbd "C-j") 'newline-and-indent)
+(global-set-key (kbd "RET") 'newline-and-indent)
+(defalias 'qrr 'query-replace-regexp)
+
+(provide 'init)
+;;; init.el ends here
