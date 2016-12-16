@@ -36,7 +36,7 @@
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
  '(package-selected-packages
    (quote
-    (spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(python-shell-completion-native-disabled-interpreters (quote ("python" "pypy")))
  '(python-shell-interpreter "python3")
  '(rw-hunspell-default-dictionary "russian")

@@ -461,6 +461,25 @@
   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
   )
 
+(use-package nose
+  :after elpy
+  :commands (nosetests-one
+             nosetests-pdb-one
+             nosetests-all
+             nosetests-pdb-all
+             nosetests-module
+             nosetests-pdb-module
+             nosetests-suite
+             nosetests-pdb-suite)
+  :init
+  :config
+  (progn
+    (add-to-list 'nose-project-root-files "setup.cfg")
+    (setq nose-use-verbose nil))
+  :bind
+  ("M-RET t a" . nosetests-all)
+  )
+
 ;; Emacs Speaks Statistics includes support for R.
 (use-package ess-site
   :ensure ess)
