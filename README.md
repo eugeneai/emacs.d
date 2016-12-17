@@ -1,7 +1,5 @@
-Imaging myself to be emacs list professional I decidec to do my 
+Imaging myself to be EMACS lisp professional I decided to do my ...
 
 # emacs.d setup
 
-It is based on afschumacher's setup mostly.
-
-
+It is based on afschumacher's and prelude setup mostly.

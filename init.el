@@ -4,6 +4,14 @@
 ;;; Code:
 ;; init.el --- Emacs configuration
 
+
+;; Consider using abbreviations.
+(add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
+(setq abbrev-file-name             ;; tell emacs where to read abbrev
+      "~/.emacs.d/private/abbrev_defs")    ;; definitions from...
+(setq save-abbrevs t)              ;; save abbrevs when files are saved
+;; you will be asked before the abbreviations are saved
+
 (setq debug-on-error t)
 
 ;; Just a sec - have to clean things up a little!
@@ -93,13 +101,6 @@
 
 ;; ThisIsFourWords
 (global-subword-mode t) ;; CamelCaseSubword
-
-;; Consider using abbreviations.
-(add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
-(setq abbrev-file-name             ;; tell emacs where to read abbrev
-      "~/.emacs.d/private/abbrev_defs")    ;; definitions from...
-(setq save-abbrevs t)              ;; save abbrevs when files are saved
-;; you will be asked before the abbreviations are saved
 
 ;; TODO: Study abbrev mode
 
@@ -206,10 +207,7 @@
 
 (use-package better-defaults)
 (use-package ag
-  :commands
-  (ag
-   helm-ag
-   )
+  :defer t
   )
 
 ;; `smartparens` manages parens well.
@@ -435,6 +433,16 @@
     'flycheck-previous-error)
   :diminish flycheck-mode)
 
+(use-package company
+  :config
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-idle-delay 0.2)
+  (setq company-tooltip-limit 10)
+  (setq company-minimum-prefix-length 2)
+  ;; invert the navigation direction if the the completion popup-isearch-match
+  ;; is displayed on top (happens near the bottom of windows)
+  (setq company-tooltip-flip-when-above t)
+  )
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
@@ -465,9 +473,6 @@
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
   (define-key yas-minor-mode-map (kbd "TAB") nil)
   (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
-  (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-idle-delay 0.2)
-  (setq company-minimum-prefix-length 1)
   (elpy-enable)
   :diminish elpy-mode)
 
@@ -588,6 +593,33 @@
   (auctex-latexmk-setup)
   )
 
+(use-package slime
+  :config
+  ;; the SBCL configuration file is in Common Lisp
+  (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
+  ;; Open files with .cl extension in lisp-mode
+  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
+  ;; Add fancy slime contribs
+  (setq slime-contribs '(slime-fancy))
+  ;; rainbow-delimeters messes up colors in slime-repl, and doesn't seem to work
+  ;; anyway, so we won't use prelude-lisp-coding-defaults.
+  (add-hook 'slime-repl-mode-hook (lambda ()
+                                    (smartparens-strict-mode +1)
+                                    ((when )hitespace-mode -1)))
+  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+        slime-fuzzy-completion-in-place t
+        slime-enable-evaluate-in-emacs t
+        slime-autodoc-use-multiline-p t
+        slime-auto-start 'always)
+  (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
+  (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
+  )
+
+
+
+;;; CONTINUE:
+;;; TODO: Other languages
+
 (use-package color-theme)
 (use-package color)
 (use-package fiplr
@@ -627,7 +659,7 @@
    recentf-max-menu-items 10
    )
   :bind
-  ("C-x C-r" . recentf-open-files)
+  ("C-x M-r" . recentf-open-files)
   )
 
 (use-package yasnippet
@@ -663,14 +695,14 @@
 
 (use-package ace-jump-mode
   :bind
-  ("M-<f1> a" . ace-jump-mode)
+  ("<print> a" . ace-jump-mode)
   )
 
 (use-package avy
   :bind
-  ("M-<f1> c" . avy-goto-char)
-  ("M-<f1> w" . avy-goto-word-1)
-  ("M-<f1> l" . avy-goto-line)
+  ("<print> c" . avy-goto-char)
+  ("<print> w" . avy-goto-word-1)
+  ("<print> l" . avy-goto-line)
   )
 
 (use-package anzu
@@ -841,6 +873,24 @@
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
   (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
   (global-set-key (kbd "M-x") 'helm-M-x)
+                                        ;(global-set-key (kbd "C-x C-m") 'helm-M-x)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (global-set-key (kbd "C-x b") 'helm-mini)
+  (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+  ;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "C-h f") 'helm-apropos)
+  (global-set-key (kbd "C-h r") 'helm-info-emacs)
+  (global-set-key (kbd "C-h C-l") 'helm-locate-library)
+  (global-set-key (kbd "C-x C-r") 'helm-recentf)
+  (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
+  (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
+  ;; shell history.
+  (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+  ;; use helm to list eshell history
+  (add-hook 'eshell-mode-hook
+   #'(lambda ()
+       (substitute-key-definition 'eshell-list-history 'helm-eshell-history eshell-mode-map)))
+  (substitute-key-definition 'find-tag 'helm-etags-select global-map)
   (unless (boundp 'completion-in-region-function)
     (define-key lisp-interaction-mode-map [remap completion-at-point] 'helm-lisp-completion-at-point)
     (define-key emacs-lisp-mode-map       [remap completion-at-point] 'helm-lisp-completion-at-point))

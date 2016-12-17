@@ -6,8 +6,9 @@
 /smex-items
 /ac-comphist.dat
 /url
-#/flyspell-
 /recentf
 /flycheck_init.el
 /bookmarks.bmk
-/private/savehist
+/private/savehist*
+/eshell/history
+/private/abbrev_defs
