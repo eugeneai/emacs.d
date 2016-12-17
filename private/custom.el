@@ -24,7 +24,6 @@
  '(default-input-method "russian-computer")
  '(elpy-rpc-backend "jedi")
  '(epy-load-yasnippet-p t)
- '(fringe-mode 0 nil (fringe))
  '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
  '(help-at-pt-timer-delay 0.9)
  '(httpd-port 8380)

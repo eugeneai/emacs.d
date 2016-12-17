@@ -288,10 +288,11 @@
 
 ;; Work with git with magic ease.
 (use-package magit
+  :if (executable-find "git")
   :bind
   ("C-x g" . magit-status)
-  :commands
-  (magit-status)
+  ;:commands
+  ;(magit-status)
   :config
   (setq magit-push-always-verify nil)
   (set-default 'magit-unstage-all-confirm t)
@@ -653,7 +654,7 @@
       (search-backward "{")
       (while (not (looking-at "}"))
         (join-line -1)))
-
+    )
   :config
   (require 'company-css)
   )
