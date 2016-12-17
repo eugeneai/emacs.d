@@ -550,6 +550,13 @@
   :after markdown-mode
   )
 
+(use-package pandoc-mode
+  :defer 1
+  :if (executable-find "pandoc")
+  :config
+  (add-hook 'markdown-mode-hook 'pandoc-mode)
+  )
+
 (use-package goto-last-change
   :config
   (global-set-key (kbd "C-x C-\\") 'goto-last-change)
