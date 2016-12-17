@@ -622,7 +622,67 @@
   (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
   )
 
+(use-package css-mode
+  :defer t
+  :init
+  (progn
+    ;; Mark `css-indent-offset' as safe-local variable
+    (put 'css-indent-offset 'safe-local-variable #'integerp)
+    ;; Explicitly run prog-mode hooks since css-mode does not derive from
+    ;; prog-mode major-mode in Emacs 24 and below.
+    (when (version< emacs-version "25")
+      (add-hook 'css-mode-hook 'spacemacs/run-prog-mode-hooks))
+    (defun css-expand-statement ()
+      "Expand CSS block"
+      (interactive)
+      (save-excursion
+        (end-of-line)
+        (search-backward "{")
+        (forward-char 1)
+        (while (or (eobp) (not (looking-at "}")))
+          (let ((beg (point)))
+            (newline)
+            (search-forward ";")
+            (indent-region beg (point))
+            ))
+        (newline)))
+    (defun css-contract-statement ()
+      "Contract CSS block"
+      (interactive)
+      (end-of-line)
+      (search-backward "{")
+      (while (not (looking-at "}"))
+        (join-line -1)))
 
+  :config
+  (require 'company-css)
+  )
+
+(use-package company-web
+  :defer t)
+
+(use-package web-mode
+  :defer t
+  :after company-web
+  :config
+  (require 'company-web-html)
+  (require 'company-css)
+  :mode
+  (("\\.phtml\\'"      . web-mode)
+   ("\\.tpl\\.php\\'"  . web-mode)
+   ("\\.twig\\'"       . web-mode)
+   ("\\.html\\'"       . web-mode)
+   ("\\.htm\\'"        . web-mode)
+   ("\\.[gj]sp\\'"     . web-mode)
+   ("\\.as[cp]x?\\'"   . web-mode)
+   ("\\.eex\\'"        . web-mode)
+   ("\\.erb\\'"        . web-mode)
+   ("\\.mustache\\'"   . web-mode)
+   ("\\.handlebars\\'" . web-mode)
+   ("\\.hbs\\'"        . web-mode)
+   ("\\.eco\\'"        . web-mode)
+   ("\\.ejs\\'"        . web-mode)
+   ("\\.djhtml\\'"     . web-mode)))
 
 ;;; CONTINUE:
 ;;; TODO: Other languages
