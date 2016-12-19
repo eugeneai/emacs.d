@@ -505,13 +505,7 @@
     (let ((nose-global-name
            (format
             "~/.pyenv/versions/%s/bin/nosetests"
-            (car
-             (last
-              (delete
-               ""
-               (split-string
-                (nose-find-project-root)
-                "/"))))
+            (getenv "PYENV_VERSION")
             )
            ))
       (nosetests-all)))
