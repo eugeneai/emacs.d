@@ -498,19 +498,42 @@
     (add-to-list 'nose-project-root-files "setup.cfg")
     (setq nose-use-verbose nil))
   :bind
-  ("M-RET t a" . nosetests-all)
+  ("M-RET t a" . nosetests-all-virtualenv)
+  :init
+  (defun nosetests-all-virtualenv ()
+    (interactive)
+    (let ((nose-global-name
+           (format
+            "~/.pyenv/versions/%s/bin/nosetests"
+            (car
+             (last
+              (delete
+               ""
+               (split-string
+                (nose-find-project-root)
+                "/"))))
+            )
+           ))
+      (nosetests-all)))
   )
 
 (use-package pyenv-mode
   :if (executable-find "pyenv")
-  :commands (pyenv-mode-versions)
+  ;:defer t
+  ;:after elpy
+  :config
+  ;(add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
+  (add-hook 'python-mode-hook (lambda () (pyenv-mode 1)))
+  (require 'pyenv-mode-auto)
   )
 
-(use-package pyenv-mode-auto
-  :if (executable-find "pyenv")
-  :defer t
-  :after pyenv-mode
-  )
+;; (use-package pyenv-mode-auto
+;;   :if (executable-find "pyenv")
+;;   ;:defer t
+;;   :after pyenv-mode
+;;   :config
+;;   ;(add-hook 'find-file-hook 'pyenv-mode-auto-hook)
+;;   )
 
 ;; Emacs Speaks Statistics includes support for R.
 (use-package ess-site
@@ -552,7 +575,7 @@
   )
 
 (use-package pandoc-mode
-  :defer 1
+  :defer t
   :if (executable-find "pandoc")
   :config
   (add-hook 'markdown-mode-hook 'pandoc-mode)
