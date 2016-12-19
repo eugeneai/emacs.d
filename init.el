@@ -613,11 +613,12 @@
   ;; anyway, so we won't use prelude-lisp-coding-defaults.
   (add-hook 'slime-repl-mode-hook (lambda ()
                                     (smartparens-strict-mode +1)
-                                    ((when )hitespace-mode -1)))
+                                    (whitespace-mode -1)))
   (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
         slime-fuzzy-completion-in-place t
         slime-enable-evaluate-in-emacs t
         slime-autodoc-use-multiline-p t
+        inferior-lisp-program "sbcl"
         slime-auto-start 'always)
   (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
   (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
