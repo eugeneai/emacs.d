@@ -6,7 +6,10 @@
 
 ;; alias qe='emacs -nw -q --load ~/.emacs.d/q.el'
 ;; in /etc/environment
+;; in /etc/profile
 ;; export EDITOR="emacs -nw -q --load ~/.emacs.d/q.el"
+;;
+;; git config --global core.editor 'emacs -nw -q --load ~/.emacs.d/q.el'
 
 ;; Consider using abbreviations.
 (add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
