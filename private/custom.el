@@ -24,7 +24,6 @@
  '(default-input-method "russian-computer")
  '(elpy-rpc-backend "jedi")
  '(epy-load-yasnippet-p t)
- '(fringe-mode 0 nil (fringe))
  '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
  '(help-at-pt-timer-delay 0.9)
  '(httpd-port 8380)
@@ -38,7 +37,7 @@
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
  '(package-selected-packages
    (quote
-    (slime comany which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(python-shell-completion-native-disabled-interpreters (quote ("python" "pypy")))
  '(python-shell-interpreter "python3")
  '(rw-hunspell-default-dictionary "russian")

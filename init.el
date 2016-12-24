@@ -295,10 +295,11 @@
 
 ;; Work with git with magic ease.
 (use-package magit
+  :if (executable-find "git")
   :bind
   ("C-x g" . magit-status)
-  :commands
-  (magit-status)
+  ;:commands
+  ;(magit-status)
   :config
   (setq magit-push-always-verify nil)
   (set-default 'magit-unstage-all-confirm t)
@@ -504,19 +505,36 @@
     (add-to-list 'nose-project-root-files "setup.cfg")
     (setq nose-use-verbose nil))
   :bind
-  ("M-RET t a" . nosetests-all)
+  ("M-RET t a" . nosetests-all-virtualenv)
+  :init
+  (defun nosetests-all-virtualenv ()
+    (interactive)
+    (let ((nose-global-name
+           (format
+            "~/.pyenv/versions/%s/bin/nosetests"
+            (getenv "PYENV_VERSION")
+            )
+           ))
+      (nosetests-all)))
   )
 
 (use-package pyenv-mode
   :if (executable-find "pyenv")
-  :commands (pyenv-mode-versions)
+  ;:defer t
+  ;:after elpy
+  :config
+  ;(add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
+  (add-hook 'python-mode-hook (lambda () (pyenv-mode 1)))
+  (require 'pyenv-mode-auto)
   )
 
-(use-package pyenv-mode-auto
-  :if (executable-find "pyenv")
-  :defer t
-  :after pyenv-mode
-  )
+;; (use-package pyenv-mode-auto
+;;   :if (executable-find "pyenv")
+;;   ;:defer t
+;;   :after pyenv-mode
+;;   :config
+;;   ;(add-hook 'find-file-hook 'pyenv-mode-auto-hook)
+;;   )
 
 ;; Emacs Speaks Statistics includes support for R.
 (use-package ess-site
@@ -555,6 +573,13 @@
 (use-package markdown-mode+
   :defer t
   :after markdown-mode
+  )
+
+(use-package pandoc-mode
+  :defer t
+  :if (executable-find "pandoc")
+  :config
+  (add-hook 'markdown-mode-hook 'pandoc-mode)
   )
 
 (use-package goto-last-change
@@ -612,17 +637,78 @@
   ;; anyway, so we won't use prelude-lisp-coding-defaults.
   (add-hook 'slime-repl-mode-hook (lambda ()
                                     (smartparens-strict-mode +1)
-                                    ((when )hitespace-mode -1)))
+                                    (whitespace-mode -1)))
   (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
         slime-fuzzy-completion-in-place t
         slime-enable-evaluate-in-emacs t
         slime-autodoc-use-multiline-p t
+        inferior-lisp-program "sbcl"
         slime-auto-start 'always)
   (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
   (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
   )
 
+(use-package css-mode
+  :defer t
+  :init
+  (progn
+    ;; Mark `css-indent-offset' as safe-local variable
+    (put 'css-indent-offset 'safe-local-variable #'integerp)
+    ;; Explicitly run prog-mode hooks since css-mode does not derive from
+    ;; prog-mode major-mode in Emacs 24 and below.
+    (when (version< emacs-version "25")
+      (add-hook 'css-mode-hook 'spacemacs/run-prog-mode-hooks))
+    (defun css-expand-statement ()
+      "Expand CSS block"
+      (interactive)
+      (save-excursion
+        (end-of-line)
+        (search-backward "{")
+        (forward-char 1)
+        (while (or (eobp) (not (looking-at "}")))
+          (let ((beg (point)))
+            (newline)
+            (search-forward ";")
+            (indent-region beg (point))
+            ))
+        (newline)))
+    (defun css-contract-statement ()
+      "Contract CSS block"
+      (interactive)
+      (end-of-line)
+      (search-backward "{")
+      (while (not (looking-at "}"))
+        (join-line -1)))
+    )
+  :config
+  (require 'company-css)
+  )
 
+(use-package company-web
+  :defer t)
+
+(use-package web-mode
+  :defer t
+  :after company-web
+  :config
+  (require 'company-web-html)
+  (require 'company-css)
+  :mode
+  (("\\.phtml\\'"      . web-mode)
+   ("\\.tpl\\.php\\'"  . web-mode)
+   ("\\.twig\\'"       . web-mode)
+   ("\\.x?html\\'"       . web-mode)
+   ("\\.x?htm\\'"        . web-mode)
+   ("\\.[gj]sp\\'"     . web-mode)
+   ("\\.as[cp]x?\\'"   . web-mode)
+   ("\\.eex\\'"        . web-mode)
+   ("\\.erb\\'"        . web-mode)
+   ("\\.mustache\\'"   . web-mode)
+   ("\\.handlebars\\'" . web-mode)
+   ("\\.hbs\\'"        . web-mode)
+   ("\\.eco\\'"        . web-mode)
+   ("\\.ejs\\'"        . web-mode)
+   ("\\.djhtml\\'"     . web-mode)))
 
 ;;; CONTINUE:
 ;;; TODO: Other languages
