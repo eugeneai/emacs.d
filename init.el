@@ -58,11 +58,18 @@
             )
         )
       (setq url-proxy-services '(("no_proxy" . "172.27.24.")
-                                 ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")))
+                                 ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+                                 ("https" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+                                 ("ftp" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+								 ))
 
       )
   )
 
+;; (setq url-http-proxy-basic-auth-storage
+;;     (list (list "proxy.com:8080"
+;;                 (cons "Input your LDAP UID !"
+;;                       (base64-encode-string "LOGIN:PASSWORD")))))
 
 
 ;; This package called package comes with Emacs.
@@ -272,7 +279,7 @@
 
 ;; FIXME: Cannot load it
 (use-package spacemacs-theme
-  :disabled t
+  ;:disabled t
   :config
   (load-theme 'spacemacs-dark t)
   )
