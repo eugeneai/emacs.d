@@ -4,6 +4,9 @@
 ;;; Code:
 ;; init.el --- Emacs configuration
 
+;; alias qe='emacs -nw -q --load ~/.emacs.d/q.el'
+;; in /etc/environment
+;; export EDITOR="emacs -nw -q --load ~/.emacs.d/q.el"
 
 ;; Consider using abbreviations.
 (add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
