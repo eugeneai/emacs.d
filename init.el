@@ -31,6 +31,7 @@
 
 ;(global-linum-mode t) ;; enable line numbers globally
 
+
 ;; If async is installed
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/private")
