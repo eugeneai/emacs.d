@@ -72,7 +72,7 @@
 
 (setq package-archives '(
                          ("melpa" . "http://melpa.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ;("marmalade" . "http://marmalade-repo.org/packages/")
                          ("elpa" . "http://elpa.gnu.org/packages/")
                          ("elpy" . "http://jorgenschaefer.github.io/packages/")
                          ("org" . "http://orgmode.org/elpa/")
