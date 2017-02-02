@@ -887,7 +887,7 @@
       (ispell-change-dictionary change)
       (message "Dictionary switched from %s to %s" dic change)
       ))
-  (global-set-key (kbd "<f8>")   'fd-switch-dictionary)
+  (global-set-key (kbd "<f4>")   'fd-switch-dictionary)
   (add-hook 'text-mode-hook (lambda ()
                               (flyspell-mode)
                               (diminish 'flyspell-mode)))
@@ -1188,7 +1188,7 @@
 ;; Handy key definition
 (define-key global-map [f9] 'reconstruct-paragraph)
 (define-key global-map [f12] 'reconstruct-minted-line)
-(define-key global-map [f4] 'delete-other-windows)
+(define-key global-map [f8] 'delete-other-windows)
 
 (add-to-list 'auto-mode-alist '("\\.zcml\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
