@@ -73,7 +73,7 @@
 
 (setq package-archives '(
                          ("melpa" . "http://melpa.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ;("marmalade" . "http://marmalade-repo.org/packages/")
                          ("elpa" . "http://elpa.gnu.org/packages/")
                          ("elpy" . "http://jorgenschaefer.github.io/packages/")
                          ("org" . "http://orgmode.org/elpa/")
@@ -642,6 +642,63 @@
   (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
   )
 
+;; Scheme support
+(use-package geiser
+  :defer 1
+  :config
+  ;(setq scheme-program-name "csi -:c")
+  ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
+  ;(define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
+
+  (require 'cmuscheme)
+
+  ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
+  ;(define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
+
+  (defun scheme-load-current-file (&optional switch)
+    (interactive "P")
+    (let ((file-name (buffer-file-name)))
+      (comint-check-source file-name)
+      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
+                                           (file-name-nondirectory file-name)))
+      (comint-send-string (scheme-proc) (concat "(load \""
+                                                file-name
+                                                "\"\)\n"))
+      (if switch
+          (switch-to-scheme t)
+        (message "\"%s\" loaded." file-name) ) ) )
+
+  (defun scheme-compile-current-file (&optional switch)
+    (interactive "P")
+    (let ((file-name (buffer-file-name)))
+      (comint-check-source file-name)
+      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
+                                           (file-name-nondirectory file-name)))
+      (message "compiling \"%s\" ..." file-name)
+      (comint-send-string (scheme-proc) (concat "(compile-file \""
+                                                file-name
+                                                "\"\)\n"))
+      (if switch
+          (switch-to-scheme t)
+        (message "\"%s\" compiled and loaded." file-name) ) ) )
+  ;; Indenting module body code at column 0
+  (defun scheme-module-indent (state indent-point normal-indent) 0)
+  (put 'module 'scheme-indent-function 'scheme-module-indent)
+
+  (put 'and-let* 'scheme-indent-function 1)
+  (put 'parameterize 'scheme-indent-function 1)
+  (put 'handle-exceptions 'scheme-indent-function 1)
+  (put 'when 'scheme-indent-function 1)
+  (put 'unless 'scheme-indent-function 1)
+  (put 'match 'scheme-indent-function 1)
+  (require 'autoinsert)
+  (add-hook 'find-file-hooks 'auto-insert)
+
+  (setq auto-insert-alist
+        '(("\\.scm" .
+           (insert "#!/bin/sh\n#| -*- scheme -*-\nexec csi -s $0 \"$@\"\n|#\n"))))
+  )
+
 (use-package css-mode
   :defer t
   :init
@@ -831,7 +888,7 @@
       (ispell-change-dictionary change)
       (message "Dictionary switched from %s to %s" dic change)
       ))
-  (global-set-key (kbd "<f8>")   'fd-switch-dictionary)
+  (global-set-key (kbd "<f4>")   'fd-switch-dictionary)
   (add-hook 'text-mode-hook (lambda ()
                               (flyspell-mode)
                               (diminish 'flyspell-mode)))
@@ -1132,7 +1189,7 @@
 ;; Handy key definition
 (define-key global-map [f9] 'reconstruct-paragraph)
 (define-key global-map [f12] 'reconstruct-minted-line)
-(define-key global-map [f4] 'delete-other-windows)
+(define-key global-map [f8] 'delete-other-windows)
 
 (add-to-list 'auto-mode-alist '("\\.zcml\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))

@@ -37,7 +37,18 @@
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
  '(package-selected-packages
    (quote
-    (company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (geiser company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+ '(prolog-program-name
+   (quote
+    (((getenv "EPROLOG")
+      (eval
+       (getenv "EPROLOG")))
+     (eclipse "eclipse")
+     (mercury nil)
+     (sicstus "sicstus")
+     (swi "pl")
+     (gnu "gprolog")
+     (t "prolog"))))
  '(python-shell-completion-native-disabled-interpreters (quote ("python" "pypy")))
  '(python-shell-interpreter "python3")
  '(rw-hunspell-default-dictionary "russian")
@@ -77,5 +88,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Fira Mono" :foundry "CTDB" :slant normal :weight normal :height 198 :width normal))))
  '(font-latex-verbatim-face ((t (:inherit Fira Sans Mono :foreground "burlywood"))))
  '(tex-verbatim ((t (:family "Inconsolata LGC Medium")))))
