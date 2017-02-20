@@ -459,20 +459,36 @@
                                         ;(when (executable-find "ipython")
                                         ;  (elpy-use-ipython))
     ;; Don't use flymake if flycheck is available.
-    (when (require 'flycheck nil t)
-      (setq elpy-modules
-            (delq 'elpy-module-flymake elpy-modules))
-      (add-hook 'elpy-mode-hook 'flycheck-mode))
+    ;; (when (require 'flycheck nil t)
+    ;;   (setq elpy-modules
+    ;;         (delq 'elpy-module-flymake elpy-modules))
+    ;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+    ;; (setq elpy-modules '(elpy-module-sane-defaults
+    ;;                      elpy-module-company
+    ;;                      elpy-module-eldoc
+    ;;                      elpy-module-highlight-indentation
+    ;;                      elpy-module-pyvenv
+    ;;                      elpy-module-yasnippet))
+
+    ;(define-key python-mode-map (kbd "RET")
+                                        ;  'newline-and-indent)
+    (delq 'elpy-module-flymake elpy-modules)
+    (add-hook 'python-mode-hook
+              (lambda ()
+                (set (make-local-variable 'comment-inline-offset) 2)
+                (auto-complete-mode -1)))
+
     ;; Don't use highlight-indentation-mode.
     (delete 'elpy-module-highlight-indentation elpy-modules)
     ;; this is messed with by emacs if you let it...
     (custom-set-variables
      '(elpy-rpc-backend "jedi")
-     '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
-     '(help-at-pt-timer-delay 0.9)
+     ;'(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
+     ;'(help-at-pt-timer-delay 0.9)
      '(tab-width 4))
-    (define-key elpy-mode-map (kbd "C-c C-n") 'next-error)
-    (define-key elpy-mode-map (kbd "C-c C-p") 'previous-error)
+    ;(define-key elpy-mode-map (kbd "C-c C-n") 'next-error)
+    ;(define-key elpy-mode-map (kbd "C-c C-p") 'previous-error)
     (define-key elpy-mode-map (kbd "M-RET f c") 'elpy-format-code)
     ;; Elpy also installs yasnippets.
     ;; Don't use tab for yasnippets, use shift-tab.
@@ -768,7 +784,9 @@
    ("\\.hbs\\'"        . web-mode)
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
-   ("\\.djhtml\\'"     . web-mode)))
+   ("\\.djhtml\\'"     . web-mode)
+   ("\\.pt\\'"         . web-mode)
+   ))
 
 ;;; CONTINUE:
 ;;; TODO: Other languages
