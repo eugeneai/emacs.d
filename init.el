@@ -12,7 +12,7 @@
 (setq save-abbrevs t)              ;; save abbrevs when files are saved
 ;; you will be asked before the abbreviations are saved
 
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; Just a sec - have to clean things up a little!
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -424,6 +424,7 @@
 
 ;; Check syntax, make life better.
 (use-package flycheck
+  :disabled 1
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
   (define-key flycheck-mode-map
@@ -447,34 +448,40 @@
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
-  :commands
-  (python-mode)
+  ;:commands
+  ;(python-mode)
+  ;:defer t
   :config
-  (elpy-enable)
-  ;; Use ipython if available.
-  ;(when (executable-find "ipython")
-  ;  (elpy-use-ipython))
-  ;; Don't use flymake if flycheck is available.
-  (when (require 'flycheck nil t)
-    (setq elpy-modules
-          (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode))
-  ;; Don't use highlight-indentation-mode.
-  (delete 'elpy-module-highlight-indentation elpy-modules)
-  ;; this is messed with by emacs if you let it...
-  (custom-set-variables
-   '(elpy-rpc-backend "jedi")
-   '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
-   '(help-at-pt-timer-delay 0.9)
-   '(tab-width 4))
-  (define-key elpy-mode-map (kbd "C-c C-n") 'next-error)
-  (define-key elpy-mode-map (kbd "C-c C-p") 'previous-error)
-  ;; Elpy also installs yasnippets.
-  ;; Don't use tab for yasnippets, use shift-tab.
-  (define-key yas-minor-mode-map (kbd "<tab>") nil)
-  (define-key yas-minor-mode-map (kbd "TAB") nil)
-  (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
-  (elpy-enable)
+  (progn
+    (elpy-enable)
+    ;; Use ipython if available.
+                                        ;(when (executable-find "ipython")
+                                        ;  (elpy-use-ipython))
+    ;; Don't use flymake if flycheck is available.
+    (when (require 'flycheck nil t)
+      (setq elpy-modules
+            (delq 'elpy-module-flymake elpy-modules))
+      (add-hook 'elpy-mode-hook 'flycheck-mode))
+    ;; Don't use highlight-indentation-mode.
+    (delete 'elpy-module-highlight-indentation elpy-modules)
+    ;; this is messed with by emacs if you let it...
+    (custom-set-variables
+     '(elpy-rpc-backend "jedi")
+     '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
+     '(help-at-pt-timer-delay 0.9)
+     '(tab-width 4))
+    (define-key elpy-mode-map (kbd "C-c C-n") 'next-error)
+    (define-key elpy-mode-map (kbd "C-c C-p") 'previous-error)
+    (define-key elpy-mode-map (kbd "M-RET f c") 'elpy-format-code)
+    ;; Elpy also installs yasnippets.
+    ;; Don't use tab for yasnippets, use shift-tab.
+    (define-key yas-minor-mode-map (kbd "<tab>") nil)
+    (define-key yas-minor-mode-map (kbd "TAB") nil)
+    (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
+    )
+  ;:mode ("\\.py\\'" . elpy-mode)
+  ;:bind (:map elpy-mode-map
+  ;            ("M-RET f c" . elpy-format-code))
   :diminish elpy-mode)
 
 (use-package py-autopep8
@@ -743,6 +750,8 @@
   :config
   (require 'company-web-html)
   (require 'company-css)
+  (add-hook 'html-mode-hook 'visual-line-mode)
+  (add-hook 'web-mode-hook 'visual-line-mode)
   :mode
   (("\\.phtml\\'"      . web-mode)
    ("\\.tpl\\.php\\'"  . web-mode)
