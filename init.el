@@ -31,6 +31,7 @@
 
 ;(global-linum-mode t) ;; enable line numbers globally
 
+
 ;; If async is installed
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/private")
@@ -756,8 +757,8 @@
   (("\\.phtml\\'"      . web-mode)
    ("\\.tpl\\.php\\'"  . web-mode)
    ("\\.twig\\'"       . web-mode)
-   ("\\.x?html\\'"       . web-mode)
-   ("\\.x?htm\\'"        . web-mode)
+   ("\\.x?html\\'"     . web-mode)
+   ("\\.x?htm\\'"      . web-mode)
    ("\\.[gj]sp\\'"     . web-mode)
    ("\\.as[cp]x?\\'"   . web-mode)
    ("\\.eex\\'"        . web-mode)
