@@ -473,7 +473,7 @@
 
     ;(define-key python-mode-map (kbd "RET")
                                         ;  'newline-and-indent)
-    (delq 'elpy-module-flymake elpy-modules)
+    ;(delq 'elpy-module-flymake elpy-modules)
     (add-hook 'python-mode-hook
               (lambda ()
                 (set (make-local-variable 'comment-inline-offset) 2)
@@ -484,8 +484,8 @@
     ;; this is messed with by emacs if you let it...
     (custom-set-variables
      '(elpy-rpc-backend "jedi")
-     ;'(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
-     ;'(help-at-pt-timer-delay 0.9)
+     '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
+     '(help-at-pt-timer-delay 1.9)
      '(tab-width 4))
     ;(define-key elpy-mode-map (kbd "C-c C-n") 'next-error)
     ;(define-key elpy-mode-map (kbd "C-c C-p") 'previous-error)
@@ -495,6 +495,7 @@
     (define-key yas-minor-mode-map (kbd "<tab>") nil)
     (define-key yas-minor-mode-map (kbd "TAB") nil)
     (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
+    (defalias 'workon 'pyenv-workon)
     )
   ;:mode ("\\.py\\'" . elpy-mode)
   ;:bind (:map elpy-mode-map
