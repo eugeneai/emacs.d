@@ -1119,6 +1119,16 @@
   (toggle-cursor-type-when-idle 1) ; On when idle
   )
 
+(use-package ttl-mode
+  :config
+  (add-hook 'ttl-mode-hook    ; Turn on font lock when in ttl mode
+            'turn-on-font-lock)
+  :mode
+  (("\\.ttl\\'"      . ttl-mode)
+   ("\\.n3\\'"       . ttl-mode)
+   )
+  )
+
 (require 'linum+)
 (defun linum-update-window-scale-fix (win)
   "fix linum for scaled text"
