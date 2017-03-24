@@ -29,6 +29,9 @@
 ;; BASIC CUSTOMIZATION
 ;; --------------------------------------
 
+
+(setenv "WORKON_HOME" "~/.pyenv/versions")
+
 ;(global-linum-mode t) ;; enable line numbers globally
 
 
