@@ -564,9 +564,9 @@
 
 ;; Use a nice JavaScript mode.
 (use-package js2-mode
-  :defer t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+  :mode
+  (("\\.js\\'" . js2-mode)
+  ))
 
 
 ;; See colors specified with text.
