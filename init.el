@@ -46,7 +46,7 @@
 ;(add-to-list 'load-path site-lisp-dir)
 
 
-(load-theme 'eugeneai-theme t)
+;(load-theme 'eugeneai-theme t)
 
 
 ;; Proxy Settings
@@ -276,7 +276,7 @@
 
 ;; FIXME: Cannot load it
 (use-package spacemacs-theme
-  :disabled t
+  ;:disabled t
   :config
   (load-theme 'spacemacs-dark t)
   )
@@ -773,6 +773,27 @@
   (require 'company-css)
   (add-hook 'html-mode-hook 'visual-line-mode)
   (add-hook 'web-mode-hook 'visual-line-mode)
+  (defun web-mode-flyspefll-verify ()
+    (let ((f (get-text-property (- (point) 1) 'face)))
+      (not (memq f '(web-mode-html-attr-value-face
+                     web-mode-html-tag-face
+                     web-mode-html-attr-name-face
+                     web-mode-doctype-face
+                     web-mode-keyword-face
+                     web-mode-function-name-face
+                     web-mode-variable-name-face
+                     web-mode-css-property-name-face
+                     web-mode-css-selector-face
+                     web-mode-css-color-face
+                     web-mode-type-face
+                     )
+                 ))))
+  (put 'web-mode 'flyspell-mode-predicate 'web-mode-flyspefll-verify)
+
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (flyspell-mode 1)
+              ))
   :mode
   (("\\.phtml\\'"      . web-mode)
    ("\\.tpl\\.php\\'"  . web-mode)
@@ -1099,6 +1120,16 @@
   (setq curchg-default-cursor-type '(hbar . 7))
   (change-cursor-mode 1) ; On for overwrite/read-only/input mode
   (toggle-cursor-type-when-idle 1) ; On when idle
+  )
+
+(use-package ttl-mode
+  :config
+  (add-hook 'ttl-mode-hook    ; Turn on font lock when in ttl mode
+            'turn-on-font-lock)
+  :mode
+  (("\\.ttl\\'"      . ttl-mode)
+   ("\\.n3\\'"       . ttl-mode)
+   )
   )
 
 (require 'linum+)

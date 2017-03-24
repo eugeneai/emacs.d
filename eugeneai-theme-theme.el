@@ -26,7 +26,7 @@
  '(js2-external-variable ((t (:foreground "orange" :slant italic))))
  '(js2-function-call ((t (:inherit default))))
  '(minibuffer-prompt ((t (:foreground "CadetBlue1"))))
- '(mode-line ((t (:background "gray75" :foreground "black" :weight normal :height 0.6 :family "Source code pro"))))
+ '(mode-line ((t (:background "gray75" :foreground "black" :weight normal :height 0.85 :family "Source code pro"))))
  '(mode-line-highlight ((t (:background "gold"))))
  '(hl-line ((t (:inherit highlight :background "black"))))
  '(tex-verbatim ((t (:family "Inconsolata LGC Medium")))))
