@@ -29,6 +29,9 @@
 ;; BASIC CUSTOMIZATION
 ;; --------------------------------------
 
+
+(setenv "WORKON_HOME" "~/.pyenv/versions")
+
 ;(global-linum-mode t) ;; enable line numbers globally
 
 
@@ -562,9 +565,8 @@
 ;; Use a nice JavaScript mode.
 (use-package js2-mode
   :mode
-  (("\\.js\\'"      . js2-mode)
-   )
-  )
+  (("\\.js\\'" . js2-mode)
+  ))
 
 
 ;; See colors specified with text.

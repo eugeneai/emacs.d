@@ -88,6 +88,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight semi-bold :height 103 :width normal))))
+ '(default ((t (:family "Fira Mono" :foundry "CTDB" :slant normal :weight normal :height 113 :width normal))))
  '(font-latex-verbatim-face ((t (:inherit Fira Sans Mono :foreground "burlywood"))))
  '(tex-verbatim ((t (:family "Inconsolata LGC Medium")))))
