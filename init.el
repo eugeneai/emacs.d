@@ -172,7 +172,17 @@
 ;;; Set some keybindings.
 
 ;; Use shift-arrows for changing windows.
-(windmove-default-keybindings)
+(when (fboundp 'windmove-default-keybindings)
+                                        ;(windmove-default-keybindings)
+  (global-set-key (kbd "C-c <left>")  'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+  (global-set-key (kbd "C-c <up>")    'windmove-up)
+  (global-set-key (kbd "C-c <down>")  'windmove-down)
+  (global-set-key (kbd "C-x <left>")  'windmove-left)
+  (global-set-key (kbd "C-x <right>") 'windmove-right)
+  (global-set-key (kbd "C-x <up>")    'windmove-up)
+  (global-set-key (kbd "C-x <down>")  'windmove-down)
+  )
 
 ;; Use Mac keys:
 (setq mac-command-modifier 'meta)
@@ -977,6 +987,16 @@
   (setq which-key-idle-delay 0.1)
   )
 
+(use-package cask
+  )
+
+(use-package jdee
+  )
+
+(use-package sr-speedbar
+  :bind
+  ("s-a" . 'sr-speedbar-toggle)
+  )
 
 ;; TODO: My stuff
 

@@ -28,6 +28,7 @@
  '(help-at-pt-timer-delay 1.9)
  '(httpd-port 8380)
  '(ispell-dictionary "english")
+ '(jdee-server-dir "~/.local/jdee-server")
  '(js-indent-level 2)
  '(load-prefer-newer t)
  '(markdown-coding-system (quote utf-8))
@@ -37,7 +38,7 @@
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
  '(package-selected-packages
    (quote
-    (ttl-mode vala-mode geiser company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (jdee package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(prolog-program-name
    (quote
     (((getenv "EPROLOG")

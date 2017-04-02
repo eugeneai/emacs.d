@@ -15,3 +15,4 @@
 /.mc-lists.el
 /tramp
 /private/bookmarks.txt
+.cask/
