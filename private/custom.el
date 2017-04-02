@@ -28,6 +28,15 @@
  '(help-at-pt-timer-delay 1.9)
  '(httpd-port 8380)
  '(ispell-dictionary "english")
+ '(jdee-complete-function (quote jdee-complete-menu))
+ '(jdee-global-classpath
+   (quote
+    ("/home/eugeneai/Development/codes/cells-group/cells-ssdc/target/classes" "~/.m2/repository")))
+ '(jdee-jdk (quote ("1.8")))
+ '(jdee-jdk-registry
+   (quote
+    (("1.8" . "/usr/lib/jvm/java-8-openjdk")
+     ("1.8-64" . "/usr/lib64/jvm/java-8-openjdk"))))
  '(jdee-server-dir "~/.local/jdee-server")
  '(js-indent-level 2)
  '(load-prefer-newer t)
@@ -38,7 +47,7 @@
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
  '(package-selected-packages
    (quote
-    (jdee package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (switch-window switch-windows sr-speedbar jdee package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu avy htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(prolog-program-name
    (quote
     (((getenv "EPROLOG")

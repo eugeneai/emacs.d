@@ -268,7 +268,8 @@
 
 ;; expand-region is that new hotness.
 (use-package expand-region
-  :bind ("M-p" . er/expand-region))
+  :bind
+  ("M-p" . er/expand-region))
 
 
 ;;Use nice colors.
@@ -511,8 +512,8 @@
     (defalias 'workon 'pyenv-workon)
     )
   ;:mode ("\\.py\\'" . elpy-mode)
-  ;:bind (:map elpy-mode-map
-  ;            ("M-RET f c" . elpy-format-code))
+  :bind (:map elpy-mode-map
+              ("M-RET f c" . elpy-format-code))
   :diminish elpy-mode)
 
 (use-package py-autopep8
@@ -995,7 +996,15 @@
 
 (use-package sr-speedbar
   :bind
-  ("s-a" . 'sr-speedbar-toggle)
+  ("s-a" . sr-speedbar-toggle)
+  )
+
+(use-package switch-window
+  :config
+  (setq switch-window-threshold 1)
+  :bind
+  ("s-z" . switch-window)
+  ("C-M-z" . switch-window)
   )
 
 ;; TODO: My stuff
