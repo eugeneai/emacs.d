@@ -998,6 +998,15 @@
   (:map eclim-mode-map
         ("M-RET p c" . eclim-problems-correct)
         ("M-RET p s" . eclim-problems)
+        ("M-RET f d" . eclim-java-find-declaration)
+        ("M-RET f r" . eclim-java-find-references)
+        ("M-RET r p" . java-refactor-rename-symbol-at-point)
+        ("M-RET s d" . eclim-java-show-documentation-for-current-element)
+        ("M-RET s h" . eclim-java-hierarchy)
+        ("M-RET i o" . eclim-java-import-organize)
+                                        ; (eclim-maven-run "compile, run, test")
+        ("M-RET m r" . eclim-maven-run)
+
         ))
 
 (use-package company-emacs-eclim
