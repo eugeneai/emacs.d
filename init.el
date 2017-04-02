@@ -991,8 +991,40 @@
 (use-package cask
   )
 
-(use-package jdee
+(use-package eclim
+  :config
+  (add-hook 'java-mode-hook 'eclim-mode)
+  :bind
+  (:map eclim-mode-map
+        ("M-RET p c" . eclim-problems-correct)
+        ("M-RET p s" . eclim-problems)
+        ))
+
+(use-package company-emacs-eclim
+  :config
+  (company-emacs-eclim-setup)
+  ;; (custom-set-faces
+  ;;  ;; ...
+  ;;  '(company-preview ((t (:background "black" :foreground "red"))))
+  ;;  '(company-preview-common ((t (:foreground "red"))))
+  ;;  '(company-preview-search ((t (:inherit company-preview))))
+  ;;  '(company-scrollbar-bg ((t (:background "brightwhite"))))
+  ;;  '(company-scrollbar-fg ((t (:background "red"))))
+  ;;  '(company-template-field ((t (:background "magenta" :foreground "black"))))
+  ;;  '(company-tooltip ((t (:background "brightwhite" :foreground "black"))))
+  ;;  '(company-tooltip-annotation ((t (:background "brightwhite" :foreground "black"))))
+  ;;  '(company-tooltip-annotation-selection ((t (:background "color-253"))))
+  ;;  '(company-tooltip-common ((t (:background "brightwhite" :foreground "red"))))
+  ;;  '(company-tooltip-common-selection ((t (:background "color-253" :foreground "red"))))
+  ;;  '(company-tooltip-mouse ((t (:foreground "black"))))
+  ;;  '(company-tooltip-search ((t (:background "brightwhite" :foreground "black"))))
+  ;;  '(company-tooltip-selection ((t (:background "color-253" :foreground
+  ;;                                               "black"))))
+  ;;  ;; ...
+  ;;  )
   )
+
+(use-package mvn)
 
 (use-package sr-speedbar
   :bind
@@ -1001,10 +1033,9 @@
 
 (use-package switch-window
   :config
-  (setq switch-window-threshold 1)
+  (setq switch-window-threshold 2)
   :bind
   ("s-z" . switch-window)
-  ("C-M-z" . switch-window)
   ("C-x o" . switch-window)
   )
 
@@ -1533,6 +1564,11 @@ ov)
 (global-set-key (kbd "C-j") 'newline-and-indent)
 (global-set-key (kbd "RET") 'newline-and-indent)
 (defalias 'qrr 'query-replace-regexp)
+
+(defun my-package-recompile()
+  "Recompile all packages"
+  (interactive)
+  (byte-recompile-directory "~/.emacs.d/elpa" 0 t))
 
 (provide 'init)
 ;;; init.el ends here
