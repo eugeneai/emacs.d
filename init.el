@@ -1005,6 +1005,7 @@
   :bind
   ("s-z" . switch-window)
   ("C-M-z" . switch-window)
+  ("C-x o" . switch-window)
   )
 
 ;; TODO: My stuff
