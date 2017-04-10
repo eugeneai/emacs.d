@@ -819,6 +819,11 @@
    ("\\.pt\\'"         . web-mode)
    ))
 
+;; Inpation mode
+
+(use-package impatient-mode
+  )
+
 ;;; CONTINUE:
 ;;; TODO: Other languages
 
