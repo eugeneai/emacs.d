@@ -439,16 +439,15 @@
 
 ;; Check syntax, make life better.
 (use-package flycheck
-  :disabled 1
+  ; :disabled 1
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
-  (define-key flycheck-mode-map
-    (kbd "C-c C-n")
-    'flycheck-next-error)
-  (define-key flycheck-mode-map
-    (kbd "C-c C-p")
-    'flycheck-previous-error)
-  :diminish flycheck-mode)
+  :bind (:map flycheck-mode-map
+              ("M-RET f n" . flycheck-next-error)
+              ("M-RET f p" . flycheck-previous-error)
+              )
+  :diminish flycheck-mode
+  )
 
 (use-package company
   :config
@@ -463,9 +462,6 @@
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
-  ;:commands
-  ;(python-mode)
-  ;:defer t
   :config
   (progn
     (elpy-enable)
@@ -485,8 +481,6 @@
     ;;                      elpy-module-pyvenv
     ;;                      elpy-module-yasnippet))
 
-    ;(define-key python-mode-map (kbd "RET")
-                                        ;  'newline-and-indent)
     ;(delq 'elpy-module-flymake elpy-modules)
     (add-hook 'python-mode-hook
               (lambda ()
@@ -497,24 +491,25 @@
     (delete 'elpy-module-highlight-indentation elpy-modules)
     ;; this is messed with by emacs if you let it...
     (custom-set-variables
-     '(elpy-rpc-backend "jedi")
+     ;'(elpy-rpc-backend "jedi")
      '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
      '(help-at-pt-timer-delay 1.9)
      '(tab-width 4))
-    ;(define-key elpy-mode-map (kbd "C-c C-n") 'next-error)
-    ;(define-key elpy-mode-map (kbd "C-c C-p") 'previous-error)
-    (define-key elpy-mode-map (kbd "M-RET f c") 'elpy-format-code)
     ;; Elpy also installs yasnippets.
     ;; Don't use tab for yasnippets, use shift-tab.
     (define-key yas-minor-mode-map (kbd "<tab>") nil)
     (define-key yas-minor-mode-map (kbd "TAB") nil)
     (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
     (defalias 'workon 'pyenv-workon)
+    (pyvenv-workon "elpy")
     )
-  ;:mode ("\\.py\\'" . elpy-mode)
+  :mode (("\\.py\\'" . elpy-mode))
   :bind (:map elpy-mode-map
-              ("M-RET f c" . elpy-format-code))
-  :diminish elpy-mode)
+              ("M-RET f c" . elpy-format-code)
+              ("M-RET e n" . next-error)
+              ("M-RET e p" . previous-error)
+              )
+  )
 
 (use-package py-autopep8
   :config
@@ -823,6 +818,11 @@
    ("\\.djhtml\\'"     . web-mode)
    ("\\.pt\\'"         . web-mode)
    ))
+
+;; Inpation mode
+
+(use-package impatient-mode
+  )
 
 ;;; CONTINUE:
 ;;; TODO: Other languages
@@ -1362,6 +1362,7 @@
                                         ;(local-set-key [f5] 'spacemacs/python-execute-file)
                               (local-set-key [f5] 'elpy-shell-send-region-or-buffer)
                                         ;(local-set-key [f6] 'spacemacs/python-execute-file-focus)
+                              (elpy-mode)
                               ))
 
 ;;; Set some more
