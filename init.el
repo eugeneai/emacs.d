@@ -1092,7 +1092,7 @@
       bookmark-save-flag 1)
 
 ;; highlight the current line
-(global-hl-line-mode +1)
+(global-hl-line-mode 0)
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
