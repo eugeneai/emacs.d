@@ -532,7 +532,10 @@
     (add-to-list 'nose-project-root-files "setup.cfg")
     (setq nose-use-verbose nil))
   :bind
-  ("M-RET t a" . nosetests-all-virtualenv)
+  (:map elpy-mode-map
+        ("M-RET t a" . nosetests-all-virtualenv)
+        ("<XF86Calculator>" . nosetests-all-virtualenv)
+        )
   :init
   (defun nosetests-all-virtualenv ()
     (interactive)
