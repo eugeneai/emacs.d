@@ -234,14 +234,26 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq x-select-enable-clipboard t)
 
-(use-package ag
-  :defer t
+;; make cursor movement keys under right hand's home-row.
+(global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
+(global-set-key (kbd "M-l") 'forward-char)  ; was downcase-word
+(global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
+(global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
+
+(use-package ergoemacs-mode
+  :disabled 1
+  :config
+  ;(setq ergoemacs-theme nil) ;; Uses Standard Ergoemacs keyboard theme
+  ;(setq ergoemacs-keyboard-layout "us") ;; Assumes QWERTY keyboard layout
+  ;(ergoemacs-mode 1)
   )
+
+(use-package ag
+  :defer t)
 
 
 ;; `smartparens` manages parens well.
 (use-package smartparens
-  :disabled 1
   :config
   (require 'smartparens-config)
   (smartparens-global-mode t)
@@ -250,9 +262,10 @@
   ;; C-M-j isn't standard, but C-M-d doesn't work for me.
   (define-key smartparens-mode-map (kbd "C-M-j") 'sp-down-sexp)
   (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-c") 'sp-copy-sexp)
   (define-key smartparens-mode-map (kbd "C-M-[") 'sp-rewrap-sexp)
   (define-key smartparens-mode-map (kbd "C-M-]") 'sp-backward-unwrap-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-z") 'sp-slurp-hybrid-sexp)
   ;; markdown-mode
   (sp-with-modes '(markdown-mode gfm-mode rst-mode)
     (sp-local-pair "*" "*"
@@ -271,6 +284,7 @@
   (setq sp-highlight-pair-overlay nil)
   (setq sp-highlight-wrap-overlay nil)
   (setq sp-highlight-wrap-tag-overlay nil)
+  (show-smartparens-mode 1)
   :diminish smartparens-mode)
 
 
@@ -517,6 +531,8 @@
     (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
     (defalias 'workon 'pyenv-workon)
     (pyvenv-workon "elpy")
+    (add-hook 'elpy-mode-hook (lambda ()
+                                (electric-pair-mode nil)))
     )
   :mode (("\\.py\\'" . elpy-mode))
   :bind (:map elpy-mode-map
@@ -1029,6 +1045,7 @@
   )
 
 (use-package eclim
+  :disabled 1
   :config
   (add-hook 'java-mode-hook 'eclim-mode)
   :bind
@@ -1047,6 +1064,7 @@
         ))
 
 (use-package company-emacs-eclim
+  :disabled 1
   :config
   (company-emacs-eclim-setup)
   ;; (custom-set-faces
@@ -1154,7 +1172,6 @@
 
 (global-set-key (kbd "C-x C-k") 'kill-current-buffer)
 (global-set-key (kbd "C-x c") 'compile)
-(global-set-key (kbd "C-x h") 'view-url)
 (global-set-key (kbd "C-x !") 'shell)
 
 ;; SCITE like
