@@ -46,6 +46,7 @@
  '(jdee-server-dir "~/.local/jdee-server")
  '(js-indent-level 2)
  '(load-prefer-newer t)
+ '(magit-auto-revert-mode t)
  '(markdown-coding-system (quote utf-8))
  '(markdown-command-needs-filename t)
  '(markdown-xhtml-header-content "<meta charset=\"utf-8\">")
@@ -106,5 +107,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Fira Mono" :foundry "CTDB" :slant normal :weight normal :height 113 :width normal))))
  '(font-latex-verbatim-face ((t (:inherit Fira Sans Mono :foreground "burlywood"))))
+ '(magit-branch-current ((t (:inherit magit-branch-local :background "dark magenta"))))
+ '(magit-branch-local ((t (:foreground "gold2"))))
  '(show-paren-match ((t (:background "gray30" :foreground "white"))))
  '(tex-verbatim ((t (:family "Inconsolata LGC Medium")))))
