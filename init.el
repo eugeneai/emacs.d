@@ -222,7 +222,7 @@
 ;; Highlight where matching parens are.
 (show-paren-mode t)
 (setq show-paren-style 'expression)
-(electric-pair-mode 1)
+(electric-pair-mode nil)
 (delete-selection-mode t)
 (setq redisplay-dont-pause t)
 (fringe-mode '(8 . 0))
