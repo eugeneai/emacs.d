@@ -1420,16 +1420,16 @@
   (newline-and-indent)
   (insert "import pdb; pdb.set_trace()")
   (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pdb; pdb.set_trace()"))
+  (highlight-lines-matching-regexp "^[ ]*import pdb;"))
 
 (defun python-add-pubreakpoint ()
   (interactive)
   (newline-and-indent)
   (insert "import pudb; pu.db")
   (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pudb; pu.db"))
+  (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
 
-(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c C-t") 'python-add-breakpoint)))
+(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c M-y") 'python-add-breakpoint)))
 (add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c C-y") 'python-add-pubreakpoint)))
 
 (add-hook 'python-mode-hook '(lambda ()
