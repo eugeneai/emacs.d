@@ -106,4 +106,5 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Fira Mono" :foundry "CTDB" :slant normal :weight normal :height 113 :width normal))))
  '(font-latex-verbatim-face ((t (:inherit Fira Sans Mono :foreground "burlywood"))))
+ '(show-paren-match ((t (:background "gray30" :foreground "white"))))
  '(tex-verbatim ((t (:family "Inconsolata LGC Medium")))))

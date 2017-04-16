@@ -213,19 +213,35 @@
 ;(global-set-key (kbd "C-x h") 'help-command)
 
 
-;; Highlight where matching parens are.
-(show-paren-mode t)
 
 ;; INSTALL PACKAGES
 ;; --------------------------------------
 
 (use-package better-defaults)
+
+;; Highlight where matching parens are.
+(show-paren-mode t)
+(setq show-paren-style 'expression)
+(electric-pair-mode 1)
+(delete-selection-mode t)
+(setq redisplay-dont-pause t)
+(fringe-mode '(8 . 0))
+(setq-default indicate-buffer-boundaries 'left)
+(setq display-time-24hr-format t)
+(setq scroll-step 1)
+(setq scroll-margin 3)
+(setq scroll-conservatively 10000)
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq x-select-enable-clipboard t)
+
 (use-package ag
   :defer t
   )
 
+
 ;; `smartparens` manages parens well.
 (use-package smartparens
+  :disabled 1
   :config
   (require 'smartparens-config)
   (smartparens-global-mode t)
@@ -439,7 +455,6 @@
 
 ;; Check syntax, make life better.
 (use-package flycheck
-  ; :disabled 1
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind (:map flycheck-mode-map
@@ -554,7 +569,7 @@
   ;:after elpy
   :config
   ;(add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
-  (add-hook 'python-mode-hook (lambda () (pyenv-mode 1)))
+  (add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
   (require 'pyenv-mode-auto)
   )
 
@@ -577,21 +592,40 @@
   (("\\.js\\'" . js2-mode)
   ))
 
-
-;; See colors specified with text.
-(use-package rainbow-mode
+(use-package paredit
+  :disabled 1
+  :diminish paredit-mode
+  :after elpy
   :config
-  (defun rainbow-mode-quietly ()
-    (rainbow-mode)
-    (diminish 'rainbow-mode))
-  (add-hook 'html-mode-hook 'rainbow-mode-quietly)
-  (add-hook 'css-mode-hook 'rainbow-mode-quietly))
-
-;; TODO: May be set some nice palette.
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+  (add-hook 'prog-mode-hook             #'enable-paredit-mode)
+  ;(add-hook 'elpy-mode-hook             #'enable-paredit-mode)
+  ; :bind (("C-c d" . paredit-forward-down))
   )
+
+;; Ensure paredit is used EVERYWHERE!
+(use-package paredit-everywhere
+  :disabled
+  :diminish paredit-everywhere-mode
+  :config
+  (add-hook 'prog-mode-hook #'paredit-everywhere-mode)
+  (add-hook 'elpy-mode-hook #'paredit-everywhere-mode)
+  )
+
+(use-package highlight-parentheses
+  :diminish highlight-parentheses-mode
+  :config
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda()
+              (highlight-parentheses-mode)
+              )))
+
+(global-highlight-parentheses-mode)
 
 ;; Support markdown, for goodness sake.
 (use-package markdown-mode
@@ -1090,6 +1124,9 @@
 (require 'bookmark)
 (setq bookmark-default-file "~/.emacs.d/private/bookmarks.txt"
       bookmark-save-flag 1)
+(global-set-key (kbd "<f1>") 'bookmark-set)
+(global-set-key (kbd "C-<f1>") 'bookmark-jump)
+(global-set-key (kbd "M-<f1>") 'bookmark-bmenu-list)
 
 ;; highlight the current line
 (global-hl-line-mode 0)
@@ -1578,10 +1615,13 @@ ov)
 (global-set-key (kbd "RET") 'newline-and-indent)
 (defalias 'qrr 'query-replace-regexp)
 
+
+
 (defun my-package-recompile()
   "Recompile all packages"
   (interactive)
   (byte-recompile-directory "~/.emacs.d/elpa" 0 t))
 
+(delete-other-windows)
 (provide 'init)
 ;;; init.el ends here
