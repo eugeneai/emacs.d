@@ -197,8 +197,12 @@
 ;; Easily memorable whole-buffer selection.
 (global-set-key (kbd "M-A") 'mark-whole-buffer)
 
+(use-package nlinum
+  :bind
+  ("C-`" . nlinum-mode))
+
 ;; Easily turn line numbers on and off.
-(global-set-key (kbd "C-`") 'linum-mode)
+; (global-set-key (kbd "C-`") 'nlinum-mode)
 
 ;; switch point into buffer list
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
@@ -1259,16 +1263,16 @@
    )
   )
 
-(require 'linum+)
-(defun linum-update-window-scale-fix (win)
-  "fix linum for scaled text"
-  (set-window-margins win
-                      (ceiling (* (if (boundp 'text-scale-mode-step)
-                                      (expt text-scale-mode-step
-                                            text-scale-mode-amount) 1)
-                                  (if (car (window-margins))
-                                      (car (window-margins)) 1)
-                                  ))))
+;; (require 'linum+)
+;; (defun linum-update-window-scale-fix (win)
+;;   "fix linum for scaled text"
+;;   (set-window-margins win
+;;                       (ceiling (* (if (boundp 'text-scale-mode-step)
+;;                                       (expt text-scale-mode-step
+;;                                             text-scale-mode-amount) 1)
+;;                                   (if (car (window-margins))
+;;                                       (car (window-margins)) 1)
+;;                                   ))))
 
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
@@ -1550,7 +1554,7 @@
   ; (add-hook 'post-command-hook 'auto-language-environment)
   )
 
-(global-set-key (kbd "C-`") 'linum-mode)
+;(global-set-key (kbd "C-`") 'linum-mode)
 (put 'scroll-left 'disabled nil)
 
 ;; Patching wrong scrolllock behaviour
