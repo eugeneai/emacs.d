@@ -229,7 +229,7 @@
 (electric-pair-mode nil)
 (delete-selection-mode t)
 (setq redisplay-dont-pause t)
-(fringe-mode '(8 . 0))
+(if (fboundp 'fringe-mode) (fringe-mode '(8 . 0)))
 (setq-default indicate-buffer-boundaries 'left)
 (setq display-time-24hr-format t)
 (setq scroll-step 1)
@@ -538,7 +538,10 @@
     (add-hook 'elpy-mode-hook (lambda ()
                                 (electric-pair-mode nil)))
     )
-  :mode (("\\.py\\'" . elpy-mode))
+  :mode (
+         ("\\.py\\'" . elpy-mode)
+         ("\\.wsgi\\'" . elpy-mode)
+         )
   :bind (:map elpy-mode-map
               ("M-RET f c" . elpy-format-code)
               ("M-RET e n" . next-error)
@@ -1385,6 +1388,7 @@
 (define-key global-map [f8] 'delete-other-windows)
 
 (add-to-list 'auto-mode-alist '("\\.zcml\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.wsgi\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 
 ;;;;; key bindings
