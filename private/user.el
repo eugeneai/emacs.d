@@ -333,7 +333,7 @@
 
 
 (add-to-list 'auto-mode-alist '("\\.zcml\\'" . xml-mode))
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+;(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 
 ;;;;; key bindings
 
