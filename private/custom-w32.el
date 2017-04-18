@@ -23,8 +23,7 @@
      (py-master-file . "/path/to/interactivetest.py")
      (whitespace-line-column . 80)
      (lexical-binding . t))))
- '(show-paren-mode t)
- '(tool-bar-mode nil))
+ '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

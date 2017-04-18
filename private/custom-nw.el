@@ -43,7 +43,6 @@
      (lexical-binding . t))))
  '(show-paren-mode t)
  '(text-mode-hook (quote (turn-on-flyspell text-mode-hook-identify)))
- '(tool-bar-mode nil)
  '(w3-honor-stylesheets t)
  '(which-function-mode nil))
 (custom-set-faces
