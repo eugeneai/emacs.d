@@ -108,6 +108,7 @@
  '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 182 :width normal))))
  '(font-latex-verbatim-face ((t (:inherit Fira Sans Mono :foreground "burlywood"))))
  '(magit-branch-current ((t (:inherit magit-branch-local :background "dark magenta"))))
- '(magit-branch-local ((t (:foreground "gold2"))))
+ '(magit-branch-local ((t (:background "turquoise4" :foreground "gold2"))))
+ '(magit-branch-remote ((t (:background "saddle brown" :foreground "DarkSeaGreen2"))))
  '(show-paren-match ((t (:background "gray30" :foreground "white"))))
  '(tex-verbatim ((t (:family "Inconsolata LGC Medium")))))

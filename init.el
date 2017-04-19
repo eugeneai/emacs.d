@@ -1636,7 +1636,14 @@ ov)
 (global-set-key (kbd "RET") 'newline-and-indent)
 (defalias 'qrr 'query-replace-regexp)
 
+(defun beginning-of-line-or-indentation ()
+  "move to beginning of line, or indentation"
+  (interactive)
+  (if (bolp)
+      (back-to-indentation)
+    (beginning-of-line)))
 
+(global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
 
 (defun my-package-recompile()
   "Recompile all packages"
