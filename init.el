@@ -9,7 +9,8 @@
 (add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
 (setq abbrev-file-name             ;; tell emacs where to read abbrev
       "~/.emacs.d/private/abbrev_defs")    ;; definitions from...
-(setq save-abbrevs t)              ;; save abbrevs when files are saved
+; (write-abbrev-file)
+(setq save-abbrevs 'silently)
 ;; you will be asked before the abbreviations are saved
 
 (setq debug-on-error nil)
@@ -1653,3 +1654,4 @@ ov)
 (delete-other-windows)
 (provide 'init)
 ;;; init.el ends here
+(put 'narrow-to-page 'disabled nil)
