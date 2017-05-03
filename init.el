@@ -1254,6 +1254,13 @@
   (toggle-cursor-type-when-idle 1) ; On when idle
   )
 
+(use-package jedi-direx)
+
+(use-package company-jedi
+  :config
+  (add-to-list 'company-backends 'company-jedi)
+  )
+
 (use-package ttl-mode
   :config
   (add-hook 'ttl-mode-hook    ; Turn on font lock when in ttl mode
