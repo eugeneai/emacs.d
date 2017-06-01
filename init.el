@@ -570,18 +570,8 @@
   :bind
   (:map elpy-mode-map
         ("M-RET t a" . nosetests-all-virtualenv)
-        ("<XF86Calculator>" . nosetests-all-virtualenv)
+        ("<XF86Calculator>" . nosetests-all)
         )
-  :init
-  (defun nosetests-all-virtualenv ()
-    (interactive)
-    (let ((nose-global-name
-           (format
-            "~/.pyenv/versions/%s/bin/nosetests"
-            (getenv "PYENV_VERSION")
-            )
-           ))
-      (nosetests-all)))
   )
 
 (use-package pyenv-mode
