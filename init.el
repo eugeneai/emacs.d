@@ -1273,6 +1273,9 @@
   (
    ("\\.cs\\'" . csharp-mode)
    )
+  :bind (:map csharp-mode-map
+              ("<f5>" . compile)
+              )
   )
 
 ;; (require 'linum+)
@@ -1656,6 +1659,7 @@ ov)
     (beginning-of-line)))
 
 (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
+(global-set-key (kbd "M-RET c") 'compile)
 
 (defun my-package-recompile()
   "Recompile all packages"
