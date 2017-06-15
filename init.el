@@ -1261,6 +1261,20 @@
    )
   )
 
+(use-package csharp-mode
+  :config
+  (defun local-csharp-mode-hook ()
+    ;; enable the stuff you want for C# here
+    (electric-pair-mode 1)       ;; Emacs 24
+    (electric-pair-local-mode 1) ;; Emacs 25
+    )
+  (add-hook 'csharp-mode-hook 'local-csharp-mode-hook)
+  :mode
+  (
+   ("\\.cs\\'" . csharp-mode)
+   )
+  )
+
 ;; (require 'linum+)
 ;; (defun linum-update-window-scale-fix (win)
 ;;   "fix linum for scaled text"
