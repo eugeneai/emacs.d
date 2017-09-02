@@ -82,6 +82,12 @@
              )
           )
 
+(add-hook 'prolog-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "<XF86Calculator>") #'compile)
+             )
+          )
+
 (add-hook 'racer-mode-hook #'eldoc-mode)
 ;(eval-after-load 'flycheck
 ;  '(add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
