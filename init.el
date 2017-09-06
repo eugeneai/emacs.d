@@ -1661,6 +1661,13 @@ ov)
 (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
 (global-set-key (kbd "M-RET c") 'compile)
 
+(add-hook 'prolog-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "<XF86Calculator>") #'compile)
+             )
+          ; prolog-mode-map unset M-Ret key, make it Ctrl-Ret
+          )
+
 (defun my-package-recompile()
   "Recompile all packages"
   (interactive)
