@@ -923,6 +923,8 @@
                                  '("~/.emacs.d/snippets")))
   (yas-reload-all)
   (yas-global-mode 1)
+  ;:bind
+  ;("c-<tab>" . yas-expand-from-trigger-key)
 )
 
 (use-package swiper
