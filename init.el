@@ -444,8 +444,8 @@
 ;; Edit in multiple places at the same time.
 (use-package multiple-cursors
   :bind
-  ("C-x r t" . mc/edit-lines)
-  ("C-x C-x" . mc/mark-more-like-this-extended))
+  ("M-RET m e" . mc/edit-lines)
+  ("M-RET m m" . mc/mark-more-like-this-extended))
 
 
 ;; (Near) simultaneous keypresses create new keys.
