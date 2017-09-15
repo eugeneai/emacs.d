@@ -4,6 +4,21 @@
 ;;; Code:
 ;; init.el --- Emacs configuration
 
+(if (eq window-system 'w32)
+    (progn
+      (if (file-directory-p "c:/GNU/bin")
+          (progn
+            (add-to-list 'exec-path "c:/GNU/bin")
+            )
+        )
+      (setq url-proxy-services '(("no_proxy" . "172.27.24.")
+                                 ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")))
+
+      )
+  )
+
+(setq windowed-system (or (eq window-system 'x) (eq window-system 'w32)))
+(setq win32-system (eq window-system 'w32))
 
 ;; Consider using abbreviations.
 (add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
@@ -230,7 +245,7 @@
 (electric-pair-mode nil)
 (delete-selection-mode t)
 (setq redisplay-dont-pause t)
-(fringe-mode '(8 . 0))
+(if (fboundp 'fringe-mode) (fringe-mode '(8 . 0)))
 (setq-default indicate-buffer-boundaries 'left)
 (setq display-time-24hr-format t)
 (setq scroll-step 1)
@@ -369,11 +384,15 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-(if (or (display-graphic-p) (daemonp))
-    (require 'git-gutter-fringe+)
-  (require 'git-gutter+))
-(global-git-gutter+-mode)
-(diminish 'git-gutter+-mode)
+(if (windowed-system)
+    (progn
+      (if (or (display-graphic-p) (daemonp))
+          (require 'git-gutter-fringe+)
+        (require 'git-gutter+))
+      (global-git-gutter+-mode)
+      (diminish 'git-gutter+-mode)
+      )
+)
 ;; ;; Eventually may be able to return to something like this:
 ;; (use-package git-gutter-fringe+
 ;;   :init (global-git-gutter+-mode)
@@ -440,6 +459,7 @@
 (use-package page-break-lines
   :config (global-page-break-lines-mode t)
   :diminish page-break-lines-mode)
+
 
 ;; Edit in multiple places at the same time.
 (use-package multiple-cursors
@@ -569,7 +589,7 @@
     (setq nose-use-verbose nil))
   :bind
   (:map elpy-mode-map
-        ("M-RET t a" . nosetests-all-virtualenv)
+        ("M-RET t a" . nosetests-all)
         ("<XF86Calculator>" . nosetests-all)
         )
   )
