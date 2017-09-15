@@ -4,22 +4,6 @@
 ;;; Code:
 ;; init.el --- Emacs configuration
 
-(if (eq window-system 'w32)
-    (progn
-      (if (file-directory-p "c:/GNU/bin")
-          (progn
-            (add-to-list 'exec-path "c:/GNU/bin")
-            )
-        )
-      (setq url-proxy-services '(("no_proxy" . "172.27.24.")
-                                 ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")))
-
-      )
-  )
-
-(setq windowed-system (or (eq window-system 'x) (eq window-system 'w32)))
-(setq win32-system (eq window-system 'w32))
-
 ;; Consider using abbreviations.
 (add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
 (setq abbrev-file-name             ;; tell emacs where to read abbrev
@@ -384,7 +368,7 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-(if (windowed-system)
+(if windowed-system
     (progn
       (if (or (display-graphic-p) (daemonp))
           (require 'git-gutter-fringe+)
