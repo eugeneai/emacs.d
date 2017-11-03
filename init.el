@@ -996,7 +996,6 @@
   (setq ispell-really-aspell nil
         ispell-really-hunspell t
         ispell-dictionary "english")
-  (setq ispell-program-name "/usr/local/bin/hunspell")
   ;; ;(require 'ispell)
   (defun fd-switch-dictionary()
     (interactive)
@@ -1042,54 +1041,9 @@
   (setq which-key-idle-delay 0.1)
   )
 
-(use-package cask
-  )
+(use-package cask)
 
-(use-package eclim
-  :disabled 1
-  :config
-  (add-hook 'java-mode-hook 'eclim-mode)
-  :bind
-  (:map eclim-mode-map
-        ("M-RET p c" . eclim-problems-correct)
-        ("M-RET p s" . eclim-problems)
-        ("M-RET f d" . eclim-java-find-declaration)
-        ("M-RET f r" . eclim-java-find-references)
-        ("M-RET r p" . java-refactor-rename-symbol-at-point)
-        ("M-RET s d" . eclim-java-show-documentation-for-current-element)
-        ("M-RET s h" . eclim-java-hierarchy)
-        ("M-RET i o" . eclim-java-import-organize)
-                                        ; (eclim-maven-run "compile, run, test")
-        ("M-RET m r" . eclim-maven-run)
-
-        ))
-
-(use-package company-emacs-eclim
-  :disabled 1
-  :config
-  (company-emacs-eclim-setup)
-  ;; (custom-set-faces
-  ;;  ;; ...
-  ;;  '(company-preview ((t (:background "black" :foreground "red"))))
-  ;;  '(company-preview-common ((t (:foreground "red"))))
-  ;;  '(company-preview-search ((t (:inherit company-preview))))
-  ;;  '(company-scrollbar-bg ((t (:background "brightwhite"))))
-  ;;  '(company-scrollbar-fg ((t (:background "red"))))
-  ;;  '(company-template-field ((t (:background "magenta" :foreground "black"))))
-  ;;  '(company-tooltip ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-annotation ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-annotation-selection ((t (:background "color-253"))))
-  ;;  '(company-tooltip-common ((t (:background "brightwhite" :foreground "red"))))
-  ;;  '(company-tooltip-common-selection ((t (:background "color-253" :foreground "red"))))
-  ;;  '(company-tooltip-mouse ((t (:foreground "black"))))
-  ;;  '(company-tooltip-search ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-selection ((t (:background "color-253" :foreground
-  ;;                                               "black"))))
-  ;;  ;; ...
-  ;;  )
-  )
-
-(use-package mvn)
+; (use-package mvn)
 
 (use-package sr-speedbar
   :bind
@@ -1284,16 +1238,8 @@
               )
   )
 
-;; (require 'linum+)
-;; (defun linum-update-window-scale-fix (win)
-;;   "fix linum for scaled text"
-;;   (set-window-margins win
-;;                       (ceiling (* (if (boundp 'text-scale-mode-step)
-;;                                       (expt text-scale-mode-step
-;;                                             text-scale-mode-amount) 1)
-;;                                   (if (car (window-margins))
-;;                                       (car (window-margins)) 1)
-;;                                   ))))
+(use-package org-mode)
+
 
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
