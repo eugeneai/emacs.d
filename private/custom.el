@@ -54,7 +54,7 @@
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
  '(package-selected-packages
    (quote
-    (csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (org-mode csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html web-mode pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose spacemacs-theme abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(prolog-program-name
    (quote
     (((getenv "EPROLOG")
@@ -106,7 +106,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight normal :height 143 :width normal))))
+ '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight normal :height 159 :width normal))))
  '(font-latex-verbatim-face ((t (:inherit Fira Sans Mono :foreground "burlywood"))))
  '(magit-branch-current ((t (:inherit magit-branch-local :background "dark magenta"))))
  '(magit-branch-local ((t (:background "turquoise4" :foreground "gold2"))))
