@@ -996,6 +996,7 @@
   (setq ispell-really-aspell nil
         ispell-really-hunspell t
         ispell-dictionary "english")
+  (setq ispell-program-name "/usr/bin/hunspell")
   ;; ;(require 'ispell)
   (defun fd-switch-dictionary()
     (interactive)
@@ -1238,7 +1239,34 @@
               )
   )
 
-(use-package org-mode)
+(use-package org)
+(use-package orgnav)
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook 'org-bullets-mode)
+  )
+; (use-package ox-pandoc)
+(use-package ox-twbs)
+
+;; lualatex preview
+(setq org-latex-pdf-process
+  '("lualatex -shell-escape -interaction nonstopmode %f"
+    "lualatex -shell-escape -interaction nonstopmode %f"))
+
+(setq luamagick '(luamagick :programs ("lualatex" "convert")
+       :description "pdf > png"
+       :message "you need to install lualatex and imagemagick."
+       :use-xcolor t
+       :image-input-type "pdf"
+       :image-output-type "png"
+       :image-size-adjust (1.0 . 1.0)
+       :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+       :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+
+;(add-to-list 'org-preview-latex-process-alist luamagick)
+
+;(setq org-preview-latex-default-process 'luamagick)
+
 
 
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
