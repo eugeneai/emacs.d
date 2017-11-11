@@ -4,15 +4,15 @@
 ;;; Code:
 ;; init.el --- Emacs configuration
 
-
 ;; Consider using abbreviations.
 (add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
 (setq abbrev-file-name             ;; tell emacs where to read abbrev
       "~/.emacs.d/private/abbrev_defs")    ;; definitions from...
-(setq save-abbrevs t)              ;; save abbrevs when files are saved
+; (write-abbrev-file)
+(setq save-abbrevs 'silently)
 ;; you will be asked before the abbreviations are saved
 
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; Just a sec - have to clean things up a little!
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -29,7 +29,11 @@
 ;; BASIC CUSTOMIZATION
 ;; --------------------------------------
 
+
+(setenv "WORKON_HOME" "~/.pyenv/versions")
+
 ;(global-linum-mode t) ;; enable line numbers globally
+
 
 ;; If async is installed
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
@@ -42,7 +46,7 @@
 ;(add-to-list 'load-path site-lisp-dir)
 
 
-(load-theme 'eugeneai-theme t)
+;(load-theme 'eugeneai-theme t)
 
 
 ;; Proxy Settings
@@ -79,7 +83,7 @@
 
 (setq package-archives '(
                          ("melpa" . "http://melpa.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ;("marmalade" . "http://marmalade-repo.org/packages/")
                          ("elpa" . "http://elpa.gnu.org/packages/")
                          ("elpy" . "http://jorgenschaefer.github.io/packages/")
                          ("org" . "http://orgmode.org/elpa/")
@@ -175,7 +179,17 @@
 ;;; Set some keybindings.
 
 ;; Use shift-arrows for changing windows.
-(windmove-default-keybindings)
+(when (fboundp 'windmove-default-keybindings)
+                                        ;(windmove-default-keybindings)
+  (global-set-key (kbd "C-c <left>")  'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+  (global-set-key (kbd "C-c <up>")    'windmove-up)
+  (global-set-key (kbd "C-c <down>")  'windmove-down)
+  (global-set-key (kbd "C-x <left>")  'windmove-left)
+  (global-set-key (kbd "C-x <right>") 'windmove-right)
+  (global-set-key (kbd "C-x <up>")    'windmove-up)
+  (global-set-key (kbd "C-x <down>")  'windmove-down)
+  )
 
 ;; Use Mac keys:
 (setq mac-command-modifier 'meta)
@@ -190,8 +204,12 @@
 ;; Easily memorable whole-buffer selection.
 (global-set-key (kbd "M-A") 'mark-whole-buffer)
 
+(use-package nlinum
+  :bind
+  ("C-`" . nlinum-mode))
+
 ;; Easily turn line numbers on and off.
-(global-set-key (kbd "C-`") 'linum-mode)
+; (global-set-key (kbd "C-`") 'nlinum-mode)
 
 ;; switch point into buffer list
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
@@ -206,16 +224,44 @@
 ;(global-set-key (kbd "C-x h") 'help-command)
 
 
-;; Highlight where matching parens are.
-(show-paren-mode t)
 
 ;; INSTALL PACKAGES
 ;; --------------------------------------
 
 (use-package better-defaults)
-(use-package ag
-  :defer t
+
+;; Highlight where matching parens are.
+(show-paren-mode t)
+(setq show-paren-style 'expression)
+(electric-pair-mode nil)
+(delete-selection-mode t)
+(setq redisplay-dont-pause t)
+(if (fboundp 'fringe-mode) (fringe-mode '(8 . 0)))
+(setq-default indicate-buffer-boundaries 'left)
+(setq display-time-24hr-format t)
+(setq scroll-step 1)
+(setq scroll-margin 3)
+(setq scroll-conservatively 10000)
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq x-select-enable-clipboard t)
+
+;; make cursor movement keys under right hand's home-row.
+(global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
+(global-set-key (kbd "M-l") 'forward-char)  ; was downcase-word
+(global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
+(global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
+
+(use-package ergoemacs-mode
+  :disabled 1
+  :config
+  ;(setq ergoemacs-theme nil) ;; Uses Standard Ergoemacs keyboard theme
+  ;(setq ergoemacs-keyboard-layout "us") ;; Assumes QWERTY keyboard layout
+  ;(ergoemacs-mode 1)
   )
+
+(use-package ag
+  :defer t)
+
 
 ;; `smartparens` manages parens well.
 (use-package smartparens
@@ -227,9 +273,10 @@
   ;; C-M-j isn't standard, but C-M-d doesn't work for me.
   (define-key smartparens-mode-map (kbd "C-M-j") 'sp-down-sexp)
   (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-c") 'sp-copy-sexp)
   (define-key smartparens-mode-map (kbd "C-M-[") 'sp-rewrap-sexp)
   (define-key smartparens-mode-map (kbd "C-M-]") 'sp-backward-unwrap-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-z") 'sp-slurp-hybrid-sexp)
   ;; markdown-mode
   (sp-with-modes '(markdown-mode gfm-mode rst-mode)
     (sp-local-pair "*" "*"
@@ -248,6 +295,7 @@
   (setq sp-highlight-pair-overlay nil)
   (setq sp-highlight-wrap-overlay nil)
   (setq sp-highlight-wrap-tag-overlay nil)
+  (show-smartparens-mode 1)
   :diminish smartparens-mode)
 
 
@@ -261,7 +309,8 @@
 
 ;; expand-region is that new hotness.
 (use-package expand-region
-  :bind ("M-p" . er/expand-region))
+  :bind
+  ("M-p" . er/expand-region))
 
 
 ;;Use nice colors.
@@ -326,11 +375,15 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-(if (or (display-graphic-p) (daemonp))
-    (require 'git-gutter-fringe+)
-  (require 'git-gutter+))
-(global-git-gutter+-mode)
-(diminish 'git-gutter+-mode)
+(if windowed-system
+    (progn
+      (if (or (display-graphic-p) (daemonp))
+          (require 'git-gutter-fringe+)
+        (require 'git-gutter+))
+      (global-git-gutter+-mode)
+      (diminish 'git-gutter+-mode)
+      )
+)
 ;; ;; Eventually may be able to return to something like this:
 ;; (use-package git-gutter-fringe+
 ;;   :init (global-git-gutter+-mode)
@@ -398,11 +451,12 @@
   :config (global-page-break-lines-mode t)
   :diminish page-break-lines-mode)
 
+
 ;; Edit in multiple places at the same time.
 (use-package multiple-cursors
   :bind
-  ("C-x r t" . mc/edit-lines)
-  ("C-x C-x" . mc/mark-more-like-this-extended))
+  ("M-RET m e" . mc/edit-lines)
+  ("M-RET m m" . mc/mark-more-like-this-extended))
 
 
 ;; (Near) simultaneous keypresses create new keys.
@@ -433,13 +487,12 @@
 (use-package flycheck
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
-  (define-key flycheck-mode-map
-    (kbd "C-c C-n")
-    'flycheck-next-error)
-  (define-key flycheck-mode-map
-    (kbd "C-c C-p")
-    'flycheck-previous-error)
-  :diminish flycheck-mode)
+  :bind (:map flycheck-mode-map
+              ("M-RET f n" . flycheck-next-error)
+              ("M-RET f p" . flycheck-previous-error)
+              )
+  :diminish flycheck-mode
+  )
 
 (use-package company
   :config
@@ -454,35 +507,56 @@
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
-  :commands
-  (python-mode)
   :config
-  (elpy-enable)
-  ;; Use ipython if available.
-  ;(when (executable-find "ipython")
-  ;  (elpy-use-ipython))
-  ;; Don't use flymake if flycheck is available.
-  (when (require 'flycheck nil t)
-    (setq elpy-modules
-          (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode))
-  ;; Don't use highlight-indentation-mode.
-  (delete 'elpy-module-highlight-indentation elpy-modules)
-  ;; this is messed with by emacs if you let it...
-  (custom-set-variables
-   '(elpy-rpc-backend "jedi")
-   '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
-   '(help-at-pt-timer-delay 0.9)
-   '(tab-width 4))
-  (define-key elpy-mode-map (kbd "C-c C-n") 'next-error)
-  (define-key elpy-mode-map (kbd "C-c C-p") 'previous-error)
-  ;; Elpy also installs yasnippets.
-  ;; Don't use tab for yasnippets, use shift-tab.
-  (define-key yas-minor-mode-map (kbd "<tab>") nil)
-  (define-key yas-minor-mode-map (kbd "TAB") nil)
-  (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
-  (elpy-enable)
-  :diminish elpy-mode)
+  (progn
+    (elpy-enable)
+    ;; Use ipython if available.
+                                        ;(when (executable-find "ipython")
+                                        ;  (elpy-use-ipython))
+    ;; Don't use flymake if flycheck is available.
+    ;; (when (require 'flycheck nil t)
+    ;;   (setq elpy-modules
+    ;;         (delq 'elpy-module-flymake elpy-modules))
+    ;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+    ;; (setq elpy-modules '(elpy-module-sane-defaults
+    ;;                      elpy-module-company
+    ;;                      elpy-module-eldoc
+    ;;                      elpy-module-highlight-indentation
+    ;;                      elpy-module-pyvenv
+    ;;                      elpy-module-yasnippet))
+
+    ;(delq 'elpy-module-flymake elpy-modules)
+    (add-hook 'python-mode-hook
+              (lambda ()
+                (set (make-local-variable 'comment-inline-offset) 2)
+                (auto-complete-mode -1)))
+
+    ;; Don't use highlight-indentation-mode.
+    (delete 'elpy-module-highlight-indentation elpy-modules)
+    ;; this is messed with by emacs if you let it...
+    (custom-set-variables
+     ;'(elpy-rpc-backend "jedi")
+     '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
+     '(help-at-pt-timer-delay 1.9)
+     '(tab-width 4))
+    ;; Elpy also installs yasnippets.
+    ;; Don't use tab for yasnippets, use shift-tab.
+    (define-key yas-minor-mode-map (kbd "<tab>") nil)
+    (define-key yas-minor-mode-map (kbd "TAB") nil)
+    (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
+    (defalias 'workon 'pyenv-workon)
+    (pyvenv-workon "elpy")
+    (add-hook 'elpy-mode-hook (lambda ()
+                                (electric-pair-mode nil)))
+    )
+  :mode (("\\.py\\'" . elpy-mode))
+  :bind (:map elpy-mode-map
+              ("M-RET f c" . elpy-format-code)
+              ("M-RET e n" . next-error)
+              ("M-RET e p" . previous-error)
+              )
+  )
 
 (use-package py-autopep8
   :config
@@ -505,17 +579,10 @@
     (add-to-list 'nose-project-root-files "setup.cfg")
     (setq nose-use-verbose nil))
   :bind
-  ("M-RET t a" . nosetests-all-virtualenv)
-  :init
-  (defun nosetests-all-virtualenv ()
-    (interactive)
-    (let ((nose-global-name
-           (format
-            "~/.pyenv/versions/%s/bin/nosetests"
-            (getenv "PYENV_VERSION")
-            )
-           ))
-      (nosetests-all)))
+  (:map elpy-mode-map
+        ("M-RET t a" . nosetests-all)
+        ("<XF86Calculator>" . nosetests-all)
+        )
   )
 
 (use-package pyenv-mode
@@ -524,7 +591,7 @@
   ;:after elpy
   :config
   ;(add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
-  (add-hook 'python-mode-hook (lambda () (pyenv-mode 1)))
+  (add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
   (require 'pyenv-mode-auto)
   )
 
@@ -543,25 +610,44 @@
 
 ;; Use a nice JavaScript mode.
 (use-package js2-mode
-  :defer t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+  :mode
+  (("\\.js\\'" . js2-mode)
+  ))
 
-
-;; See colors specified with text.
-(use-package rainbow-mode
+(use-package paredit
+  :disabled 1
+  :diminish paredit-mode
+  :after elpy
   :config
-  (defun rainbow-mode-quietly ()
-    (rainbow-mode)
-    (diminish 'rainbow-mode))
-  (add-hook 'html-mode-hook 'rainbow-mode-quietly)
-  (add-hook 'css-mode-hook 'rainbow-mode-quietly))
-
-;; TODO: May be set some nice palette.
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+  (add-hook 'prog-mode-hook             #'enable-paredit-mode)
+  ;(add-hook 'elpy-mode-hook             #'enable-paredit-mode)
+  ; :bind (("C-c d" . paredit-forward-down))
   )
+
+;; Ensure paredit is used EVERYWHERE!
+(use-package paredit-everywhere
+  :disabled
+  :diminish paredit-everywhere-mode
+  :config
+  (add-hook 'prog-mode-hook #'paredit-everywhere-mode)
+  (add-hook 'elpy-mode-hook #'paredit-everywhere-mode)
+  )
+
+(use-package highlight-parentheses
+  :diminish highlight-parentheses-mode
+  :config
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda()
+              (highlight-parentheses-mode)
+              )))
+
+(global-highlight-parentheses-mode)
 
 ;; Support markdown, for goodness sake.
 (use-package markdown-mode
@@ -648,6 +734,63 @@
   (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
   )
 
+;; Scheme support
+(use-package geiser
+  :defer 1
+  :config
+  ;(setq scheme-program-name "csi -:c")
+  ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
+  ;(define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
+
+  (require 'cmuscheme)
+
+  ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
+  ;(define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
+
+  (defun scheme-load-current-file (&optional switch)
+    (interactive "P")
+    (let ((file-name (buffer-file-name)))
+      (comint-check-source file-name)
+      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
+                                           (file-name-nondirectory file-name)))
+      (comint-send-string (scheme-proc) (concat "(load \""
+                                                file-name
+                                                "\"\)\n"))
+      (if switch
+          (switch-to-scheme t)
+        (message "\"%s\" loaded." file-name) ) ) )
+
+  (defun scheme-compile-current-file (&optional switch)
+    (interactive "P")
+    (let ((file-name (buffer-file-name)))
+      (comint-check-source file-name)
+      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
+                                           (file-name-nondirectory file-name)))
+      (message "compiling \"%s\" ..." file-name)
+      (comint-send-string (scheme-proc) (concat "(compile-file \""
+                                                file-name
+                                                "\"\)\n"))
+      (if switch
+          (switch-to-scheme t)
+        (message "\"%s\" compiled and loaded." file-name) ) ) )
+  ;; Indenting module body code at column 0
+  (defun scheme-module-indent (state indent-point normal-indent) 0)
+  (put 'module 'scheme-indent-function 'scheme-module-indent)
+
+  (put 'and-let* 'scheme-indent-function 1)
+  (put 'parameterize 'scheme-indent-function 1)
+  (put 'handle-exceptions 'scheme-indent-function 1)
+  (put 'when 'scheme-indent-function 1)
+  (put 'unless 'scheme-indent-function 1)
+  (put 'match 'scheme-indent-function 1)
+  (require 'autoinsert)
+  (add-hook 'find-file-hooks 'auto-insert)
+
+  (setq auto-insert-alist
+        '(("\\.scm" .
+           (insert "#!/bin/sh\n#| -*- scheme -*-\nexec csi -s $0 \"$@\"\n|#\n"))))
+  )
+
 (use-package css-mode
   :defer t
   :init
@@ -693,12 +836,35 @@
   :config
   (require 'company-web-html)
   (require 'company-css)
+  (add-hook 'html-mode-hook 'visual-line-mode)
+  (add-hook 'web-mode-hook 'visual-line-mode)
+  (defun web-mode-flyspefll-verify ()
+    (let ((f (get-text-property (- (point) 1) 'face)))
+      (not (memq f '(web-mode-html-attr-value-face
+                     web-mode-html-tag-face
+                     web-mode-html-attr-name-face
+                     web-mode-doctype-face
+                     web-mode-keyword-face
+                     web-mode-function-name-face
+                     web-mode-variable-name-face
+                     web-mode-css-property-name-face
+                     web-mode-css-selector-face
+                     web-mode-css-color-face
+                     web-mode-type-face
+                     )
+                 ))))
+  (put 'web-mode 'flyspell-mode-predicate 'web-mode-flyspefll-verify)
+
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (flyspell-mode 1)
+              ))
   :mode
   (("\\.phtml\\'"      . web-mode)
    ("\\.tpl\\.php\\'"  . web-mode)
    ("\\.twig\\'"       . web-mode)
-   ("\\.x?html\\'"       . web-mode)
-   ("\\.x?htm\\'"        . web-mode)
+   ("\\.x?html\\'"     . web-mode)
+   ("\\.x?htm\\'"      . web-mode)
    ("\\.[gj]sp\\'"     . web-mode)
    ("\\.as[cp]x?\\'"   . web-mode)
    ("\\.eex\\'"        . web-mode)
@@ -708,7 +874,14 @@
    ("\\.hbs\\'"        . web-mode)
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
-   ("\\.djhtml\\'"     . web-mode)))
+   ("\\.djhtml\\'"     . web-mode)
+   ("\\.pt\\'"         . web-mode)
+   ))
+
+;; Inpation mode
+
+(use-package impatient-mode
+  )
 
 ;;; CONTINUE:
 ;;; TODO: Other languages
@@ -761,6 +934,8 @@
                                  '("~/.emacs.d/snippets")))
   (yas-reload-all)
   (yas-global-mode 1)
+  ;:bind
+  ;("c-<tab>" . yas-expand-from-trigger-key)
 )
 
 (use-package swiper
@@ -828,7 +1003,7 @@
   (setq ispell-really-aspell nil
         ispell-really-hunspell t
         ispell-dictionary "english")
-  (setq ispell-program-name "/usr/local/bin/hunspell")
+  (setq ispell-program-name "/usr/bin/hunspell")
   ;; ;(require 'ispell)
   (defun fd-switch-dictionary()
     (interactive)
@@ -837,7 +1012,7 @@
       (ispell-change-dictionary change)
       (message "Dictionary switched from %s to %s" dic change)
       ))
-  (global-set-key (kbd "<f8>")   'fd-switch-dictionary)
+  (global-set-key (kbd "<f4>")   'fd-switch-dictionary)
   (add-hook 'text-mode-hook (lambda ()
                               (flyspell-mode)
                               (diminish 'flyspell-mode)))
@@ -874,6 +1049,22 @@
   (setq which-key-idle-delay 0.1)
   )
 
+(use-package cask)
+
+; (use-package mvn)
+
+(use-package sr-speedbar
+  :bind
+  ("s-a" . sr-speedbar-toggle)
+  )
+
+(use-package switch-window
+  :config
+  (setq switch-window-threshold 2)
+  :bind
+  ("s-z" . switch-window)
+  ("C-x o" . switch-window)
+  )
 
 ;; TODO: My stuff
 
@@ -914,9 +1105,12 @@
 (require 'bookmark)
 (setq bookmark-default-file "~/.emacs.d/private/bookmarks.txt"
       bookmark-save-flag 1)
+(global-set-key (kbd "<f1>") 'bookmark-set)
+(global-set-key (kbd "C-<f1>") 'bookmark-jump)
+(global-set-key (kbd "M-<f1>") 'bookmark-bmenu-list)
 
 ;; highlight the current line
-(global-hl-line-mode +1)
+(global-hl-line-mode 0)
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -941,7 +1135,6 @@
 
 (global-set-key (kbd "C-x C-k") 'kill-current-buffer)
 (global-set-key (kbd "C-x c") 'compile)
-(global-set-key (kbd "C-x h") 'view-url)
 (global-set-key (kbd "C-x !") 'shell)
 
 ;; SCITE like
@@ -1019,16 +1212,74 @@
   (toggle-cursor-type-when-idle 1) ; On when idle
   )
 
-(require 'linum+)
-(defun linum-update-window-scale-fix (win)
-  "fix linum for scaled text"
-  (set-window-margins win
-                      (ceiling (* (if (boundp 'text-scale-mode-step)
-                                      (expt text-scale-mode-step
-                                            text-scale-mode-amount) 1)
-                                  (if (car (window-margins))
-                                      (car (window-margins)) 1)
-                                  ))))
+(use-package jedi-direx)
+
+(use-package company-jedi
+  :config
+  (add-to-list 'company-backends 'company-jedi)
+  )
+
+(use-package ttl-mode
+  :config
+  (add-hook 'ttl-mode-hook    ; Turn on font lock when in ttl mode
+            'turn-on-font-lock)
+  :mode
+  (("\\.ttl\\'"      . ttl-mode)
+   ("\\.n3\\'"       . ttl-mode)
+   )
+  )
+
+(use-package csharp-mode
+  :config
+  (defun local-csharp-mode-hook ()
+    ;; enable the stuff you want for C# here
+    (electric-pair-mode 1)       ;; Emacs 24
+    (electric-pair-local-mode 1) ;; Emacs 25
+    )
+  (add-hook 'csharp-mode-hook 'local-csharp-mode-hook)
+  :mode
+  (
+   ("\\.cs\\'" . csharp-mode)
+   )
+  :bind (:map csharp-mode-map
+              ("<f5>" . compile)
+              )
+  )
+
+(use-package vala-mode)
+(use-package vala-snippets)
+
+(use-package org)
+(use-package orgnav)
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook 'org-bullets-mode)
+  (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
+  ;; (setq org-ellipsis '("↝" "⇉" "⇝" "⇢" "⇨" "⇰" "➔" "➙" "➛" "➜" "➝" "➞"))
+  )
+; (use-package ox-pandoc)
+(use-package ox-twbs)
+
+;; lualatex preview
+(setq org-latex-pdf-process
+  '("lualatex -shell-escape -interaction nonstopmode %f"
+    "lualatex -shell-escape -interaction nonstopmode %f"))
+
+(setq luamagick '(luamagick :programs ("lualatex" "convert")
+       :description "pdf > png"
+       :message "you need to install lualatex and imagemagick."
+       :use-xcolor t
+       :image-input-type "pdf"
+       :image-output-type "png"
+       :image-size-adjust (1.0 . 1.0)
+       :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+       :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+
+;(add-to-list 'org-preview-latex-process-alist luamagick)
+
+;(setq org-preview-latex-default-process 'luamagick)
+
+
 
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
@@ -1138,7 +1389,7 @@
 ;; Handy key definition
 (define-key global-map [f9] 'reconstruct-paragraph)
 (define-key global-map [f12] 'reconstruct-minted-line)
-(define-key global-map [f4] 'delete-other-windows)
+(define-key global-map [f8] 'delete-other-windows)
 
 (add-to-list 'auto-mode-alist '("\\.zcml\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
@@ -1179,6 +1430,7 @@
                                         ;(local-set-key [f5] 'spacemacs/python-execute-file)
                               (local-set-key [f5] 'elpy-shell-send-region-or-buffer)
                                         ;(local-set-key [f6] 'spacemacs/python-execute-file-focus)
+                              (elpy-mode)
                               ))
 
 ;;; Set some more
@@ -1196,16 +1448,16 @@
   (newline-and-indent)
   (insert "import pdb; pdb.set_trace()")
   (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pdb; pdb.set_trace()"))
+  (highlight-lines-matching-regexp "^[ ]*import pdb;"))
 
 (defun python-add-pubreakpoint ()
   (interactive)
   (newline-and-indent)
   (insert "import pudb; pu.db")
   (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pudb; pu.db"))
+  (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
 
-(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c C-t") 'python-add-breakpoint)))
+(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c M-y") 'python-add-breakpoint)))
 (add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c C-y") 'python-add-pubreakpoint)))
 
 (add-hook 'python-mode-hook '(lambda ()
@@ -1309,7 +1561,7 @@
   ; (add-hook 'post-command-hook 'auto-language-environment)
   )
 
-(global-set-key (kbd "C-`") 'linum-mode)
+;(global-set-key (kbd "C-`") 'linum-mode)
 (put 'scroll-left 'disabled nil)
 
 ;; Patching wrong scrolllock behaviour
@@ -1391,5 +1643,54 @@ ov)
 (global-set-key (kbd "RET") 'newline-and-indent)
 (defalias 'qrr 'query-replace-regexp)
 
+(defun beginning-of-line-or-indentation ()
+  "move to beginning of line, or indentation"
+  (interactive)
+  (if (bolp)
+      (back-to-indentation)
+    (beginning-of-line)))
+
+(global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
+(global-set-key (kbd "M-RET c") 'compile)
+
+(add-hook 'prolog-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "<XF86Calculator>") #'compile)
+             )
+          ; prolog-mode-map unset M-Ret key, make it Ctrl-Ret
+          )
+
+(defun cfg:reverse-input-method (input-method)
+  "Build the reverse mapping of single letters from INPUT-METHOD."
+  (interactive
+   (list (read-input-method-name "Use input method (default current): ")))
+  (if (and input-method (symbolp input-method))
+      (setq input-method (symbol-name input-method)))
+  (let ((current current-input-method)
+        (modifiers '(nil (control) (meta) (control meta))))
+    (when input-method
+      (activate-input-method input-method))
+    (when (and current-input-method quail-keyboard-layout)
+      (dolist (map (cdr (quail-map)))
+        (let* ((to (car map))
+               (from (quail-get-translation
+                      (cadr map) (char-to-string to) 1)))
+          (when (and (characterp from) (characterp to))
+            (dolist (mod modifiers)
+              (define-key local-function-key-map
+                (vector (append mod (list from)))
+                (vector (append mod (list to)))))))))
+    (when input-method
+      (activate-input-method current))))
+
+(cfg:reverse-input-method 'russian-computer)
+
+(defun my-package-recompile()
+  "Recompile all packages"
+  (interactive)
+  (byte-recompile-directory "~/.emacs.d/elpa" 0 t))
+
+(delete-other-windows)
 (provide 'init)
 ;;; init.el ends here
+(put 'narrow-to-page 'disabled nil)
