@@ -12,7 +12,7 @@
 (setq save-abbrevs 'silently)
 ;; you will be asked before the abbreviations are saved
 
-(setq debug-on-error nil)
+;; (setq debug-on-error nil)
 
 ;; Just a sec - have to clean things up a little!
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -73,7 +73,7 @@
 (setq url-http-proxy-basic-auth-storage
       (list (list "172.27.100.5:4444"
                   (cons "titan.cyber"
-                        (base64-encode-string "ghbdtnbr")))))
+                        (base64-encode-string "titan.cyber:ghbdtnbr")))))
 
 
 ;; This package called package comes with Emacs.
@@ -1049,7 +1049,7 @@
   (setq which-key-idle-delay 0.1)
   )
 
-(use-package cask)
+; (use-package cask)
 
 ; (use-package mvn)
 
