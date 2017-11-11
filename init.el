@@ -66,10 +66,10 @@
       )
   )
 
-;; (setq url-http-proxy-basic-auth-storage
-;;     (list (list "proxy.com:8080"
-;;                 (cons "Input your LDAP UID !"
-;;                       (base64-encode-string "LOGIN:PASSWORD")))))
+(setq url-http-proxy-basic-auth-storage
+      (list (list "172.27.100.5:4444"
+                  (cons "titan.cyber"
+                        (base64-encode-string "ghbdtnbr")))))
 
 
 ;; This package called package comes with Emacs.
