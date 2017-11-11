@@ -1239,11 +1239,16 @@
               )
   )
 
+(use-package vala-mode)
+(use-package vala-snippets)
+
 (use-package org)
 (use-package orgnav)
 (use-package org-bullets
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
+  (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
+  ;; (setq org-ellipsis '("↝" "⇉" "⇝" "⇢" "⇨" "⇰" "➔" "➙" "➛" "➜" "➝" "➞"))
   )
 ; (use-package ox-pandoc)
 (use-package ox-twbs)
