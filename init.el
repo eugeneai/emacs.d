@@ -236,7 +236,7 @@
 (electric-pair-mode nil)
 (delete-selection-mode t)
 (setq redisplay-dont-pause t)
-(if (fboundp 'fringe-mode) (fringe-mode '(8 . 0)))
+(if (fboundp 'fringe-mode) (fringe-mode '(8 . 8)))
 (setq-default indicate-buffer-boundaries 'left)
 (setq display-time-24hr-format t)
 (setq scroll-step 1)
@@ -326,12 +326,12 @@
   (load-theme 'material t)
   )
 
-;; FIXME: Cannot load it
-(use-package spacemacs-theme
-  ;:disabled t
-  :config
-  (load-theme 'spacemacs-dark t)
-  )
+;; ;; FIXME: Cannot load it
+;; (use-package spacemacs-theme
+;;   ;:disabled t
+;;   :config
+;;   (load-theme 'spacemacs-dark t)
+;;   )
 
 ;; Themes can be disabled with disable-theme.
 
@@ -519,12 +519,12 @@
     ;;         (delq 'elpy-module-flymake elpy-modules))
     ;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
 
-    ;; (setq elpy-modules '(elpy-module-sane-defaults
-    ;;                      elpy-module-company
-    ;;                      elpy-module-eldoc
-    ;;                      elpy-module-highlight-indentation
-    ;;                      elpy-module-pyvenv
-    ;;                      elpy-module-yasnippet))
+    (setq elpy-modules '(elpy-module-sane-defaults
+                         elpy-module-company
+                         elpy-module-eldoc
+                         elpy-module-highlight-indentation
+                         elpy-module-pyvenv
+                         elpy-module-yasnippet))
 
     ;(delq 'elpy-module-flymake elpy-modules)
     (add-hook 'python-mode-hook
@@ -709,6 +709,7 @@
   :after tex
   :config
   (auctex-latexmk-setup)
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t)
   )
 
 (use-package slime
@@ -934,8 +935,8 @@
                                  '("~/.emacs.d/snippets")))
   (yas-reload-all)
   (yas-global-mode 1)
-  ;:bind
-  ;("c-<tab>" . yas-expand-from-trigger-key)
+  :bind
+  ("C-<tab>" . yas-expand-from-trigger-key)
 )
 
 (use-package swiper
@@ -1137,6 +1138,11 @@
 (global-set-key (kbd "C-x c") 'compile)
 (global-set-key (kbd "C-x !") 'shell)
 
+(defun my-compilation-mode-hook ()
+  (setq truncate-lines nil) ;; automatically becomes buffer local
+  (set (make-local-variable 'truncate-partial-width-windows) nil))
+(add-hook 'compilation-mode-hook 'my-compilation-mode-hook)
+
 ;; SCITE like
 ;(global-set-key [f7] 'split-window-vertically)
 ;(global-set-key [f8] 'delete-other-windows)
@@ -1259,6 +1265,15 @@
   )
 ; (use-package ox-pandoc)
 (use-package ox-twbs)
+(use-package ansi-color
+  :config
+  (defun my/ansi-colorize-buffer ()
+    (let ((buffer-read-only nil))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
+  )
+
+(use-package d-mode)
 
 ;; lualatex preview
 (setq org-latex-pdf-process
