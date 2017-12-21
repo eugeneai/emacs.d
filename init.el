@@ -1667,6 +1667,11 @@ ov)
 
 (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
 (global-set-key (kbd "M-RET c") 'compile)
+(defun my-add-tilde ()
+  (interactive)
+  (insert "~"))
+(global-set-key (kbd "<f6>") 'my-add-tilde)
+
 
 (add-hook 'prolog-mode-hook
           '(lambda ()
