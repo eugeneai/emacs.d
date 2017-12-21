@@ -1669,6 +1669,7 @@ ov)
 (global-set-key (kbd "M-RET c") 'compile)
 (defun my-add-tilde ()
   (interactive)
+  (delete-char 1)
   (insert "~"))
 (global-set-key (kbd "<f6>") 'my-add-tilde)
 
