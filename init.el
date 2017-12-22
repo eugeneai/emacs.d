@@ -4,7 +4,6 @@
 ;;; Code:
 ;; init.el --- Emacs configuration
 
-
 ;; Consider using abbreviations.
 (add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
 (setq abbrev-file-name             ;; tell emacs where to read abbrev
@@ -13,7 +12,7 @@
 (setq save-abbrevs 'silently)
 ;; you will be asked before the abbreviations are saved
 
-(setq debug-on-error nil)
+;; (setq debug-on-error nil)
 
 ;; Just a sec - have to clean things up a little!
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -63,11 +62,18 @@
             )
         )
       (setq url-proxy-services '(("no_proxy" . "172.27.24.")
-                                 ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")))
+                                 ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+                                 ("https" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+                                 ("ftp" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+								 ))
 
       )
   )
 
+(setq url-http-proxy-basic-auth-storage
+      (list (list "172.27.100.5:4444"
+                  (cons "titan.cyber"
+                        (base64-encode-string "titan.cyber:ghbdtnbr")))))
 
 
 ;; This package called package comes with Emacs.
@@ -230,7 +236,7 @@
 (electric-pair-mode nil)
 (delete-selection-mode t)
 (setq redisplay-dont-pause t)
-(fringe-mode '(8 . 0))
+(if (fboundp 'fringe-mode) (fringe-mode '(8 . 8)))
 (setq-default indicate-buffer-boundaries 'left)
 (setq display-time-24hr-format t)
 (setq scroll-step 1)
@@ -320,12 +326,12 @@
   (load-theme 'material t)
   )
 
-;; FIXME: Cannot load it
-(use-package spacemacs-theme
-  ;:disabled t
-  :config
-  (load-theme 'spacemacs-dark t)
-  )
+;; ;; FIXME: Cannot load it
+;; (use-package spacemacs-theme
+;;   ;:disabled t
+;;   :config
+;;   (load-theme 'spacemacs-dark t)
+;;   )
 
 ;; Themes can be disabled with disable-theme.
 
@@ -369,11 +375,15 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-(if (or (display-graphic-p) (daemonp))
-    (require 'git-gutter-fringe+)
-  (require 'git-gutter+))
-(global-git-gutter+-mode)
-(diminish 'git-gutter+-mode)
+(if windowed-system
+    (progn
+      (if (or (display-graphic-p) (daemonp))
+          (require 'git-gutter-fringe+)
+        (require 'git-gutter+))
+      (global-git-gutter+-mode)
+      (diminish 'git-gutter+-mode)
+      )
+)
 ;; ;; Eventually may be able to return to something like this:
 ;; (use-package git-gutter-fringe+
 ;;   :init (global-git-gutter+-mode)
@@ -441,11 +451,12 @@
   :config (global-page-break-lines-mode t)
   :diminish page-break-lines-mode)
 
+
 ;; Edit in multiple places at the same time.
 (use-package multiple-cursors
   :bind
-  ("C-x r t" . mc/edit-lines)
-  ("C-x C-x" . mc/mark-more-like-this-extended))
+  ("M-RET m e" . mc/edit-lines)
+  ("M-RET m m" . mc/mark-more-like-this-extended))
 
 
 ;; (Near) simultaneous keypresses create new keys.
@@ -508,12 +519,12 @@
     ;;         (delq 'elpy-module-flymake elpy-modules))
     ;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
 
-    ;; (setq elpy-modules '(elpy-module-sane-defaults
-    ;;                      elpy-module-company
-    ;;                      elpy-module-eldoc
-    ;;                      elpy-module-highlight-indentation
-    ;;                      elpy-module-pyvenv
-    ;;                      elpy-module-yasnippet))
+    (setq elpy-modules '(elpy-module-sane-defaults
+                         elpy-module-company
+                         elpy-module-eldoc
+                         elpy-module-highlight-indentation
+                         elpy-module-pyvenv
+                         elpy-module-yasnippet))
 
     ;(delq 'elpy-module-flymake elpy-modules)
     (add-hook 'python-mode-hook
@@ -569,7 +580,7 @@
     (setq nose-use-verbose nil))
   :bind
   (:map elpy-mode-map
-        ("M-RET t a" . nosetests-all-virtualenv)
+        ("M-RET t a" . nosetests-all)
         ("<XF86Calculator>" . nosetests-all)
         )
   )
@@ -698,6 +709,7 @@
   :after tex
   :config
   (auctex-latexmk-setup)
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t)
   )
 
 (use-package slime
@@ -923,8 +935,8 @@
                                  '("~/.emacs.d/snippets")))
   (yas-reload-all)
   (yas-global-mode 1)
-  ;:bind
-  ;("c-<tab>" . yas-expand-from-trigger-key)
+  :bind
+  ("C-<tab>" . yas-expand-from-trigger-key)
 )
 
 (use-package swiper
@@ -992,7 +1004,7 @@
   (setq ispell-really-aspell nil
         ispell-really-hunspell t
         ispell-dictionary "english")
-  (setq ispell-program-name "/usr/local/bin/hunspell")
+  (setq ispell-program-name "/usr/bin/hunspell")
   ;; ;(require 'ispell)
   (defun fd-switch-dictionary()
     (interactive)
@@ -1038,54 +1050,9 @@
   (setq which-key-idle-delay 0.1)
   )
 
-(use-package cask
-  )
+; (use-package cask)
 
-(use-package eclim
-  :disabled 1
-  :config
-  (add-hook 'java-mode-hook 'eclim-mode)
-  :bind
-  (:map eclim-mode-map
-        ("M-RET p c" . eclim-problems-correct)
-        ("M-RET p s" . eclim-problems)
-        ("M-RET f d" . eclim-java-find-declaration)
-        ("M-RET f r" . eclim-java-find-references)
-        ("M-RET r p" . java-refactor-rename-symbol-at-point)
-        ("M-RET s d" . eclim-java-show-documentation-for-current-element)
-        ("M-RET s h" . eclim-java-hierarchy)
-        ("M-RET i o" . eclim-java-import-organize)
-                                        ; (eclim-maven-run "compile, run, test")
-        ("M-RET m r" . eclim-maven-run)
-
-        ))
-
-(use-package company-emacs-eclim
-  :disabled 1
-  :config
-  (company-emacs-eclim-setup)
-  ;; (custom-set-faces
-  ;;  ;; ...
-  ;;  '(company-preview ((t (:background "black" :foreground "red"))))
-  ;;  '(company-preview-common ((t (:foreground "red"))))
-  ;;  '(company-preview-search ((t (:inherit company-preview))))
-  ;;  '(company-scrollbar-bg ((t (:background "brightwhite"))))
-  ;;  '(company-scrollbar-fg ((t (:background "red"))))
-  ;;  '(company-template-field ((t (:background "magenta" :foreground "black"))))
-  ;;  '(company-tooltip ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-annotation ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-annotation-selection ((t (:background "color-253"))))
-  ;;  '(company-tooltip-common ((t (:background "brightwhite" :foreground "red"))))
-  ;;  '(company-tooltip-common-selection ((t (:background "color-253" :foreground "red"))))
-  ;;  '(company-tooltip-mouse ((t (:foreground "black"))))
-  ;;  '(company-tooltip-search ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-selection ((t (:background "color-253" :foreground
-  ;;                                               "black"))))
-  ;;  ;; ...
-  ;;  )
-  )
-
-(use-package mvn)
+; (use-package mvn)
 
 (use-package sr-speedbar
   :bind
@@ -1170,6 +1137,11 @@
 (global-set-key (kbd "C-x C-k") 'kill-current-buffer)
 (global-set-key (kbd "C-x c") 'compile)
 (global-set-key (kbd "C-x !") 'shell)
+
+(defun my-compilation-mode-hook ()
+  (setq truncate-lines nil) ;; automatically becomes buffer local
+  (set (make-local-variable 'truncate-partial-width-windows) nil))
+(add-hook 'compilation-mode-hook 'my-compilation-mode-hook)
 
 ;; SCITE like
 ;(global-set-key [f7] 'split-window-vertically)
@@ -1280,16 +1252,49 @@
               )
   )
 
-;; (require 'linum+)
-;; (defun linum-update-window-scale-fix (win)
-;;   "fix linum for scaled text"
-;;   (set-window-margins win
-;;                       (ceiling (* (if (boundp 'text-scale-mode-step)
-;;                                       (expt text-scale-mode-step
-;;                                             text-scale-mode-amount) 1)
-;;                                   (if (car (window-margins))
-;;                                       (car (window-margins)) 1)
-;;                                   ))))
+(use-package vala-mode)
+(use-package vala-snippets)
+
+(use-package org)
+(use-package orgnav)
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook 'org-bullets-mode)
+  (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
+  ;; (setq org-ellipsis '("↝" "⇉" "⇝" "⇢" "⇨" "⇰" "➔" "➙" "➛" "➜" "➝" "➞"))
+  )
+; (use-package ox-pandoc)
+(use-package ox-twbs)
+(use-package ansi-color
+  :config
+  (defun my/ansi-colorize-buffer ()
+    (let ((buffer-read-only nil))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
+  )
+
+(use-package d-mode)
+
+;; lualatex preview
+(setq org-latex-pdf-process
+  '("lualatex -shell-escape -interaction nonstopmode %f"
+    "lualatex -shell-escape -interaction nonstopmode %f"))
+
+(setq luamagick '(luamagick :programs ("lualatex" "convert")
+       :description "pdf > png"
+       :message "you need to install lualatex and imagemagick."
+       :use-xcolor t
+       :image-input-type "pdf"
+       :image-output-type "png"
+       :image-size-adjust (1.0 . 1.0)
+       :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+       :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+
+;(add-to-list 'org-preview-latex-process-alist luamagick)
+
+;(setq org-preview-latex-default-process 'luamagick)
+
+
 
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
@@ -1662,6 +1667,12 @@ ov)
 
 (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
 (global-set-key (kbd "M-RET c") 'compile)
+(defun my-add-tilde ()
+  (interactive)
+  (delete-char 1)
+  (insert "~"))
+(global-set-key (kbd "<f6>") 'my-add-tilde)
+
 
 (add-hook 'prolog-mode-hook
           '(lambda ()
