@@ -550,11 +550,38 @@
     (add-hook 'elpy-mode-hook (lambda ()
                                 (electric-pair-mode nil)))
     )
+
+  (defun annotate-pdb ()
+    (interactive)
+    (highlight-lines-matching-regexp "import pu?db")
+    (highlight-lines-matching-regexp "pdb.set_trace()"))
+  (add-hook 'python-mode-hook 'annotate-pdb)
+
+  (defun python-add-breakpoint ()
+    (interactive)
+    (newline-and-indent)
+    (insert "import pdb; pdb.set_trace()")
+    (newline-and-indent)
+    (highlight-lines-matching-regexp "^[ ]*import pdb;"))
+
+  (defun python-add-pubreakpoint ()
+    (interactive)
+    (newline-and-indent)
+    (insert "import pudb; pu.db")
+    (newline-and-indent)
+    (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
+
+  (add-hook 'python-mode-hook '(lambda ()
+                                 (electric-indent-local-mode -1)
+                                 ))
+
   :mode (("\\.py\\'" . elpy-mode))
   :bind (:map elpy-mode-map
               ("M-RET f c" . elpy-format-code)
               ("M-RET e n" . next-error)
               ("M-RET e p" . previous-error)
+              ("M-RET b d" . python-add-breakpoint)
+              ("M-RET b u" . python-add-pubreakpoint)
               )
   )
 
@@ -1451,33 +1478,6 @@
 ;;; Set some more
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(defun annotate-pdb ()
-  (interactive)
-  (highlight-lines-matching-regexp "import pu?db")
-  (highlight-lines-matching-regexp "pdb.set_trace()"))
-(add-hook 'python-mode-hook 'annotate-pdb)
-
-(defun python-add-breakpoint ()
-  (interactive)
-  (newline-and-indent)
-  (insert "import pdb; pdb.set_trace()")
-  (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pdb;"))
-
-(defun python-add-pubreakpoint ()
-  (interactive)
-  (newline-and-indent)
-  (insert "import pudb; pu.db")
-  (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
-
-(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c M-y") 'python-add-breakpoint)))
-(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c C-y") 'python-add-pubreakpoint)))
-
-(add-hook 'python-mode-hook '(lambda ()
-                               (electric-indent-local-mode -1)
-                               ))
 
 (defun tex-add-russian-dash ()
   (interactive)
