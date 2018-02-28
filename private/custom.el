@@ -75,7 +75,8 @@
  '(rw-hunspell-use-rw-ispell t)
  '(safe-local-variable-values
    (quote
-    ((TeX-command-extra-options . "-shell-escape")
+    ((TeX-engine . lualatex)
+     (TeX-command-extra-options . "-shell-escape")
      (TeX-auto-save . t)
      (TeX-parse-self . t)
      (major-mode . rst-mode)

@@ -104,6 +104,8 @@
 ;; which also installs diminish.
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
+(unless (package-installed-p 'dininish)
+  (package-install 'diminish))
 (setq use-package-verbose t)
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -494,6 +496,58 @@
   :diminish flycheck-mode
   )
 
+(use-package langtool
+  :defer 1
+  :if (executable-find "/usr/bin/languagetool")
+  :config
+  ;(setq langtool-java-bin "/usr/bin/java")
+  (setq langtool-bin "/usr/bin/languagetool")
+  ;; (setq langtool-language-tool-jar "/usr/share/java/languagetool/languagetool-commandline.jar")
+  ;; (setq langtool-java-classpath
+  ;;       "/usr/share/java/languagetool/*")
+  (setq langtool-default-language "ru-RU")
+  (setq langtool-mother-tongue "ru")
+  (defun langtool-autoshow-detail-popup (overlays)
+    (when (require 'popup nil t)
+      ;; Do not interrupt current popup
+      (unless (or popup-instances
+                  ;; suppress popup after type `C-g' .
+                  (memq last-command '(keyboard-quit)))
+        (let ((msg (langtool-details-error-message overlays)))
+          (popup-tip msg)))))
+
+  (setq langtool-autoshow-message-function
+        'langtool-autoshow-detail-popup)
+
+  (defun my-lt-set-english ()
+    (interactive)
+    (setq langtool-default-language "en-US")
+    (message "Language tool set to English")
+    )
+
+  (defun my-lt-set-russian ()
+    (interactive)
+    (setq langtool-default-language "ru-RU")
+    (message "Language tool set to Russian")
+    )
+
+  :bind
+    ("M-RET l t s" . langtool-check)
+    ("M-RET l t d" . langtool-check-done)
+    ("M-RET l t l" . langtool-switch-default-language)
+    ("M-RET l t s" . langtool-show-message-at-point)
+    ("M-RET l t c" . langtool-correct-buffer)
+    ("M-RET l t e" . my-lt-set-english)
+    ("M-RET l t r" . my-lt-set-russian)
+    ("\C-x4s" . langtool-check)
+    ("\C-x4q" . langtool-check-done)
+    ("\C-x4l" . langtool-switch-default-language)
+    ("\C-x44" . langtool-show-message-at-point)
+    ("\C-x4c" . langtool-correct-buffer)
+    ("\C-x4e" . my-lt-set-english)
+    ("\C-x4r" . my-lt-set-russian)
+    )
+
 (use-package company
   :config
   (add-hook 'after-init-hook 'global-company-mode)
@@ -550,11 +604,38 @@
     (add-hook 'elpy-mode-hook (lambda ()
                                 (electric-pair-mode nil)))
     )
+
+  (defun annotate-pdb ()
+    (interactive)
+    (highlight-lines-matching-regexp "import pu?db")
+    (highlight-lines-matching-regexp "pdb.set_trace()"))
+  (add-hook 'python-mode-hook 'annotate-pdb)
+
+  (defun python-add-breakpoint ()
+    (interactive)
+    (newline-and-indent)
+    (insert "import pdb; pdb.set_trace()")
+    (newline-and-indent)
+    (highlight-lines-matching-regexp "^[ ]*import pdb;"))
+
+  (defun python-add-pubreakpoint ()
+    (interactive)
+    (newline-and-indent)
+    (insert "import pudb; pu.db")
+    (newline-and-indent)
+    (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
+
+  (add-hook 'python-mode-hook '(lambda ()
+                                 (electric-indent-local-mode -1)
+                                 ))
+
   :mode (("\\.py\\'" . elpy-mode))
   :bind (:map elpy-mode-map
               ("M-RET f c" . elpy-format-code)
               ("M-RET e n" . next-error)
               ("M-RET e p" . previous-error)
+              ("M-RET b d" . python-add-breakpoint)
+              ("M-RET b u" . python-add-pubreakpoint)
               )
   )
 
@@ -1451,33 +1532,6 @@
 ;;; Set some more
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(defun annotate-pdb ()
-  (interactive)
-  (highlight-lines-matching-regexp "import pu?db")
-  (highlight-lines-matching-regexp "pdb.set_trace()"))
-(add-hook 'python-mode-hook 'annotate-pdb)
-
-(defun python-add-breakpoint ()
-  (interactive)
-  (newline-and-indent)
-  (insert "import pdb; pdb.set_trace()")
-  (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pdb;"))
-
-(defun python-add-pubreakpoint ()
-  (interactive)
-  (newline-and-indent)
-  (insert "import pudb; pu.db")
-  (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
-
-(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c M-y") 'python-add-breakpoint)))
-(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c C-y") 'python-add-pubreakpoint)))
-
-(add-hook 'python-mode-hook '(lambda ()
-                               (electric-indent-local-mode -1)
-                               ))
 
 (defun tex-add-russian-dash ()
   (interactive)
