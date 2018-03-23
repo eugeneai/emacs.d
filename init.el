@@ -1102,6 +1102,7 @@
                               (flyspell-prog-mode)
                               (diminish 'flyspell-mode)))
   ; ispell-alternate-dictionary
+  :bind ("C-M-<tab>" . flyspell-auto-correct-word)
   )
 
 (use-package smart-mode-line
@@ -1316,22 +1317,37 @@
    )
   )
 
-(use-package csharp-mode
+(use-package omnisharp
   :config
   (defun local-csharp-mode-hook ()
+    (interactive "")
     ;; enable the stuff you want for C# here
+    (omnisharp-mode)
+    (company-mode)
+    (flycheck-mode)
+    (setq indent-tabs-mode nil)
+    (setq c-syntactic-indentation t)
+    (c-set-style "ellemtel")
+    (setq c-basic-offset 4)
+    (setq truncate-lines t)
+    (setq tab-width 4)
+    (setq evil-shift-width 4)
     (electric-pair-mode 1)       ;; Emacs 24
     (electric-pair-local-mode 1) ;; Emacs 25
     )
-  (add-hook 'csharp-mode-hook 'local-csharp-mode-hook)
-  :mode
-  (
-   ("\\.cs\\'" . csharp-mode)
-   )
+  (add-to-list 'company-backends #'company-omnisharp)
+                                        ;(add-hook 'csharp-mode-hook #'local-csharp-mode-hook)
+  :hook (csharp-mode . local-csharp-mode-hook)
+  :mode ("\\.cs\\'" . csharp-mode)
   :bind (:map csharp-mode-map
-              ("<f5>" . compile)
+              ("M-RET c c" . compile)
+              ("M-RET r c" . recompile)
+              ("M-RET r r" . omnisharp-run-code-action-refactoring)
+              ("<pause>" . omnisharp-run-code-action-refactoring)
               )
   )
+
+
 
 (use-package vala-mode)
 (use-package vala-snippets)
@@ -1711,8 +1727,9 @@
     (beginning-of-line)))
 
 (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
-(global-set-key (kbd "M-RET c") 'compile)
-(global-set-key (kbd "<XF86Calculator>") 'compile)
+(global-set-key (kbd "M-RET c c") 'compile)
+(global-set-key (kbd "M-RET c r") 'recompile)
+(global-set-key (kbd "<XF86Calculator>") 'recompile)
 
 (defun my-add-tilde ()
   (interactive)
@@ -1723,7 +1740,7 @@
 
 (add-hook 'prolog-mode-hook
           '(lambda ()
-             (local-set-key (kbd "<XF86Calculator>") #'compile)
+             (local-set-key (kbd "<XF86Calculator>") #'recompile)
              )
           ; prolog-mode-map unset M-Ret key, make it Ctrl-Ret
           )
