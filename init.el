@@ -685,8 +685,8 @@
 ;;   )
 
 ;; Emacs Speaks Statistics includes support for R.
-(use-package ess-site
-  :ensure ess)
+;; (use-package ess-site
+;;   :ensure ess)
 
 
 ;; Use a nice JavaScript mode.
@@ -1102,6 +1102,7 @@
                               (flyspell-prog-mode)
                               (diminish 'flyspell-mode)))
   ; ispell-alternate-dictionary
+  :bind ("C-M-<tab>" . flyspell-auto-correct-word)
   )
 
 (use-package smart-mode-line
@@ -1316,22 +1317,37 @@
    )
   )
 
-(use-package csharp-mode
+(use-package omnisharp
   :config
   (defun local-csharp-mode-hook ()
+    (interactive "")
     ;; enable the stuff you want for C# here
+    (omnisharp-mode)
+    (company-mode)
+    (flycheck-mode)
+    (setq indent-tabs-mode nil)
+    (setq c-syntactic-indentation t)
+    (c-set-style "ellemtel")
+    (setq c-basic-offset 4)
+    (setq truncate-lines t)
+    (setq tab-width 4)
+    (setq evil-shift-width 4)
     (electric-pair-mode 1)       ;; Emacs 24
     (electric-pair-local-mode 1) ;; Emacs 25
     )
-  (add-hook 'csharp-mode-hook 'local-csharp-mode-hook)
-  :mode
-  (
-   ("\\.cs\\'" . csharp-mode)
-   )
+  (add-to-list 'company-backends #'company-omnisharp)
+                                        ;(add-hook 'csharp-mode-hook #'local-csharp-mode-hook)
+  :hook (csharp-mode . local-csharp-mode-hook)
+  :mode ("\\.cs\\'" . csharp-mode)
   :bind (:map csharp-mode-map
-              ("<f5>" . compile)
+              ("M-RET c c" . compile)
+              ("M-RET r c" . recompile)
+              ("M-RET r r" . omnisharp-run-code-action-refactoring)
+              ("<pause>" . omnisharp-run-code-action-refactoring)
               )
   )
+
+
 
 (use-package vala-mode)
 (use-package vala-snippets)
@@ -1390,6 +1406,23 @@
                 )
               auto-mode-alist)
       )
+
+;; (autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
+;; (add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
+;; (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
+(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
+(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
+
+(defun compile-test ()
+  (interactive)
+  (comile "make -k tests")
+  )
+
+(add-hook 'prolog-mode-hook (lambda ()
+                              (local-set-key (kbd "M-RET t a") 'compile-test)
+                            )
+          )
+
 
 (global-set-key (kbd "C-c q") 'auto-fill-mode)
 
@@ -1655,32 +1688,6 @@
   (scroll-lock-move-to-column scroll-lock-temporary-goal-column)
   )
 
-(defvar gud-overlay
-(let* ((ov (make-overlay (point-min) (point-min))))
-(overlay-put ov 'face 'secondary-selection)
-ov)
-"Overlay variable for GUD highlighting.")
-
-(defadvice gud-display-line (after my-gud-highlight act)
-"Highlight current line."
-(let* ((ov gud-overlay)
-(bf (gud-find-file true-file)))
-(save-excursion
-  (set-buffer bf)
-  (move-overlay ov (line-beginning-position) (line-end-position)
-  (current-buffer)))))
-
-(defun gud-kill-buffer ()
-(if (eq major-mode 'gud-mode)
-(delete-overlay gud-overlay)))
-
-(add-hook 'kill-buffer-hook 'gud-kill-buffer)
-(add-hook 'gdb-mode-hook '(lambda ()
-                            ;(new-frame)
-                            ;(switch-to-buffer "**gdb**")
-                            ;(tool-bar-mode 1)
-                            (gdb-many-windows)
-                            ))
 ;;-------------------------------------------------------------
 
 (put 'erase-buffer 'disabled nil)
@@ -1720,7 +1727,10 @@ ov)
     (beginning-of-line)))
 
 (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
-(global-set-key (kbd "M-RET c") 'compile)
+(global-set-key (kbd "M-RET c c") 'compile)
+(global-set-key (kbd "M-RET c r") 'recompile)
+(global-set-key (kbd "<XF86Calculator>") 'recompile)
+
 (defun my-add-tilde ()
   (interactive)
   (delete-char 1)
@@ -1730,7 +1740,7 @@ ov)
 
 (add-hook 'prolog-mode-hook
           '(lambda ()
-             (local-set-key (kbd "<XF86Calculator>") #'compile)
+             (local-set-key (kbd "<XF86Calculator>") #'recompile)
              )
           ; prolog-mode-map unset M-Ret key, make it Ctrl-Ret
           )
