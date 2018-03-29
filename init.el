@@ -79,20 +79,25 @@
 ;; This package called package comes with Emacs.
 (require 'package)
 ;; Turn on packaging.
-(package-initialize)
 
-(setq package-archives '(
-                         ("melpa" . "http://melpa.org/packages/")
-                         ;("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("elpa" . "http://elpa.gnu.org/packages/")
-                         ("elpy" . "http://jorgenschaefer.github.io/packages/")
-                         ("org" . "http://orgmode.org/elpa/")
-                         ))
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://marmalade-repo.org/packages/")) t)
+  (add-to-list 'package-archives (cons "elpa" (concat proto "://elpa.gnu.org/packages/")) t)
+  (add-to-list 'package-archives (cons "elpy" (concat proto "://jorgenschaefer.github.io/packages/")) t)
+  (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
+  )
 
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 
+(package-initialize)
 
 ;; From github.com/magnars/.emacs.d:
 ;; Ensure we have MELPA package awareness.
