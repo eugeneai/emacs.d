@@ -562,6 +562,16 @@
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
   (setq company-tooltip-flip-when-above t)
+  (defun my-setup-faces-compay ()
+    (interactive "")
+    (let ((bg (face-attribute 'default :background)))
+      (custom-set-faces
+       `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
+       `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
+       `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
+       `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+       `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
+    )
   )
 
 ;; Elpy the Emacs Lisp Python Environment.
@@ -1122,11 +1132,11 @@
 )
 
 
-;; show the cursor when moving after big movements in the window
-(use-package beacon
-  :config
-  (beacon-mode +1)
-  )
+;; ;; show the cursor when moving after big movements in the window
+;; (use-package beacon
+;;   :config
+;;   (beacon-mode +1)
+;;   )
 
 ;; show available keybindings after you start typing
 (use-package which-key
@@ -1296,14 +1306,14 @@
 (use-package helm-themes)
 
 
-(use-package cursor-chg
-  :config
-  (setq curchg-default-cursor-color "LightSkyBlue1")
-  (setq curchg-input-method-cursor-color "red")
-  (setq curchg-default-cursor-type '(hbar . 7))
-  (change-cursor-mode 1) ; On for overwrite/read-only/input mode
-  (toggle-cursor-type-when-idle 1) ; On when idle
-  )
+;; (use-package cursor-chg
+;;   :config
+;;   (setq curchg-default-cursor-color "LightSkyBlue1")
+;;   (setq curchg-input-method-cursor-color "red")
+;;   (setq curchg-default-cursor-type '(hbar . 7))
+;;   (change-cursor-mode 1) ; On for overwrite/read-only/input mode
+;;   (toggle-cursor-type-when-idle 1) ; On when idle
+;;   )
 
 (use-package jedi-direx)
 
@@ -1780,7 +1790,71 @@
   (interactive)
   (byte-recompile-directory "~/.emacs.d/elpa" 0 t))
 
+
+(when
+    windowed-system
+    (progn
+      ;; This script is set for a `text-scale-mode-step` of `1.04`
+      (setq text-scale-mode-step 1.2)
+      ;;
+      ;; List: `Sub-Zoom Font Heights per text-scale-mode-step`
+      ;;   eg.  For a default font-height of 120 just remove the leading `160 150 140 130`
+      (defvar sub-zoom-ht (list 160 150 140 130 120 120 110 100 100  90  80  80  80  80  70  70  60  60  50  50  50  40  40  40  30  20  20  20  20  20  20  10  10  10  10  10  10  10  10  10  10   5   5   5   5   5   2   2   2   2   2   2   2   2   1   1   1   1   1   1   1   1   1   1   1   1))
+      (defvar sub-zoom-len (safe-length sub-zoom-ht))
+      (defvar def-zoom-ht (car sub-zoom-ht))
+      ;(set-face-attribute 'default nil :height def-zoom-ht)
+
+      ;; Adjust line number fonts.
+
+      (setq my-def-linum-text-height
+            (face-attribute 'default :height))
+
+      (defun text-scale-adjust-zAp ()
+        (interactive)
+        (text-scale-adjust 0)
+        (set-face-attribute 'linum nil :height my-def-linum-text-height)
+        (my-setup-faces-compay)
+        )
+
+      (defun text-scale-decrease-zAp ()
+        (interactive)
+        (text-scale-decrease 1)
+        (set-face-attribute 'linum nil :height my-def-linum-text-height)
+        (my-setup-faces-compay)
+        )
+
+      (defun text-scale-increase-zAp ()
+        (interactive)
+        (text-scale-increase 1)
+        (set-face-attribute 'linum nil :height my-def-linum-text-height)
+        (my-setup-faces-compay)
+        )
+
+      ;; Zoom font via Numeric Keypad
+
+      (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase-zAp)
+      (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease-zAp)
+      (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust-zAp)
+      (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase-zAp)
+      (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease-zAp)
+      (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase-zAp)
+      (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease-zAp)
+
+      ;; (set-scroll-bar-mode 'right)   ; replace 'right with 'left to place it to the left
+      (setq popup-use-optimized-column-computation nil) ; May be tie menu size to default text size.
+  )
+  )
+
+(require 'cursor-chg)
+(setq curchg-default-cursor-color "LightSkyBlue1")
+(setq curchg-input-method-cursor-color "red")
+(setq curchg-default-cursor-type '(hbar . 7))
+(change-cursor-mode 1) ; On for overwrite/read-only/input mode
+(toggle-cursor-type-when-idle 1) ; On when idle
+
+
+(put 'narrow-to-page 'disabled nil)
 (delete-other-windows)
+
 (provide 'init)
 ;;; init.el ends here
-(put 'narrow-to-page 'disabled nil)
