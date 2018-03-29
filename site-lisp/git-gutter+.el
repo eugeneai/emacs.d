@@ -571,7 +571,7 @@ Returns t on zero exit code, nil otherwise."
         (forward-line (1- (plist-get diffinfo :start-line)))
         (when (buffer-live-p (get-buffer git-gutter+-popup-buffer))
           (save-window-excursion
-            (git-gutter+-show-hunk)))))))
+            (git-gutter+-show-hunk diffinfo)))))))
 
 (defun git-gutter+-previous-hunk (arg)
   "Move to previous diff hunk"
@@ -1168,12 +1168,11 @@ set remove it."
 (defvar git-gutter+-previously-staged-files nil)
 (defvar git-gutter+-staged-files nil)
 
-;; Older versions of magit
-(eval-after-load 'magit
-  '(add-hook 'magit-refresh-status-hook 'git-gutter+-on-magit-refresh-status))
-;; Newer versions of magit
-(eval-after-load 'magit
-  '(add-hook 'magit-status-refresh-hook 'git-gutter+-on-magit-refresh-status))
+(with-eval-after-load 'magit
+  ;; Old Magit versions
+  (add-hook 'magit-refresh-status-hook 'git-gutter+-on-magit-refresh-status)
+  ;; New Magit versions
+  (add-hook 'magit-status-refresh-hook 'git-gutter+-on-magit-refresh-status))
 
 (defun git-gutter+-on-magit-refresh-status ()
   (let ((head (git-gutter+-get-magit-head)))
