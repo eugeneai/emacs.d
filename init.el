@@ -324,21 +324,21 @@
 (use-package zenburn-theme
   :disabled t
   :config
-  (load-theme 'zenburn t)
+  ; (load-theme 'zenburn t)
   )
 
 (use-package material-theme
-  :disabled t
+  ;:disabled t
   :config
-  (load-theme 'material t)
+  ; (load-theme 'material t)
   )
 
-;; ;; FIXME: Cannot load it
-;; (use-package spacemacs-theme
-;;   ;:disabled t
-;;   :config
-;;   (load-theme 'spacemacs-dark t)
-;;   )
+;; An original method of spacemacs loading
+(use-package spacemacs-common
+  :disabled t
+  :ensure spacemacs-theme
+  :config (load-theme 'spacemacs-dark t))
+
 
 ;; Themes can be disabled with disable-theme.
 
@@ -480,15 +480,12 @@
   :config
   (key-chord-define-global "jk" 'buffer-stack-down))
 
-
-
 ;; Conveniently zoom all of Emacs.
-(use-package zoom-frm
-  :bind
-  ("C-=" . zoom-in/out)
-  ("C-+" . zoom-in/out)
-  ("C--" . zoom-in/out))
-
+;; (use-package zoom-frm
+;;   :bind
+;;   ("C-=" . zoom-in/out)
+;;   ("C-+" . zoom-in/out)
+;;   ("C--" . zoom-in/out))
 
 ;; Check syntax, make life better.
 (use-package flycheck
@@ -983,7 +980,7 @@
 ;;; CONTINUE:
 ;;; TODO: Other languages
 
-(use-package color-theme)
+;;(use-package color-theme)
 (use-package color)
 (use-package fiplr
   :config
@@ -1812,21 +1809,21 @@
       (defun text-scale-adjust-zAp ()
         (interactive)
         (text-scale-adjust 0)
-        (set-face-attribute 'linum nil :height my-def-linum-text-height)
+        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
         (my-setup-faces-compay)
         )
 
       (defun text-scale-decrease-zAp ()
         (interactive)
         (text-scale-decrease 1)
-        (set-face-attribute 'linum nil :height my-def-linum-text-height)
+        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
         (my-setup-faces-compay)
         )
 
       (defun text-scale-increase-zAp ()
         (interactive)
         (text-scale-increase 1)
-        (set-face-attribute 'linum nil :height my-def-linum-text-height)
+        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
         (my-setup-faces-compay)
         )
 
