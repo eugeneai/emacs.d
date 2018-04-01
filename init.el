@@ -46,7 +46,7 @@
 ;(add-to-list 'load-path site-lisp-dir)
 
 
-;(load-theme 'eugeneai-theme t)
+(load-theme 'eugeneai-theme t)
 
 
 ;; Proxy Settings
@@ -328,7 +328,7 @@
   )
 
 (use-package material-theme
-  ;:disabled t
+  :disabled t
   :config
   ; (load-theme 'material t)
   )
@@ -1296,10 +1296,18 @@
   (define-key company-mode-map (kbd "C-:") 'helm-company)
   (define-key company-active-map (kbd "C-:") 'helm-company)
   )
-
 (use-package helm-pydoc
   :config
   (define-key python-mode-map (kbd "C-c C-d") 'helm-pydoc))
+
+(use-package helm-swoop
+  :config
+  (global-set-key (kbd "M-i") 'helm-swoop)
+  (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+  (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+  (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+  )
+
 (use-package helm-themes)
 
 
