@@ -1363,7 +1363,9 @@
     (electric-pair-local-mode 1) ;; Emacs 25
     )
   (add-to-list 'company-backends #'company-omnisharp)
-                                        ;(add-hook 'csharp-mode-hook #'local-csharp-mode-hook)
+  ; FIXME: these do not work due to endless recursion
+  ;(add-to-list 'load-path "~/.emacs.d/site-lisp/paket.el/")
+  ;(require 'paket)
   :hook (csharp-mode . local-csharp-mode-hook)
   :mode ("\\.cs\\'" . csharp-mode)
   :bind (:map csharp-mode-map
@@ -1398,6 +1400,8 @@
   )
 
 (use-package d-mode)
+
+
 
 ;; lualatex preview
 (setq org-latex-pdf-process
