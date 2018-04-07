@@ -557,11 +557,11 @@
   :config
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-idle-delay 0.2)
-  (setq company-tooltip-limit 10)
+  (setq company-tooltip-limit 20)
   (setq company-minimum-prefix-length 2)
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
-  (setq company-tooltip-flip-when-above t)
+  ;(setq company-tooltip-flip-when-above t)
   (defun my-setup-faces-compay ()
     (interactive "")
     (let ((bg (face-attribute 'default :background)))
@@ -573,6 +573,10 @@
        `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
     )
   )
+
+(use-package company-auctex
+  :config
+  (company-auctex-init))
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
