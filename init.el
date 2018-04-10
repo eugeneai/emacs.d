@@ -557,11 +557,11 @@
   :config
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-idle-delay 0.2)
-  (setq company-tooltip-limit 10)
+  (setq company-tooltip-limit 20)
   (setq company-minimum-prefix-length 2)
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
-  (setq company-tooltip-flip-when-above t)
+  ;(setq company-tooltip-flip-when-above t)
   (defun my-setup-faces-compay ()
     (interactive "")
     (let ((bg (face-attribute 'default :background)))
@@ -573,6 +573,10 @@
        `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
     )
   )
+
+(use-package company-auctex
+  :config
+  (company-auctex-init))
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
@@ -1359,7 +1363,9 @@
     (electric-pair-local-mode 1) ;; Emacs 25
     )
   (add-to-list 'company-backends #'company-omnisharp)
-                                        ;(add-hook 'csharp-mode-hook #'local-csharp-mode-hook)
+  ; FIXME: these do not work due to endless recursion
+  ;(add-to-list 'load-path "~/.emacs.d/site-lisp/paket.el/")
+  ;(require 'paket)
   :hook (csharp-mode . local-csharp-mode-hook)
   :mode ("\\.cs\\'" . csharp-mode)
   :bind (:map csharp-mode-map
@@ -1394,6 +1400,8 @@
   )
 
 (use-package d-mode)
+
+
 
 ;; lualatex preview
 (setq org-latex-pdf-process
