@@ -1550,6 +1550,7 @@
 (define-key global-map [f9] 'reconstruct-paragraph)
 (define-key global-map [f12] 'reconstruct-minted-line)
 (define-key global-map [f8] 'delete-other-windows)
+(define-key global-map [C-f8] 'delete-window)
 
 (add-to-list 'auto-mode-alist '("\\.zcml\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
