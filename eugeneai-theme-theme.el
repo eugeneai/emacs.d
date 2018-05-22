@@ -10,8 +10,7 @@
 (custom-theme-set-variables
  'eugeneai-theme
  '(safe-local-variable-values (quote ((TeX-master . "dis") (whitespace-line-column . 80) (lexical-binding . t))))
- '(show-paren-mode t)
- '(tool-bar-mode nil))
+ '(show-paren-mode t))
 
 (custom-theme-set-faces
  'eugeneai-theme
