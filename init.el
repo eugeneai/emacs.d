@@ -501,12 +501,14 @@
   :diminish flycheck-mode
   )
 
+(setq langtool-java-classpath
+      "/usr/share/languagetool:/usr/share/java/languagetool/*")
 (use-package langtool
   :defer 1
   :if (executable-find "/usr/bin/languagetool")
   :config
   ;(setq langtool-java-bin "/usr/bin/java")
-  (setq langtool-bin "/usr/bin/languagetool")
+  ;;;;; (setq langtool-bin "/usr/bin/languagetool")
   ;; (setq langtool-language-tool-jar "/usr/share/java/languagetool/languagetool-commandline.jar")
   ;; (setq langtool-java-classpath
   ;;       "/usr/share/java/languagetool/*")
