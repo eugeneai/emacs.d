@@ -1,17 +1,17 @@
 ;; logtalk.el -- font lock support for Logtalk (https://logtalk.org/)
 
-;; Copyright (c) 2003-2017 Paulo Moura
+;; Copyright (c) 2003-2018 Paulo Moura
 
 ;; Author: Paulo Moura <pmoura@logtalk.org>
 ;; Creation date: November 15, 2003
-;; Last modification date: November 13, 2017
-;; Version: 1.34
+;; Last modification date: August 3, 2018
+;; Version: 1.37
 
 ;; Installation:
 ;;
-;; First, copy this file to the appropriated directory. For FSF Emacs this will
+;; First, copy this file to the appropriated directory. For FSF Emacs this will 
 ;; probably be /usr/local/share/emacs/site-lisp. For XEmacs, the directory is
-;; usully /usr/local/lib/xemacs/site-lisp. You may also copy the file to a
+;; usully /usr/local/lib/xemacs/site-lisp. You may also copy the file to a 
 ;; sub-directory in your home directory depending on your Emacs configuration.
 ;; Type "C-h v load-path" in Emacs to find the list of paths that are searched
 ;; for when looking for lisp files.
@@ -25,27 +25,27 @@
 
 
 
-;; setup
+;; setup 
 
-(defvar logtalk-mode-version "1.34"
+(defvar logtalk-mode-version "1.37"
 	"Logtalk mode version number")
 
 (defvar logtalk-mode-hook nil)
 
-(defvar logtalk-mode-map nil)
+(defvar logtalk-mode-map nil) 
 
 (if logtalk-mode-map nil
 	(setq logtalk-mode-map (make-keymap)))
 
 
 
-;; syntax highlighting
+;; syntax highlighting 
 
 (defvar logtalk-font-lock-keywords nil)
 
 
 
-;; syntax table
+;; syntax table 
 
 (defvar logtalk-mode-syntax-table
 	(let ((logtalk-mode-syntax-table (make-syntax-table)))
@@ -125,7 +125,7 @@
 		("\\<\\(co\\(?:mplements_object\\|nforms_to_protocol\\)\\|extends_\\(?:object\\|protocol\\|category\\)\\|i\\(?:mp\\(?:lements_protocol\\|orts_category\\)\\|nstantiates_class\\)\\|specializes_class\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
 		("\\<\\(\\(?:abolish\\|define\\)_events\\|current_event\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
 		("\\<\\(\\(?:c\\(?:reate\\|urrent\\)\\|set\\)_logtalk_flag\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
-		("\\<\\(logtalk_\\(?:compile\\|load\\|library_path\\|load_context\\|make\\)\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
+		("\\<\\(logtalk_\\(?:compile\\|load\\|library_path\\|load_context\\|make\\(?:_target_action\\)\\)\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
 		("\\<logtalk_make\\>" 0 'logtalk-built-in-predicate-face)
 		("\\<\\(forall\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
 		("\\<\\(retractall\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
@@ -135,8 +135,8 @@
 		("\\<\\(ca\\(?:ll\\|tch\\)\\|throw\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
 		("\\<\\(fa\\(?:il\\|lse\\)\\|true\\)\\>" 0 'logtalk-built-in-predicate-face)
 		("\\(!\\|->\\|;\\)" 0 'logtalk-built-in-predicate-face)
-		("\\<instantiation_error\\>" 0 'logtalk-built-in-predicate-face)
-		("\\<\\(\\(?:type\\|domain\\|existence\\|permission\\|representation\\|evaluation\\|resource\\)_error\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
+		("\\<\\(?:instantiation\\|system\\)_error\\>" 0 'logtalk-built-in-predicate-face)
+		("\\<\\(\\(?:type\\|domain\\|existence\\|permission\\|representation\\|evaluation\\|resource\\|syntax\\)_error\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
 		;;
 		;; multi-threading:
 		;;
@@ -215,7 +215,7 @@
 		;;
 		;; atomic term processing:
 		;;
-        ("\\<\\(atom_\\(?:c\\(?:hars\\|o\\(?:des\\|ncat\\)\\)\\|length\\)\\|char_code\\|number_c\\(?:har\\|ode\\)s\\|sub_atom\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
+		("\\<\\(atom_\\(?:c\\(?:hars\\|o\\(?:des\\|ncat\\)\\)\\|length\\)\\|char_code\\|number_c\\(?:har\\|ode\\)s\\|sub_atom\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
 		;;
 		;; sorting
 		;;
@@ -254,6 +254,7 @@
 		("\\<\\(0x[[:xdigit:]]+\\)\\>" 1 'logtalk-number-face)
 		("\\<\\(0o[0-7]+\\)\\>" 1 'logtalk-number-face)
 		("\\<\\(0b[0-1]+\\)\\>" 1 'logtalk-number-face)
+		("\\<\\(0['][\\].\\)\\>" 1 'logtalk-number-face)
 		("\\<\\(0['].\\)\\>" 1 'logtalk-number-face)
 		("\\<\\([0-9]+\\([.][0-9]+\\)?\\([eE][+-][0-9]+\\)?\\)\\>" 1 'logtalk-number-face)
 	))
@@ -293,4 +294,4 @@
 	(setq mode-name "Logtalk")
 	(run-hooks 'logtalk-mode-hook))
 
-(provide 'logtalk-mode)
+(provide 'logtalk-mode) 
