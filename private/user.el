@@ -175,7 +175,7 @@
 
 ;(require 'linum)
 
-(require 'linum+)
+;(require 'linum+)
 
 ;;(global-linum-mode 1)
 
@@ -347,7 +347,7 @@
 (global-set-key (kbd "C-<escape>") 'keyboard-escape-quit)
 (global-unset-key (kbd "<escape>-<escape>-<escape>"))
 (global-set-key (kbd "C-q") 'quoted-insert)
-(global-set-key (kbd "C-z") 'undo)
+;; (global-set-key (kbd "C-z") 'undo)
 
 (global-set-key (kbd "s-<right>") 'next-buffer)
 (global-set-key (kbd "s-<left>") 'previous-buffer)
@@ -785,7 +785,7 @@
 
 ;(add-hook 'LaTeX-mode-hook 'latex-12-hacks)
 
-(global-set-key (kbd "C-`") 'linum-mode)
+;(global-set-key (kbd "C-`") 'linum-mode)
 (put 'scroll-left 'disabled nil)
 
 ;; Patching wrong scrolllock behaviour

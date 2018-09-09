@@ -214,9 +214,14 @@
 ;; Easily memorable whole-buffer selection.
 (global-set-key (kbd "M-A") 'mark-whole-buffer)
 
-(use-package nlinum
-  :bind
-  ("C-`" . nlinum-mode))
+(if
+    (version< emacs-version "26.0.50")
+    (progn
+      (use-package nlinum
+        :bind
+        ("C-`" . nlinum-mode)))
+  (progn
+    (global-set-key (kbd "C-`") 'display-line-numbers-mode)))
 
 ;; Easily turn line numbers on and off.
 ; (global-set-key (kbd "C-`") 'nlinum-mode)
@@ -385,15 +390,15 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-(if windowed-system
-    (progn
-      (if (or (display-graphic-p) (daemonp))
-          (require 'git-gutter-fringe+)
-        (require 'git-gutter+))
-      (global-git-gutter+-mode)
-      (diminish 'git-gutter+-mode)
-      )
-)
+;; (if windowed-system
+;;     (progn
+;;       (if (or (display-graphic-p) (daemonp))
+;;           (require 'git-gutter-fringe+)
+;;         (require 'git-gutter+))
+;;       (global-git-gutter+-mode)
+;;       (diminish 'git-gutter+-mode)
+;;       )
+;; )
 ;; ;; Eventually may be able to return to something like this:
 ;; (use-package git-gutter-fringe+
 ;;   :init (global-git-gutter+-mode)
@@ -431,11 +436,11 @@
   (global-set-key (kbd "M-X") 'smex-major-mode-commands))
 
 
-;; See the undo history and move through it.
-(use-package undo-tree
-  :disabled t
-  :config (global-undo-tree-mode t)
-  :diminish undo-tree-mode)
+;; ;; See the undo history and move through it.
+;; (use-package undo-tree
+;;   :disabled t
+;;   :config (global-undo-tree-mode t)
+;;   :diminish undo-tree-mode)
 
 ;; Add nice project functions for git repos.
 (use-package projectile
@@ -1346,37 +1351,37 @@
    )
   )
 
-(use-package omnisharp
-  :config
-  (defun local-csharp-mode-hook ()
-    (interactive "")
-    ;; enable the stuff you want for C# here
-    (omnisharp-mode)
-    (company-mode)
-    (flycheck-mode)
-    (setq indent-tabs-mode nil)
-    (setq c-syntactic-indentation t)
-    (c-set-style "ellemtel")
-    (setq c-basic-offset 4)
-    (setq truncate-lines t)
-    (setq tab-width 4)
-    (setq evil-shift-width 4)
-    (electric-pair-mode 1)       ;; Emacs 24
-    (electric-pair-local-mode 1) ;; Emacs 25
-    )
-  (add-to-list 'company-backends #'company-omnisharp)
-  ; FIXME: these do not work due to endless recursion
-  ;(add-to-list 'load-path "~/.emacs.d/site-lisp/paket.el/")
-  ;(require 'paket)
-  :hook (csharp-mode . local-csharp-mode-hook)
-  :mode ("\\.cs\\'" . csharp-mode)
-  :bind (:map csharp-mode-map
-              ("M-RET c c" . compile)
-              ("M-RET r c" . recompile)
-              ("M-RET r r" . omnisharp-run-code-action-refactoring)
-              ("<pause>" . omnisharp-run-code-action-refactoring)
-              )
-  )
+;; (use-package omnisharp
+;;   :config
+;;   (defun local-csharp-mode-hook ()
+;;     (interactive "")
+;;     ;; enable the stuff you want for C# here
+;;     (omnisharp-mode)
+;;     (company-mode)
+;;     (flycheck-mode)
+;;     (setq indent-tabs-mode nil)
+;;     (setq c-syntactic-indentation t)
+;;     (c-set-style "ellemtel")
+;;     (setq c-basic-offset 4)
+;;     (setq truncate-lines t)
+;;     (setq tab-width 4)
+;;     (setq evil-shift-width 4)
+;;     (electric-pair-mode 1)       ;; Emacs 24
+;;     (electric-pair-local-mode 1) ;; Emacs 25
+;;     )
+;;   (add-to-list 'company-backends #'company-omnisharp)
+;;   ; FIXME: these do not work due to endless recursion
+;;   ;(add-to-list 'load-path "~/.emacs.d/site-lisp/paket.el/")
+;;   ;(require 'paket)
+;;   :hook (csharp-mode . local-csharp-mode-hook)
+;;   :mode ("\\.cs\\'" . csharp-mode)
+;;   :bind (:map csharp-mode-map
+;;               ("M-RET c c" . compile)
+;;               ("M-RET r c" . recompile)
+;;               ("M-RET r r" . omnisharp-run-code-action-refactoring)
+;;               ("<pause>" . omnisharp-run-code-action-refactoring)
+;;               )
+;;   )
 
 
 
@@ -1440,11 +1445,11 @@
               auto-mode-alist)
       )
 
-;; (autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
-;; (add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
-;; (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
-(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
-(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
+(autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
+(add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
+(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
+; (add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
+; (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
 
 (defun compile-test ()
   (interactive)
@@ -1563,7 +1568,7 @@
 (global-set-key (kbd "C-<escape>") 'keyboard-escape-quit)
 (global-unset-key (kbd "<escape>-<escape>-<escape>"))
 (global-set-key (kbd "C-q") 'quoted-insert)
-(global-set-key (kbd "C-z") 'undo)
+;; (global-set-key (kbd "C-z") 'undo)
 
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
@@ -1873,7 +1878,10 @@
 
 
 (put 'narrow-to-page 'disabled nil)
-(delete-other-windows)
+
+;;(switch-to-buffer "*Compile-Log*")
+;;(delete-window)
+;;(switch-to-buffer "*scratch*")
 
 (provide 'init)
 ;;; init.el ends here
