@@ -471,7 +471,10 @@
 (use-package multiple-cursors
   :bind
   ("M-RET m e" . mc/edit-lines)
-  ("M-RET m m" . mc/mark-more-like-this-extended))
+  ("M-RET m m" . mc/mark-more-like-this-extended)
+  ("C->" . 'mc/mark-next-like-this)
+  ("C-<" . 'mc/mark-previous-like-this)
+  ("C-c C-<" . 'mc/mark-all-like-this))
 
 
 ;; (Near) simultaneous keypresses create new keys.
@@ -1448,8 +1451,8 @@
 (autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
 (add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
 (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
-; (add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
-; (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
+(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
+(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
 
 (defun compile-test ()
   (interactive)
@@ -1632,9 +1635,9 @@
 (defun my-ttt ()
   (erase-buffer)
   (face-remap-add-relative 'default '(
-          ; :family "Monospace"
-          ; :height 160 ;Seseg
-           :height 100
+          :family "Fira Mono Light"
+          :height 160 ;Seseg
+          ; :height 100
           ))
 )
 
