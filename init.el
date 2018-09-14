@@ -25,6 +25,9 @@
 (setq custom-file "~/.emacs.d/private/custom.el")
 (load-file custom-file)
 
+(add-to-list 'display-buffer-alist
+             '("." nil (reusable-frames . t)))
+
 ;; Welcome!
 (setq user-full-name "Evgeny Cherkashin"
       user-mail-address "eugeneai@irnok.net")
@@ -572,16 +575,6 @@
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
   ;(setq company-tooltip-flip-when-above t)
-  (defun my-setup-faces-compay ()
-    (interactive "")
-    (let ((bg (face-attribute 'default :background)))
-      (custom-set-faces
-       `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-       `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-       `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-       `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-       `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-    )
   )
 
 (use-package company-auctex
@@ -1836,36 +1829,15 @@
       (setq my-def-linum-text-height
             (face-attribute 'default :height))
 
-      (defun text-scale-adjust-zAp ()
-        (interactive)
-        (text-scale-adjust 0)
-        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
-      (defun text-scale-decrease-zAp ()
-        (interactive)
-        (text-scale-decrease 1)
-        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
-      (defun text-scale-increase-zAp ()
-        (interactive)
-        (text-scale-increase 1)
-        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
       ;; Zoom font via Numeric Keypad
 
-      (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease-zAp)
-      (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust-zAp)
-      (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease-zAp)
-      (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease-zAp)
+      (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase)
+      (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease)
+      (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust)
+      (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase)
+      (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease)
+      (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase)
+      (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease)
 
       ;; (set-scroll-bar-mode 'right)   ; replace 'right with 'left to place it to the left
       (setq popup-use-optimized-column-computation nil) ; May be tie menu size to default text size.
