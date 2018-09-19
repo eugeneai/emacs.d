@@ -28,6 +28,10 @@
 (add-to-list 'display-buffer-alist
              '("." nil (reusable-frames . t)))
 
+;; Compilation output
+(setq compilation-scroll-output t)
+;  (setq compilation-scroll-output 'first-error)
+
 ;; Welcome!
 (setq user-full-name "Evgeny Cherkashin"
       user-mail-address "eugeneai@irnok.net")
@@ -1232,6 +1236,7 @@
                                         ; starting the new one
       compilation-scroll-output 'first-error ; Automatically scroll to first
                                         ; error
+      compilation-scroll-output t ; Automatically scroll to first
       )
 
 (defun kill-current-buffer ()
@@ -1628,9 +1633,9 @@
 (defun my-ttt ()
   (erase-buffer)
   (face-remap-add-relative 'default '(
-          :family "Fira Mono Light"
-          :height 160 ;Seseg
-          ; :height 100
+          ;:family "Fira Mono Light"
+          ; :height 160 ;Seseg
+          :height 100
           ))
 )
 
