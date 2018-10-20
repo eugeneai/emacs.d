@@ -25,6 +25,13 @@
 (setq custom-file "~/.emacs.d/private/custom.el")
 (load-file custom-file)
 
+(add-to-list 'display-buffer-alist
+             '("." nil (reusable-frames . t)))
+
+;; Compilation output
+(setq compilation-scroll-output t)
+;  (setq compilation-scroll-output 'first-error)
+
 ;; Welcome!
 (setq user-full-name "Evgeny Cherkashin"
       user-mail-address "eugeneai@irnok.net")
@@ -90,7 +97,7 @@
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
 
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://marmalade-repo.org/packages/")) t)
+  ;; (add-to-list 'package-archives (cons "marmalade" (concat proto "://marmalade-repo.org/packages/")) t)
   (add-to-list 'package-archives (cons "elpa" (concat proto "://elpa.gnu.org/packages/")) t)
   (add-to-list 'package-archives (cons "elpy" (concat proto "://jorgenschaefer.github.io/packages/")) t)
   (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
@@ -214,9 +221,14 @@
 ;; Easily memorable whole-buffer selection.
 (global-set-key (kbd "M-A") 'mark-whole-buffer)
 
-(use-package nlinum
-  :bind
-  ("C-`" . nlinum-mode))
+(if
+    (version< emacs-version "26.0.50")
+    (progn
+      (use-package nlinum
+        :bind
+        ("C-`" . nlinum-mode)))
+  (progn
+    (global-set-key (kbd "C-`") 'display-line-numbers-mode)))
 
 ;; Easily turn line numbers on and off.
 ; (global-set-key (kbd "C-`") 'nlinum-mode)
@@ -385,15 +397,15 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-(if windowed-system
-    (progn
-      (if (or (display-graphic-p) (daemonp))
-          (require 'git-gutter-fringe+)
-        (require 'git-gutter+))
-      (global-git-gutter+-mode)
-      (diminish 'git-gutter+-mode)
-      )
-)
+;; (if windowed-system
+;;     (progn
+;;       (if (or (display-graphic-p) (daemonp))
+;;           (require 'git-gutter-fringe+)
+;;         (require 'git-gutter+))
+;;       (global-git-gutter+-mode)
+;;       (diminish 'git-gutter+-mode)
+;;       )
+;; )
 ;; ;; Eventually may be able to return to something like this:
 ;; (use-package git-gutter-fringe+
 ;;   :init (global-git-gutter+-mode)
@@ -431,11 +443,11 @@
   (global-set-key (kbd "M-X") 'smex-major-mode-commands))
 
 
-;; See the undo history and move through it.
-(use-package undo-tree
-  :disabled t
-  :config (global-undo-tree-mode t)
-  :diminish undo-tree-mode)
+;; ;; See the undo history and move through it.
+;; (use-package undo-tree
+;;   :disabled t
+;;   :config (global-undo-tree-mode t)
+;;   :diminish undo-tree-mode)
 
 ;; Add nice project functions for git repos.
 (use-package projectile
@@ -466,7 +478,10 @@
 (use-package multiple-cursors
   :bind
   ("M-RET m e" . mc/edit-lines)
-  ("M-RET m m" . mc/mark-more-like-this-extended))
+  ("M-RET m m" . mc/mark-more-like-this-extended)
+  ("C->" . 'mc/mark-next-like-this)
+  ("C-<" . 'mc/mark-previous-like-this)
+  ("C-c C-<" . 'mc/mark-all-like-this))
 
 
 ;; (Near) simultaneous keypresses create new keys.
@@ -564,16 +579,6 @@
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
   ;(setq company-tooltip-flip-when-above t)
-  (defun my-setup-faces-compay ()
-    (interactive "")
-    (let ((bg (face-attribute 'default :background)))
-      (custom-set-faces
-       `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-       `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-       `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-       `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-       `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-    )
   )
 
 (use-package company-auctex
@@ -1231,6 +1236,7 @@
                                         ; starting the new one
       compilation-scroll-output 'first-error ; Automatically scroll to first
                                         ; error
+      compilation-scroll-output t ; Automatically scroll to first
       )
 
 (defun kill-current-buffer ()
@@ -1346,37 +1352,37 @@
    )
   )
 
-(use-package omnisharp
-  :config
-  (defun local-csharp-mode-hook ()
-    (interactive "")
-    ;; enable the stuff you want for C# here
-    (omnisharp-mode)
-    (company-mode)
-    (flycheck-mode)
-    (setq indent-tabs-mode nil)
-    (setq c-syntactic-indentation t)
-    (c-set-style "ellemtel")
-    (setq c-basic-offset 4)
-    (setq truncate-lines t)
-    (setq tab-width 4)
-    (setq evil-shift-width 4)
-    (electric-pair-mode 1)       ;; Emacs 24
-    (electric-pair-local-mode 1) ;; Emacs 25
-    )
-  (add-to-list 'company-backends #'company-omnisharp)
-  ; FIXME: these do not work due to endless recursion
-  ;(add-to-list 'load-path "~/.emacs.d/site-lisp/paket.el/")
-  ;(require 'paket)
-  :hook (csharp-mode . local-csharp-mode-hook)
-  :mode ("\\.cs\\'" . csharp-mode)
-  :bind (:map csharp-mode-map
-              ("M-RET c c" . compile)
-              ("M-RET r c" . recompile)
-              ("M-RET r r" . omnisharp-run-code-action-refactoring)
-              ("<pause>" . omnisharp-run-code-action-refactoring)
-              )
-  )
+;; (use-package omnisharp
+;;   :config
+;;   (defun local-csharp-mode-hook ()
+;;     (interactive "")
+;;     ;; enable the stuff you want for C# here
+;;     (omnisharp-mode)
+;;     (company-mode)
+;;     (flycheck-mode)
+;;     (setq indent-tabs-mode nil)
+;;     (setq c-syntactic-indentation t)
+;;     (c-set-style "ellemtel")
+;;     (setq c-basic-offset 4)
+;;     (setq truncate-lines t)
+;;     (setq tab-width 4)
+;;     (setq evil-shift-width 4)
+;;     (electric-pair-mode 1)       ;; Emacs 24
+;;     (electric-pair-local-mode 1) ;; Emacs 25
+;;     )
+;;   (add-to-list 'company-backends #'company-omnisharp)
+;;   ; FIXME: these do not work due to endless recursion
+;;   ;(add-to-list 'load-path "~/.emacs.d/site-lisp/paket.el/")
+;;   ;(require 'paket)
+;;   :hook (csharp-mode . local-csharp-mode-hook)
+;;   :mode ("\\.cs\\'" . csharp-mode)
+;;   :bind (:map csharp-mode-map
+;;               ("M-RET c c" . compile)
+;;               ("M-RET r c" . recompile)
+;;               ("M-RET r r" . omnisharp-run-code-action-refactoring)
+;;               ("<pause>" . omnisharp-run-code-action-refactoring)
+;;               )
+;;   )
 
 
 
@@ -1440,9 +1446,9 @@
               auto-mode-alist)
       )
 
-;; (autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
-;; (add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
-;; (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
+(autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
+(add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
+(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
 (add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
 (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
 
@@ -1563,7 +1569,7 @@
 (global-set-key (kbd "C-<escape>") 'keyboard-escape-quit)
 (global-unset-key (kbd "<escape>-<escape>-<escape>"))
 (global-set-key (kbd "C-q") 'quoted-insert)
-(global-set-key (kbd "C-z") 'undo)
+;; (global-set-key (kbd "C-z") 'undo)
 
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
@@ -1627,9 +1633,9 @@
 (defun my-ttt ()
   (erase-buffer)
   (face-remap-add-relative 'default '(
-          ; :family "Monospace"
+          ;:family "Fira Mono Light"
           ; :height 160 ;Seseg
-           :height 100
+          :height 100
           ))
 )
 
@@ -1828,36 +1834,15 @@
       (setq my-def-linum-text-height
             (face-attribute 'default :height))
 
-      (defun text-scale-adjust-zAp ()
-        (interactive)
-        (text-scale-adjust 0)
-        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
-      (defun text-scale-decrease-zAp ()
-        (interactive)
-        (text-scale-decrease 1)
-        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
-      (defun text-scale-increase-zAp ()
-        (interactive)
-        (text-scale-increase 1)
-        ; (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
       ;; Zoom font via Numeric Keypad
 
-      (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease-zAp)
-      (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust-zAp)
-      (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease-zAp)
-      (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease-zAp)
+      (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase)
+      (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease)
+      (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust)
+      (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase)
+      (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease)
+      (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase)
+      (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease)
 
       ;; (set-scroll-bar-mode 'right)   ; replace 'right with 'left to place it to the left
       (setq popup-use-optimized-column-computation nil) ; May be tie menu size to default text size.
@@ -1873,7 +1858,10 @@
 
 
 (put 'narrow-to-page 'disabled nil)
-(delete-other-windows)
+
+;;(switch-to-buffer "*Compile-Log*")
+;;(delete-window)
+;;(switch-to-buffer "*scratch*")
 
 (provide 'init)
 ;;; init.el ends here

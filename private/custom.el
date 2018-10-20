@@ -52,9 +52,10 @@
  '(markdown-xhtml-header-content "<meta charset=\"utf-8\">")
  '(minibuffer-auto-raise t)
  '(minibuffer-frame-alist (quote ((width . 80) (height . 1))))
+ '(mouse-wheel-scroll-amount (quote (1 ((shift) . 5) ((control) . 0.5))))
  '(package-selected-packages
    (quote
-    (php-mode company-auctex helm-swoop color-theme-modern spacemacs-theme material-theme zenburn-theme highlight-parentheses company omisharp-mode omnisharp omisharp langtool diminish company-php php+-mode d-mode vala-snippets ox-twbs ox-pandoc org-bullets orgnav org-mode csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (company-auctex helm-swoop color-theme-modern spacemacs-theme material-theme zenburn-theme highlight-parentheses company omisharp-mode omnisharp omisharp langtool diminish company-php php+-mode d-mode vala-snippets ox-twbs ox-pandoc org-bullets orgnav org-mode csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(prolog-program-name
    (quote
     (((getenv "EPROLOG")
@@ -107,12 +108,22 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 159 :width normal))))
+ '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight normal :height 130 :width normal))))
+ '(company-scrollbar-bg ((t (:background "#4ccc4ccc4ccc"))))
+ '(company-scrollbar-fg ((t (:background "#3fff3fff3fff"))))
+ '(company-tooltip ((t (:inherit default :background "gray30" :foreground "white"))))
+ '(company-tooltip-common ((t (:inherit font-lock-constant-face :background "goldenrod" :foreground "black"))))
+ '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
  '(font-latex-verbatim-face ((t (:inherit Fira Code :foreground "burlywood"))))
+ '(line-number ((t (:inherit (shadow default) :background "gray30" :foreground "gold" :weight ultra-light :family "Ubuntu Mono"))))
+ '(line-number-current-line ((t (:inherit line-number :background "forest green" :foreground "white"))))
  '(logtalk-default-face ((t (:inherit nil :stipple nil :background "gray20" :foreground "wheat1" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :foundry "CTDB" :family "Fira Code"))) t)
  '(magit-branch-current ((t (:inherit magit-branch-local :background "dark magenta"))))
  '(magit-branch-local ((t (:background "turquoise4" :foreground "gold2"))))
  '(magit-branch-remote ((t (:background "saddle brown" :foreground "DarkSeaGreen2"))))
+ '(minibuffer-prompt ((t (:foreground "CadetBlue1"))))
+ '(mode-line ((t (:background "black" :foreground "gray60" :inverse-video nil :weight normal :height 0.65 :family "Source code pro"))))
+ '(mode-line-inactive ((t (:background "#404045" :foreground "gray60" :inverse-video nil :height 0.6))))
  '(show-paren-match ((t (:inherit default :background "gray50" :foreground "gray100" :underline nil))))
  '(show-paren-mismatch ((t (:inherit default :foreground "#e0211d" :underline nil :bold nil))))
  '(tex-verbatim ((t (:family "Fira Code")))))

@@ -175,7 +175,7 @@
 
 ;(require 'linum)
 
-(require 'linum+)
+;(require 'linum+)
 
 ;;(global-linum-mode 1)
 
@@ -347,7 +347,7 @@
 (global-set-key (kbd "C-<escape>") 'keyboard-escape-quit)
 (global-unset-key (kbd "<escape>-<escape>-<escape>"))
 (global-set-key (kbd "C-q") 'quoted-insert)
-(global-set-key (kbd "C-z") 'undo)
+;; (global-set-key (kbd "C-z") 'undo)
 
 (global-set-key (kbd "s-<right>") 'next-buffer)
 (global-set-key (kbd "s-<left>") 'previous-buffer)
@@ -515,58 +515,6 @@
 
       ;; Adjust line number fonts.
 
-      (setq my-def-linum-text-height
-            (face-attribute 'default :height)
-            )
-
-      (require 'color)
-      (defun my-setup-faces-compay ()
-        (interactive "")
-        (let ((bg (face-attribute 'default :background)))
-          (custom-set-faces
-           `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-           `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-           `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-           `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-           `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-        )
-
-      (defun text-scale-adjust-zAp ()
-        (interactive)
-        (text-scale-adjust 0)
-        (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
-      (defun text-scale-decrease-zAp ()
-        (interactive)
-        (text-scale-decrease 1)
-        (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
-      (defun text-scale-increase-zAp ()
-        (interactive)
-        (text-scale-increase 1)
-        (set-face-attribute 'linum nil :height my-def-linum-text-height)
-        (my-setup-faces-compay)
-        )
-
-      ;; Zoom font via Numeric Keypad
-
-      (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease-zAp)
-      (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust-zAp)
-      (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease-zAp)
-      (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase-zAp)
-      (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease-zAp)
-
-      ;; (set-scroll-bar-mode 'right)   ; replace 'right with 'left to place it to the left
-      (setq popup-use-optimized-column-computation nil) ; May be tie menu zise to default text size.
-      ;; (ac-fuzzy-complete)
-      ;; (ac-use-fuzzy)
-      ;; (add-hook 'after-make-frame-functions 'fullscreen-toggle)
       (defun toggle-fullscreen-1 (&optional f)
         (interactive)
         (let ((current-value (frame-parameter nil 'fullscreen)))
@@ -785,7 +733,7 @@
 
 ;(add-hook 'LaTeX-mode-hook 'latex-12-hacks)
 
-(global-set-key (kbd "C-`") 'linum-mode)
+;(global-set-key (kbd "C-`") 'linum-mode)
 (put 'scroll-left 'disabled nil)
 
 ;; Patching wrong scrolllock behaviour
