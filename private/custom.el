@@ -12,15 +12,6 @@
  '(TeX-source-correlate-method (quote synctex))
  '(TeX-source-correlate-mode t)
  '(TeX-source-correlate-start-server (quote ask))
- '(TeX-view-program-selection
-   (quote
-    (((output-dvi has-no-display-manager)
-      "dvi2tty")
-     ((output-dvi style-pstricks)
-      "dvips and gv")
-     (output-dvi "xdvi")
-     (output-pdf "Okular")
-     (output-html "xdg-open"))))
  '(ac-ispell-fuzzy-limit 2)
  '(ac-ispell-requires 3)
  '(blink-cursor-mode nil)
@@ -64,7 +55,7 @@
  '(mouse-wheel-scroll-amount (quote (1 ((shift) . 5) ((control) . 0.5))))
  '(package-selected-packages
    (quote
-    (csharp-mode company-auctex helm-swoop color-theme-modern spacemacs-theme material-theme zenburn-theme highlight-parentheses company omisharp-mode omisharp langtool diminish company-php php+-mode d-mode vala-snippets ox-twbs ox-pandoc org-bullets orgnav org-mode jedi-direx company-jedi company-jedu ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (company-auctex helm-swoop color-theme-modern spacemacs-theme material-theme zenburn-theme highlight-parentheses company omisharp-mode omnisharp omisharp langtool diminish company-php php+-mode d-mode vala-snippets ox-twbs ox-pandoc org-bullets orgnav org-mode csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(prolog-program-name
    (quote
     (((getenv "EPROLOG")
