@@ -12,15 +12,25 @@
 (setq save-abbrevs 'silently)
 ;; you will be asked before the abbreviations are saved
 
-(setq debug-on-error nil)
+;; (setq debug-on-error nil)
 
 ;; Just a sec - have to clean things up a little!
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (setq inhibit-startup-screen t)
+
+(define-key special-event-map [config-changed-event] 'ignore)
+
 (setq custom-file "~/.emacs.d/private/custom.el")
 (load-file custom-file)
+
+(add-to-list 'display-buffer-alist
+             '("." nil (reusable-frames . t)))
+
+;; Compilation output
+(setq compilation-scroll-output t)
+;  (setq compilation-scroll-output 'first-error)
 
 ;; Welcome!
 (setq user-full-name "Evgeny Cherkashin"
@@ -46,7 +56,7 @@
 ;(add-to-list 'load-path site-lisp-dir)
 
 
-;(load-theme 'eugeneai-theme t)
+(load-theme 'eugeneai-theme t)
 
 
 ;; Proxy Settings
@@ -62,30 +72,42 @@
             )
         )
       (setq url-proxy-services '(("no_proxy" . "172.27.24.")
-                                 ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")))
+                                 ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+                                 ("https" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+                                 ("ftp" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
+								 ))
 
       )
   )
 
+(setq url-http-proxy-basic-auth-storage
+      (list (list "172.27.100.5:4444"
+                  (cons "titan.cyber"
+                        (base64-encode-string "titan.cyber:ghbdtnbr")))))
 
 
 ;; This package called package comes with Emacs.
 (require 'package)
 ;; Turn on packaging.
-(package-initialize)
 
-(setq package-archives '(
-                         ("melpa" . "http://melpa.org/packages/")
-                         ;("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("elpa" . "http://elpa.gnu.org/packages/")
-                         ("elpy" . "http://jorgenschaefer.github.io/packages/")
-                         ("org" . "http://orgmode.org/elpa/")
-                         ))
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if t "http" "https")))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+
+  ;; (add-to-list 'package-archives (cons "marmalade" (concat proto "://marmalade-repo.org/packages/")) t)
+  (add-to-list 'package-archives (cons "elpa" (concat proto "://elpa.gnu.org/packages/")) t)
+  (add-to-list 'package-archives (cons "elpy" (concat proto "://jorgenschaefer.github.io/packages/")) t)
+  (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
+  )
 
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 
+(package-initialize)
 
 ;; From github.com/magnars/.emacs.d:
 ;; Ensure we have MELPA package awareness.
@@ -97,6 +119,8 @@
 ;; which also installs diminish.
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
+(unless (package-installed-p 'dininish)
+  (package-install 'diminish))
 (setq use-package-verbose t)
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -197,9 +221,14 @@
 ;; Easily memorable whole-buffer selection.
 (global-set-key (kbd "M-A") 'mark-whole-buffer)
 
-(use-package nlinum
-  :bind
-  ("C-`" . nlinum-mode))
+(if
+    (version< emacs-version "26.0.50")
+    (progn
+      (use-package nlinum
+        :bind
+        ("C-`" . nlinum-mode)))
+  (progn
+    (global-set-key (kbd "C-`") 'display-line-numbers-mode)))
 
 ;; Easily turn line numbers on and off.
 ; (global-set-key (kbd "C-`") 'nlinum-mode)
@@ -229,7 +258,7 @@
 (electric-pair-mode nil)
 (delete-selection-mode t)
 (setq redisplay-dont-pause t)
-(if (fboundp 'fringe-mode) (fringe-mode '(8 . 0)))
+(if (fboundp 'fringe-mode) (fringe-mode '(8 . 8)))
 (setq-default indicate-buffer-boundaries 'left)
 (setq display-time-24hr-format t)
 (setq scroll-step 1)
@@ -310,21 +339,21 @@
 (use-package zenburn-theme
   :disabled t
   :config
-  (load-theme 'zenburn t)
+  ; (load-theme 'zenburn t)
   )
 
 (use-package material-theme
   :disabled t
   :config
-  (load-theme 'material t)
+  ; (load-theme 'material t)
   )
 
-;; FIXME: Cannot load it
-(use-package spacemacs-theme
-  ;:disabled t
-  :config
-  (load-theme 'spacemacs-dark t)
-  )
+;; An original method of spacemacs loading
+(use-package spacemacs-common
+  :disabled t
+  :ensure spacemacs-theme
+  :config (load-theme 'spacemacs-dark t))
+
 
 ;; Themes can be disabled with disable-theme.
 
@@ -368,15 +397,15 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-(if windowed-system
-    (progn
-      (if (or (display-graphic-p) (daemonp))
-          (require 'git-gutter-fringe+)
-        (require 'git-gutter+))
-      (global-git-gutter+-mode)
-      (diminish 'git-gutter+-mode)
-      )
-)
+;; (if windowed-system
+;;     (progn
+;;       (if (or (display-graphic-p) (daemonp))
+;;           (require 'git-gutter-fringe+)
+;;         (require 'git-gutter+))
+;;       (global-git-gutter+-mode)
+;;       (diminish 'git-gutter+-mode)
+;;       )
+;; )
 ;; ;; Eventually may be able to return to something like this:
 ;; (use-package git-gutter-fringe+
 ;;   :init (global-git-gutter+-mode)
@@ -414,11 +443,11 @@
   (global-set-key (kbd "M-X") 'smex-major-mode-commands))
 
 
-;; See the undo history and move through it.
-(use-package undo-tree
-  :disabled t
-  :config (global-undo-tree-mode t)
-  :diminish undo-tree-mode)
+;; ;; See the undo history and move through it.
+;; (use-package undo-tree
+;;   :disabled t
+;;   :config (global-undo-tree-mode t)
+;;   :diminish undo-tree-mode)
 
 ;; Add nice project functions for git repos.
 (use-package projectile
@@ -449,7 +478,10 @@
 (use-package multiple-cursors
   :bind
   ("M-RET m e" . mc/edit-lines)
-  ("M-RET m m" . mc/mark-more-like-this-extended))
+  ("M-RET m m" . mc/mark-more-like-this-extended)
+  ("C->" . 'mc/mark-next-like-this)
+  ("C-<" . 'mc/mark-previous-like-this)
+  ("C-c C-<" . 'mc/mark-all-like-this))
 
 
 ;; (Near) simultaneous keypresses create new keys.
@@ -466,15 +498,12 @@
   :config
   (key-chord-define-global "jk" 'buffer-stack-down))
 
-
-
 ;; Conveniently zoom all of Emacs.
-(use-package zoom-frm
-  :bind
-  ("C-=" . zoom-in/out)
-  ("C-+" . zoom-in/out)
-  ("C--" . zoom-in/out))
-
+;; (use-package zoom-frm
+;;   :bind
+;;   ("C-=" . zoom-in/out)
+;;   ("C-+" . zoom-in/out)
+;;   ("C--" . zoom-in/out))
 
 ;; Check syntax, make life better.
 (use-package flycheck
@@ -487,16 +516,74 @@
   :diminish flycheck-mode
   )
 
+(setq langtool-java-classpath
+      "/usr/share/languagetool:/usr/share/java/languagetool/*")
+(use-package langtool
+  :defer 1
+  :if (executable-find "/usr/bin/languagetool")
+  :config
+  ;(setq langtool-java-bin "/usr/bin/java")
+  ;;;;; (setq langtool-bin "/usr/bin/languagetool")
+  ;; (setq langtool-language-tool-jar "/usr/share/java/languagetool/languagetool-commandline.jar")
+  ;; (setq langtool-java-classpath
+  ;;       "/usr/share/java/languagetool/*")
+  (setq langtool-default-language "ru-RU")
+  (setq langtool-mother-tongue "ru")
+  (defun langtool-autoshow-detail-popup (overlays)
+    (when (require 'popup nil t)
+      ;; Do not interrupt current popup
+      (unless (or popup-instances
+                  ;; suppress popup after type `C-g' .
+                  (memq last-command '(keyboard-quit)))
+        (let ((msg (langtool-details-error-message overlays)))
+          (popup-tip msg)))))
+
+  (setq langtool-autoshow-message-function
+        'langtool-autoshow-detail-popup)
+
+  (defun my-lt-set-english ()
+    (interactive)
+    (setq langtool-default-language "en-US")
+    (message "Language tool set to English")
+    )
+
+  (defun my-lt-set-russian ()
+    (interactive)
+    (setq langtool-default-language "ru-RU")
+    (message "Language tool set to Russian")
+    )
+
+  :bind
+    ("M-RET l t s" . langtool-check)
+    ("M-RET l t d" . langtool-check-done)
+    ("M-RET l t l" . langtool-switch-default-language)
+    ("M-RET l t s" . langtool-show-message-at-point)
+    ("M-RET l t c" . langtool-correct-buffer)
+    ("M-RET l t e" . my-lt-set-english)
+    ("M-RET l t r" . my-lt-set-russian)
+    ("\C-x4s" . langtool-check)
+    ("\C-x4q" . langtool-check-done)
+    ("\C-x4l" . langtool-switch-default-language)
+    ("\C-x44" . langtool-show-message-at-point)
+    ("\C-x4c" . langtool-correct-buffer)
+    ("\C-x4e" . my-lt-set-english)
+    ("\C-x4r" . my-lt-set-russian)
+    )
+
 (use-package company
   :config
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-idle-delay 0.2)
-  (setq company-tooltip-limit 10)
+  (setq company-tooltip-limit 20)
   (setq company-minimum-prefix-length 2)
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
-  (setq company-tooltip-flip-when-above t)
+  ;(setq company-tooltip-flip-when-above t)
   )
+
+(use-package company-auctex
+  :config
+  (company-auctex-init))
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
@@ -512,12 +599,12 @@
     ;;         (delq 'elpy-module-flymake elpy-modules))
     ;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
 
-    ;; (setq elpy-modules '(elpy-module-sane-defaults
-    ;;                      elpy-module-company
-    ;;                      elpy-module-eldoc
-    ;;                      elpy-module-highlight-indentation
-    ;;                      elpy-module-pyvenv
-    ;;                      elpy-module-yasnippet))
+    (setq elpy-modules '(elpy-module-sane-defaults
+                         elpy-module-company
+                         elpy-module-eldoc
+                         elpy-module-highlight-indentation
+                         elpy-module-pyvenv
+                         elpy-module-yasnippet))
 
     ;(delq 'elpy-module-flymake elpy-modules)
     (add-hook 'python-mode-hook
@@ -543,11 +630,38 @@
     (add-hook 'elpy-mode-hook (lambda ()
                                 (electric-pair-mode nil)))
     )
+
+  (defun annotate-pdb ()
+    (interactive)
+    (highlight-lines-matching-regexp "import pu?db")
+    (highlight-lines-matching-regexp "pdb.set_trace()"))
+  (add-hook 'python-mode-hook 'annotate-pdb)
+
+  (defun python-add-breakpoint ()
+    (interactive)
+    (newline-and-indent)
+    (insert "import pdb; pdb.set_trace()")
+    (newline-and-indent)
+    (highlight-lines-matching-regexp "^[ ]*import pdb;"))
+
+  (defun python-add-pubreakpoint ()
+    (interactive)
+    (newline-and-indent)
+    (insert "import pudb; pu.db")
+    (newline-and-indent)
+    (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
+
+  (add-hook 'python-mode-hook '(lambda ()
+                                 (electric-indent-local-mode -1)
+                                 ))
+
   :mode (("\\.py\\'" . elpy-mode))
   :bind (:map elpy-mode-map
               ("M-RET f c" . elpy-format-code)
               ("M-RET e n" . next-error)
               ("M-RET e p" . previous-error)
+              ("M-RET b d" . python-add-breakpoint)
+              ("M-RET b u" . python-add-pubreakpoint)
               )
   )
 
@@ -597,8 +711,8 @@
 ;;   )
 
 ;; Emacs Speaks Statistics includes support for R.
-(use-package ess-site
-  :ensure ess)
+;; (use-package ess-site
+;;   :ensure ess)
 
 
 ;; Use a nice JavaScript mode.
@@ -702,6 +816,7 @@
   :after tex
   :config
   (auctex-latexmk-setup)
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t)
   )
 
 (use-package slime
@@ -879,7 +994,7 @@
 ;;; CONTINUE:
 ;;; TODO: Other languages
 
-(use-package color-theme)
+;;(use-package color-theme)
 (use-package color)
 (use-package fiplr
   :config
@@ -927,8 +1042,8 @@
                                  '("~/.emacs.d/snippets")))
   (yas-reload-all)
   (yas-global-mode 1)
-  ;:bind
-  ;("c-<tab>" . yas-expand-from-trigger-key)
+  :bind
+  ("C-<tab>" . yas-expand-from-trigger-key)
 )
 
 (use-package swiper
@@ -996,7 +1111,7 @@
   (setq ispell-really-aspell nil
         ispell-really-hunspell t
         ispell-dictionary "english")
-  (setq ispell-program-name "/usr/local/bin/hunspell")
+  (setq ispell-program-name "/usr/bin/hunspell")
   ;; ;(require 'ispell)
   (defun fd-switch-dictionary()
     (interactive)
@@ -1013,6 +1128,7 @@
                               (flyspell-prog-mode)
                               (diminish 'flyspell-mode)))
   ; ispell-alternate-dictionary
+  :bind ("C-M-<tab>" . flyspell-auto-correct-word)
   )
 
 (use-package smart-mode-line
@@ -1027,11 +1143,11 @@
 )
 
 
-;; show the cursor when moving after big movements in the window
-(use-package beacon
-  :config
-  (beacon-mode +1)
-  )
+;; ;; show the cursor when moving after big movements in the window
+;; (use-package beacon
+;;   :config
+;;   (beacon-mode +1)
+;;   )
 
 ;; show available keybindings after you start typing
 (use-package which-key
@@ -1042,54 +1158,9 @@
   (setq which-key-idle-delay 0.1)
   )
 
-(use-package cask
-  )
+; (use-package cask)
 
-(use-package eclim
-  :disabled 1
-  :config
-  (add-hook 'java-mode-hook 'eclim-mode)
-  :bind
-  (:map eclim-mode-map
-        ("M-RET p c" . eclim-problems-correct)
-        ("M-RET p s" . eclim-problems)
-        ("M-RET f d" . eclim-java-find-declaration)
-        ("M-RET f r" . eclim-java-find-references)
-        ("M-RET r p" . java-refactor-rename-symbol-at-point)
-        ("M-RET s d" . eclim-java-show-documentation-for-current-element)
-        ("M-RET s h" . eclim-java-hierarchy)
-        ("M-RET i o" . eclim-java-import-organize)
-                                        ; (eclim-maven-run "compile, run, test")
-        ("M-RET m r" . eclim-maven-run)
-
-        ))
-
-(use-package company-emacs-eclim
-  :disabled 1
-  :config
-  (company-emacs-eclim-setup)
-  ;; (custom-set-faces
-  ;;  ;; ...
-  ;;  '(company-preview ((t (:background "black" :foreground "red"))))
-  ;;  '(company-preview-common ((t (:foreground "red"))))
-  ;;  '(company-preview-search ((t (:inherit company-preview))))
-  ;;  '(company-scrollbar-bg ((t (:background "brightwhite"))))
-  ;;  '(company-scrollbar-fg ((t (:background "red"))))
-  ;;  '(company-template-field ((t (:background "magenta" :foreground "black"))))
-  ;;  '(company-tooltip ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-annotation ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-annotation-selection ((t (:background "color-253"))))
-  ;;  '(company-tooltip-common ((t (:background "brightwhite" :foreground "red"))))
-  ;;  '(company-tooltip-common-selection ((t (:background "color-253" :foreground "red"))))
-  ;;  '(company-tooltip-mouse ((t (:foreground "black"))))
-  ;;  '(company-tooltip-search ((t (:background "brightwhite" :foreground "black"))))
-  ;;  '(company-tooltip-selection ((t (:background "color-253" :foreground
-  ;;                                               "black"))))
-  ;;  ;; ...
-  ;;  )
-  )
-
-(use-package mvn)
+; (use-package mvn)
 
 (use-package sr-speedbar
   :bind
@@ -1165,6 +1236,7 @@
                                         ; starting the new one
       compilation-scroll-output 'first-error ; Automatically scroll to first
                                         ; error
+      compilation-scroll-output t ; Automatically scroll to first
       )
 
 (defun kill-current-buffer ()
@@ -1174,6 +1246,11 @@
 (global-set-key (kbd "C-x C-k") 'kill-current-buffer)
 (global-set-key (kbd "C-x c") 'compile)
 (global-set-key (kbd "C-x !") 'shell)
+
+(defun my-compilation-mode-hook ()
+  (setq truncate-lines nil) ;; automatically becomes buffer local
+  (set (make-local-variable 'truncate-partial-width-windows) nil))
+(add-hook 'compilation-mode-hook 'my-compilation-mode-hook)
 
 ;; SCITE like
 ;(global-set-key [f7] 'split-window-vertically)
@@ -1234,21 +1311,29 @@
   (define-key company-mode-map (kbd "C-:") 'helm-company)
   (define-key company-active-map (kbd "C-:") 'helm-company)
   )
-
 (use-package helm-pydoc
   :config
   (define-key python-mode-map (kbd "C-c C-d") 'helm-pydoc))
+
+(use-package helm-swoop
+  :config
+  (global-set-key (kbd "M-i") 'helm-swoop)
+  (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+  (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+  (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+  )
+
 (use-package helm-themes)
 
 
-(use-package cursor-chg
-  :config
-  (setq curchg-default-cursor-color "LightSkyBlue1")
-  (setq curchg-input-method-cursor-color "red")
-  (setq curchg-default-cursor-type '(hbar . 7))
-  (change-cursor-mode 1) ; On for overwrite/read-only/input mode
-  (toggle-cursor-type-when-idle 1) ; On when idle
-  )
+;; (use-package cursor-chg
+;;   :config
+;;   (setq curchg-default-cursor-color "LightSkyBlue1")
+;;   (setq curchg-input-method-cursor-color "red")
+;;   (setq curchg-default-cursor-type '(hbar . 7))
+;;   (change-cursor-mode 1) ; On for overwrite/read-only/input mode
+;;   (toggle-cursor-type-when-idle 1) ; On when idle
+;;   )
 
 (use-package jedi-direx)
 
@@ -1267,33 +1352,85 @@
    )
   )
 
-(use-package csharp-mode
+;; (use-package omnisharp
+;;   :config
+;;   (defun local-csharp-mode-hook ()
+;;     (interactive "")
+;;     ;; enable the stuff you want for C# here
+;;     (omnisharp-mode)
+;;     (company-mode)
+;;     (flycheck-mode)
+;;     (setq indent-tabs-mode nil)
+;;     (setq c-syntactic-indentation t)
+;;     (c-set-style "ellemtel")
+;;     (setq c-basic-offset 4)
+;;     (setq truncate-lines t)
+;;     (setq tab-width 4)
+;;     (setq evil-shift-width 4)
+;;     (electric-pair-mode 1)       ;; Emacs 24
+;;     (electric-pair-local-mode 1) ;; Emacs 25
+;;     )
+;;   (add-to-list 'company-backends #'company-omnisharp)
+;;   ; FIXME: these do not work due to endless recursion
+;;   ;(add-to-list 'load-path "~/.emacs.d/site-lisp/paket.el/")
+;;   ;(require 'paket)
+;;   :hook (csharp-mode . local-csharp-mode-hook)
+;;   :mode ("\\.cs\\'" . csharp-mode)
+;;   :bind (:map csharp-mode-map
+;;               ("M-RET c c" . compile)
+;;               ("M-RET r c" . recompile)
+;;               ("M-RET r r" . omnisharp-run-code-action-refactoring)
+;;               ("<pause>" . omnisharp-run-code-action-refactoring)
+;;               )
+;;   )
+
+
+
+(use-package vala-mode)
+(use-package vala-snippets)
+
+(use-package org)
+(use-package orgnav)
+(use-package org-bullets
   :config
-  (defun local-csharp-mode-hook ()
-    ;; enable the stuff you want for C# here
-    (electric-pair-mode 1)       ;; Emacs 24
-    (electric-pair-local-mode 1) ;; Emacs 25
-    )
-  (add-hook 'csharp-mode-hook 'local-csharp-mode-hook)
-  :mode
-  (
-   ("\\.cs\\'" . csharp-mode)
-   )
-  :bind (:map csharp-mode-map
-              ("<f5>" . compile)
-              )
+  (add-hook 'org-mode-hook 'org-bullets-mode)
+  (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
+  ;; (setq org-ellipsis '("↝" "⇉" "⇝" "⇢" "⇨" "⇰" "➔" "➙" "➛" "➜" "➝" "➞"))
+  )
+; (use-package ox-pandoc)
+(use-package ox-twbs)
+(use-package ansi-color
+  :config
+  (defun my/ansi-colorize-buffer ()
+    (let ((buffer-read-only nil))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
   )
 
-;; (require 'linum+)
-;; (defun linum-update-window-scale-fix (win)
-;;   "fix linum for scaled text"
-;;   (set-window-margins win
-;;                       (ceiling (* (if (boundp 'text-scale-mode-step)
-;;                                       (expt text-scale-mode-step
-;;                                             text-scale-mode-amount) 1)
-;;                                   (if (car (window-margins))
-;;                                       (car (window-margins)) 1)
-;;                                   ))))
+(use-package d-mode)
+
+
+
+;; lualatex preview
+(setq org-latex-pdf-process
+  '("lualatex -shell-escape -interaction nonstopmode %f"
+    "lualatex -shell-escape -interaction nonstopmode %f"))
+
+(setq luamagick '(luamagick :programs ("lualatex" "convert")
+       :description "pdf > png"
+       :message "you need to install lualatex and imagemagick."
+       :use-xcolor t
+       :image-input-type "pdf"
+       :image-output-type "png"
+       :image-size-adjust (1.0 . 1.0)
+       :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+       :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+
+;(add-to-list 'org-preview-latex-process-alist luamagick)
+
+;(setq org-preview-latex-default-process 'luamagick)
+
+
 
 (autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
 (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
@@ -1308,6 +1445,23 @@
                 )
               auto-mode-alist)
       )
+
+(autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
+(add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
+(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
+(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
+(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
+
+(defun compile-test ()
+  (interactive)
+  (comile "make -k tests")
+  )
+
+(add-hook 'prolog-mode-hook (lambda ()
+                              (local-set-key (kbd "M-RET t a") 'compile-test)
+                            )
+          )
+
 
 (global-set-key (kbd "C-c q") 'auto-fill-mode)
 
@@ -1404,6 +1558,7 @@
 (define-key global-map [f9] 'reconstruct-paragraph)
 (define-key global-map [f12] 'reconstruct-minted-line)
 (define-key global-map [f8] 'delete-other-windows)
+(define-key global-map [C-f8] 'delete-window)
 
 (add-to-list 'auto-mode-alist '("\\.zcml\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
@@ -1414,7 +1569,7 @@
 (global-set-key (kbd "C-<escape>") 'keyboard-escape-quit)
 (global-unset-key (kbd "<escape>-<escape>-<escape>"))
 (global-set-key (kbd "C-q") 'quoted-insert)
-(global-set-key (kbd "C-z") 'undo)
+;; (global-set-key (kbd "C-z") 'undo)
 
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
@@ -1451,33 +1606,6 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(defun annotate-pdb ()
-  (interactive)
-  (highlight-lines-matching-regexp "import pu?db")
-  (highlight-lines-matching-regexp "pdb.set_trace()"))
-(add-hook 'python-mode-hook 'annotate-pdb)
-
-(defun python-add-breakpoint ()
-  (interactive)
-  (newline-and-indent)
-  (insert "import pdb; pdb.set_trace()")
-  (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pdb;"))
-
-(defun python-add-pubreakpoint ()
-  (interactive)
-  (newline-and-indent)
-  (insert "import pudb; pu.db")
-  (newline-and-indent)
-  (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
-
-(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c M-y") 'python-add-breakpoint)))
-(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map (kbd "C-c C-y") 'python-add-pubreakpoint)))
-
-(add-hook 'python-mode-hook '(lambda ()
-                               (electric-indent-local-mode -1)
-                               ))
-
 (defun tex-add-russian-dash ()
   (interactive)
   (insert "~-- "))
@@ -1505,9 +1633,9 @@
 (defun my-ttt ()
   (erase-buffer)
   (face-remap-add-relative 'default '(
-          ; :family "Monospace"
+          ;:family "Fira Mono Light"
           ; :height 160 ;Seseg
-           :height 100
+          :height 100
           ))
 )
 
@@ -1600,32 +1728,6 @@
   (scroll-lock-move-to-column scroll-lock-temporary-goal-column)
   )
 
-(defvar gud-overlay
-(let* ((ov (make-overlay (point-min) (point-min))))
-(overlay-put ov 'face 'secondary-selection)
-ov)
-"Overlay variable for GUD highlighting.")
-
-(defadvice gud-display-line (after my-gud-highlight act)
-"Highlight current line."
-(let* ((ov gud-overlay)
-(bf (gud-find-file true-file)))
-(save-excursion
-  (set-buffer bf)
-  (move-overlay ov (line-beginning-position) (line-end-position)
-  (current-buffer)))))
-
-(defun gud-kill-buffer ()
-(if (eq major-mode 'gud-mode)
-(delete-overlay gud-overlay)))
-
-(add-hook 'kill-buffer-hook 'gud-kill-buffer)
-(add-hook 'gdb-mode-hook '(lambda ()
-                            ;(new-frame)
-                            ;(switch-to-buffer "**gdb**")
-                            ;(tool-bar-mode 1)
-                            (gdb-many-windows)
-                            ))
 ;;-------------------------------------------------------------
 
 (put 'erase-buffer 'disabled nil)
@@ -1665,11 +1767,20 @@ ov)
     (beginning-of-line)))
 
 (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
-(global-set-key (kbd "M-RET c") 'compile)
+(global-set-key (kbd "M-RET c c") 'compile)
+(global-set-key (kbd "M-RET c r") 'recompile)
+(global-set-key (kbd "<XF86Calculator>") 'recompile)
+
+(defun my-add-tilde ()
+  (interactive)
+  (delete-char 1)
+  (insert "~"))
+(global-set-key (kbd "<f6>") 'my-add-tilde)
+
 
 (add-hook 'prolog-mode-hook
           '(lambda ()
-             (local-set-key (kbd "<XF86Calculator>") #'compile)
+             (local-set-key (kbd "<XF86Calculator>") #'recompile)
              )
           ; prolog-mode-map unset M-Ret key, make it Ctrl-Ret
           )
@@ -1704,7 +1815,53 @@ ov)
   (interactive)
   (byte-recompile-directory "~/.emacs.d/elpa" 0 t))
 
-(delete-other-windows)
+
+(when
+    windowed-system
+    (progn
+      ;; This script is set for a `text-scale-mode-step` of `1.04`
+      (setq text-scale-mode-step 1.2)
+      ;;
+      ;; List: `Sub-Zoom Font Heights per text-scale-mode-step`
+      ;;   eg.  For a default font-height of 120 just remove the leading `160 150 140 130`
+      (defvar sub-zoom-ht (list 160 150 140 130 120 120 110 100 100  90  80  80  80  80  70  70  60  60  50  50  50  40  40  40  30  20  20  20  20  20  20  10  10  10  10  10  10  10  10  10  10   5   5   5   5   5   2   2   2   2   2   2   2   2   1   1   1   1   1   1   1   1   1   1   1   1))
+      (defvar sub-zoom-len (safe-length sub-zoom-ht))
+      (defvar def-zoom-ht (car sub-zoom-ht))
+      ;(set-face-attribute 'default nil :height def-zoom-ht)
+
+      ;; Adjust line number fonts.
+
+      (setq my-def-linum-text-height
+            (face-attribute 'default :height))
+
+      ;; Zoom font via Numeric Keypad
+
+      (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase)
+      (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease)
+      (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust)
+      (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase)
+      (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease)
+      (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase)
+      (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease)
+
+      ;; (set-scroll-bar-mode 'right)   ; replace 'right with 'left to place it to the left
+      (setq popup-use-optimized-column-computation nil) ; May be tie menu size to default text size.
+  )
+  )
+
+(require 'cursor-chg)
+(setq curchg-default-cursor-color "LightSkyBlue1")
+(setq curchg-input-method-cursor-color "red")
+(setq curchg-default-cursor-type '(hbar . 7))
+(change-cursor-mode 1) ; On for overwrite/read-only/input mode
+(toggle-cursor-type-when-idle 1) ; On when idle
+
+
+(put 'narrow-to-page 'disabled nil)
+
+;;(switch-to-buffer "*Compile-Log*")
+;;(delete-window)
+;;(switch-to-buffer "*scratch*")
+
 (provide 'init)
 ;;; init.el ends here
-(put 'narrow-to-page 'disabled nil)
