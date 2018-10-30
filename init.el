@@ -475,13 +475,13 @@
 
 
 ;; Edit in multiple places at the same time.
-(use-package multiple-cursors
-  :bind
-  ("M-RET m e" . mc/edit-lines)
-  ("M-RET m m" . mc/mark-more-like-this-extended)
-  ("C->" . 'mc/mark-next-like-this)
-  ("C-<" . 'mc/mark-previous-like-this)
-  ("C-c C-<" . 'mc/mark-all-like-this))
+;; (use-package multiple-cursors
+;;   :bind
+;;   ("M-RET m e" . mc/edit-lines)
+;;   ("M-RET m m" . mc/mark-more-like-this-extended)
+;;   ("C->" . 'mc/mark-next-like-this)
+;;   ("C-<" . 'mc/mark-previous-like-this)
+;;   ("C-c C-<" . 'mc/mark-all-like-this))
 
 
 ;; (Near) simultaneous keypresses create new keys.

@@ -17,6 +17,5 @@
 /private/bookmarks.txt
 .cask/
 /semanticdb
-.cache/
+/.cache*
 ido.last
-
