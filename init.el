@@ -414,22 +414,22 @@
 ;; Interactive selection of things.
 ;; TODO: consider helm instead (see Sacha's config)
 ;; NOTE: "C-j: Use the current input string verbatim."
-(ido-mode t)
-(ido-everywhere t)
-;; disable ido faces to see flx highlights.
-(setq ido-enable-flex-matching t)
-(setq ido-use-faces nil)
-;(global-set-key (kbd "M-l") 'other-window)
-;(global-set-key (kbd "C-M-l") 'ido-switch-buffer)
+;; (ido-mode t)
+;; (ido-everywhere t)
+;; ;; disable ido faces to see flx highlights.
+;; (setq ido-enable-flex-matching t)
+;; (setq ido-use-faces nil)
+;; ;(global-set-key (kbd "M-l") 'other-window)
+;; ;(global-set-key (kbd "C-M-l") 'ido-switch-buffer)
 
 ;; list vertically (so much nicer!)
-(use-package ido-vertical-mode
-  :config
-  (ido-vertical-mode t)
-  (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
+;; (use-package ido-vertical-mode
+;;   :config
+;;   (ido-vertical-mode t)
+;;   (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
 
-(use-package flx-ido
-  :config (flx-ido-mode 1))
+;; (use-package flx-ido
+;;   :config (flx-ido-mode 1))
 
 ;; Smart M-x
 (use-package smex
@@ -604,7 +604,10 @@
                          elpy-module-eldoc
                          elpy-module-highlight-indentation
                          elpy-module-pyvenv
-                         elpy-module-yasnippet))
+                         elpy-module-flymake
+                         elpy-module-autodoc
+                         elpy-module-yasnippet
+                         elpy-module-sane-defaults))
 
     ;(delq 'elpy-module-flymake elpy-modules)
     (add-hook 'python-mode-hook
@@ -616,7 +619,7 @@
     (delete 'elpy-module-highlight-indentation elpy-modules)
     ;; this is messed with by emacs if you let it...
     (custom-set-variables
-     ;'(elpy-rpc-backend "jedi")
+     '(elpy-rpc-backend "jedi")
      '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
      '(help-at-pt-timer-delay 1.9)
      '(tab-width 4))
@@ -1634,8 +1637,8 @@
   (erase-buffer)
   (face-remap-add-relative 'default '(
           ;:family "Fira Mono Light"
-          ; :height 160 ;Seseg
-          :height 100
+          :height 160 ;Seseg
+          ;:height 100
           ))
 )
 

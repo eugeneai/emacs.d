@@ -27,8 +27,6 @@
  '(eclimd-autostart t)
  '(eclimd-autostart-with-default-workspace t)
  '(eclimd-default-workspace "~/.local/eclipse")
- '(elpy-rpc-backend "jedi")
- '(epy-load-yasnippet-p t)
  '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
  '(help-at-pt-timer-delay 1.9)
  '(httpd-port 8380)
@@ -55,7 +53,7 @@
  '(mouse-wheel-scroll-amount (quote (1 ((shift) . 5) ((control) . 0.5))))
  '(package-selected-packages
    (quote
-    (company-auctex helm-swoop color-theme-modern spacemacs-theme material-theme zenburn-theme highlight-parentheses company omisharp-mode omnisharp omisharp langtool diminish company-php php+-mode d-mode vala-snippets ox-twbs ox-pandoc org-bullets orgnav org-mode csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
+    (docker dockerfile-mode company-auctex helm-swoop color-theme-modern spacemacs-theme material-theme zenburn-theme highlight-parentheses company omisharp-mode omnisharp omisharp langtool diminish company-php php+-mode d-mode vala-snippets ox-twbs ox-pandoc org-bullets orgnav org-mode csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package)))
  '(prolog-program-name
    (quote
     (((getenv "EPROLOG")
@@ -67,7 +65,7 @@
      (swi "swipl")
      (gnu "gprolog")
      (t "prolog"))))
- '(prolog-system (quote swi))
+ '(prolog-system (quote swi) t)
  '(python-shell-completion-native-disabled-interpreters (quote ("python" "pypy")))
  '(python-shell-interpreter "python3")
  '(rw-hunspell-default-dictionary "russian")
@@ -108,7 +106,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 143 :width normal))))
+ '(default ((t (:family "Fira Mono" :foundry "CTDB" :slant normal :weight normal :height 159 :width normal))))
  '(company-scrollbar-bg ((t (:background "#4ccc4ccc4ccc"))))
  '(company-scrollbar-fg ((t (:background "#3fff3fff3fff"))))
  '(company-tooltip ((t (:inherit default :background "gray30" :foreground "white"))))
