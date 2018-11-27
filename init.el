@@ -397,39 +397,39 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-;; (if windowed-system
-;;     (progn
-;;       (if (or (display-graphic-p) (daemonp))
-;;           (require 'git-gutter-fringe+)
-;;         (require 'git-gutter+))
-;;       (global-git-gutter+-mode)
-;;       (diminish 'git-gutter+-mode)
-;;       )
-;; )
+(if windowed-system
+    (progn
+      (if (or (display-graphic-p) (daemonp))
+          (require 'git-gutter-fringe+)
+        (require 'git-gutter+))
+      (global-git-gutter+-mode)
+      (diminish 'git-gutter+-mode)
+      )
+)
 ;; ;; Eventually may be able to return to something like this:
-;; (use-package git-gutter-fringe+
-;;   :init (global-git-gutter+-mode)
-;;   :diminish git-gutter+-mode)
+(use-package git-gutter-fringe+
+  :init (global-git-gutter+-mode)
+  :diminish git-gutter+-mode)
 
 ;; Interactive selection of things.
 ;; TODO: consider helm instead (see Sacha's config)
 ;; NOTE: "C-j: Use the current input string verbatim."
-;; (ido-mode t)
-;; (ido-everywhere t)
+;(ido-mode t)
+;(ido-everywhere t)
 ;; ;; disable ido faces to see flx highlights.
-;; (setq ido-enable-flex-matching t)
-;; (setq ido-use-faces nil)
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)
 ;; ;(global-set-key (kbd "M-l") 'other-window)
 ;; ;(global-set-key (kbd "C-M-l") 'ido-switch-buffer)
 
 ;; list vertically (so much nicer!)
-;; (use-package ido-vertical-mode
-;;   :config
-;;   (ido-vertical-mode t)
-;;   (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
+(use-package ido-vertical-mode
+  :config
+  (ido-vertical-mode t)
+  (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
 
-;; (use-package flx-ido
-;;   :config (flx-ido-mode 1))
+(use-package flx-ido
+  :config (flx-ido-mode 1))
 
 ;; Smart M-x
 (use-package smex
@@ -475,13 +475,13 @@
 
 
 ;; Edit in multiple places at the same time.
-;; (use-package multiple-cursors
-;;   :bind
-;;   ("M-RET m e" . mc/edit-lines)
-;;   ("M-RET m m" . mc/mark-more-like-this-extended)
-;;   ("C->" . 'mc/mark-next-like-this)
-;;   ("C-<" . 'mc/mark-previous-like-this)
-;;   ("C-c C-<" . 'mc/mark-all-like-this))
+(use-package multiple-cursors
+  :bind
+  ("M-RET m e" . mc/edit-lines)
+  ("M-RET m m" . mc/mark-more-like-this-extended)
+  ("C->" . 'mc/mark-next-like-this)
+  ("C-<" . 'mc/mark-previous-like-this)
+  ("C-c C-<" . 'mc/mark-all-like-this))
 
 
 ;; (Near) simultaneous keypresses create new keys.
@@ -991,8 +991,7 @@
 
 ;; Inpation mode
 
-(use-package impatient-mode
-  )
+(use-package impatient-mode)
 
 ;;; CONTINUE:
 ;;; TODO: Other languages
@@ -1004,8 +1003,7 @@
   (setq fiplr-root-markers '(".git" ".svn"))
   (setq fiplr-ignored-globs '((directories (".git" ".svn"))
                               (files ("*.jpg" "*.png" "*.zip" "*~"))))
-  (global-set-key (kbd "C-x f") 'fiplr-find-file)
-  )
+  (global-set-key (kbd "C-x f") 'fiplr-find-file))
 
 (use-package w3m
   :if (executable-find "w3m")
@@ -1272,7 +1270,8 @@
   :config
   (require 'helm-config)
   (helm-mode 1)
-  (define-key global-map [remap find-file] 'helm-find-files)
+  ; (define-key global-map [remap find-file] 'helm-find-files)
+
   (define-key global-map [remap occur] 'helm-occur)
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
   (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
