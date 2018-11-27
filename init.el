@@ -1270,7 +1270,7 @@
   :config
   (require 'helm-config)
   (helm-mode 1)
-  ; (define-key global-map [remap find-file] 'helm-find-files)
+                                        ; (define-key global-map [remap find-file] 'helm-find-files)
 
   (define-key global-map [remap occur] 'helm-occur)
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
@@ -1280,7 +1280,7 @@
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
   (global-set-key (kbd "C-x b") 'helm-mini)
   (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
-  ;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+                                        ;(global-set-key (kbd "C-x C-f") 'helm-find-files)
   (global-set-key (kbd "C-h f") 'helm-apropos)
   (global-set-key (kbd "C-h r") 'helm-info-emacs)
   (global-set-key (kbd "C-h C-l") 'helm-locate-library)
@@ -1291,13 +1291,44 @@
   (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
   ;; use helm to list eshell history
   (add-hook 'eshell-mode-hook
-   #'(lambda ()
-       (substitute-key-definition 'eshell-list-history 'helm-eshell-history eshell-mode-map)))
+            #'(lambda ()
+                (substitute-key-definition 'eshell-list-history 'helm-eshell-history eshell-mode-map)))
   (substitute-key-definition 'find-tag 'helm-etags-select global-map)
   (unless (boundp 'completion-in-region-function)
     (define-key lisp-interaction-mode-map [remap completion-at-point] 'helm-lisp-completion-at-point)
     (define-key emacs-lisp-mode-map       [remap completion-at-point] 'helm-lisp-completion-at-point))
   (global-set-key (kbd "C-x C-d") 'helm-browse-project)
+
+  (custom-set-variables
+   '(helm-completing-read-handlers-alist
+     (quote
+      ((describe-function . helm-completing-read-symbols)
+       (describe-variable . helm-completing-read-symbols)
+       (describe-symbol . helm-completing-read-symbols)
+       (debug-on-entry . helm-completing-read-symbols)
+       (find-function . helm-completing-read-symbols)
+       (disassemble . helm-completing-read-symbols)
+       (trace-function . helm-completing-read-symbols)
+       (trace-function-foreground . helm-completing-read-symbols)
+       (trace-function-background . helm-completing-read-symbols)
+       (find-tag . helm-completing-read-default-find-tag)
+       (org-capture . helm-org-completing-read-tags)
+       (org-set-tags . helm-org-completing-read-tags)
+       (ffap-alternate-file)
+       (tmm-menubar)
+       (find-file . ido)
+       (find-file-at-point . ido)
+       (ffap . helm-completing-read-sync-default-handler)
+       (execute-extended-command)
+       (dired-do-rename . helm-read-file-name-handler-1)
+       (dired-do-copy . helm-read-file-name-handler-1)
+       (dired-do-symlink . helm-read-file-name-handler-1)
+       (dired-do-relsymlink . helm-read-file-name-handler-1)
+       (dired-do-hardlink . helm-read-file-name-handler-1)
+       (basic-save-buffer . helm-read-file-name-handler-1)
+       (write-file . helm-read-file-name-handler-1)
+       (write-region . helm-read-file-name-handler-1)
+       (find-file-read-only . ido)))))
   )
 
 (use-package helm-ls-git
