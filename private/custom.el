@@ -106,7 +106,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Mono" :foundry "CTDB" :slant normal :weight normal :height 159 :width normal))))
+ '(default ((t (:family "Fira Mono Regular" :foundry "CTDB" :slant normal :weight normal :height 243 :width normal))))
  '(company-scrollbar-bg ((t (:background "#4ccc4ccc4ccc"))))
  '(company-scrollbar-fg ((t (:background "#3fff3fff3fff"))))
  '(company-tooltip ((t (:inherit default :background "gray30" :foreground "white"))))
@@ -115,12 +115,12 @@
  '(font-latex-verbatim-face ((t (:inherit Fira Code :foreground "burlywood"))))
  '(line-number ((t (:inherit (shadow default) :background "gray30" :foreground "gold" :weight ultra-light :family "Ubuntu Mono"))))
  '(line-number-current-line ((t (:inherit line-number :background "forest green" :foreground "white"))))
- '(logtalk-default-face ((t (:inherit nil :stipple nil :background "gray20" :foreground "wheat1" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :foundry "CTDB" :family "Fira Code"))) t)
+ '(logtalk-default-face ((t (:inherit nil :stipple nil :background "gray20" :foreground "wheat1" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :foundry "CTDB" :family "Fira Mono Regular"))) t)
  '(magit-branch-current ((t (:inherit magit-branch-local :background "dark magenta"))))
  '(magit-branch-local ((t (:background "turquoise4" :foreground "gold2"))))
  '(magit-branch-remote ((t (:background "saddle brown" :foreground "DarkSeaGreen2"))))
  '(minibuffer-prompt ((t (:foreground "CadetBlue1"))))
- '(mode-line ((t (:background "black" :foreground "gray60" :inverse-video nil :weight normal :height 0.65 :family "Source code pro"))))
+ '(mode-line ((t (:background "black" :foreground "gray60" :inverse-video nil :weight normal :height 0.65 :family "Fira Mono Regular"))))
  '(mode-line-inactive ((t (:background "#404045" :foreground "gray60" :inverse-video nil :height 0.6))))
  '(show-paren-match ((t (:inherit default :background "gray50" :foreground "gray100" :underline nil))))
  '(show-paren-mismatch ((t (:inherit default :foreground "#e0211d" :underline nil :bold nil))))
