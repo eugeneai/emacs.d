@@ -443,6 +443,24 @@
   (global-set-key (kbd "M-X") 'smex-major-mode-commands))
 
 
+(use-package yasnippet
+  :config
+  ;(setq yas-snippet-dirs (append yas-snippet-dirs
+  ;                               '("~/.emacs.d/private/snippets")))
+  (yas-reload-all)
+  (yas-global-mode 1)
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  :bind
+  ("C-<return>" . yas-expand-from-trigger-key)
+  ("C-M-<return>" . yas-expand-from-trigger-key)
+  )
+
+(use-package yasnippet-snippets
+  :config
+  (yas-reload-all))
+
+
+
 ;; ;; See the undo history and move through it.
 ;; (use-package undo-tree
 ;;   :disabled t
@@ -589,7 +607,6 @@
 (use-package elpy
   :config
   (progn
-    (elpy-enable)
     ;; Use ipython if available.
                                         ;(when (executable-find "ipython")
                                         ;  (elpy-use-ipython))
@@ -608,6 +625,8 @@
                          elpy-module-autodoc
                          elpy-module-yasnippet
                          elpy-module-sane-defaults))
+    (elpy-enable)
+    (yas-reload-all)
 
     ;(delq 'elpy-module-flymake elpy-modules)
     (add-hook 'python-mode-hook
@@ -1036,16 +1055,6 @@
   :bind
   ("C-x M-r" . recentf-open-files)
   )
-
-(use-package yasnippet
-  :config
-  (setq yas-snippet-dirs (append yas-snippet-dirs
-                                 '("~/.emacs.d/snippets")))
-  (yas-reload-all)
-  (yas-global-mode 1)
-  :bind
-  ("C-<tab>" . yas-expand-from-trigger-key)
-)
 
 (use-package swiper
   :disabled t

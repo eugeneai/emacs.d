@@ -17,6 +17,13 @@
  '(blink-cursor-mode nil)
  '(bookmark-default-file "/home/eugeneai/.emacs.d/bookmarks.bmk")
  '(column-number-mode t)
+ '(company-backends
+   (quote
+    (company-jedi
+     (company-auctex-macros company-auctex-symbols company-auctex-environments)
+     company-auctex-bibs company-auctex-labels company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-capf company-files
+     (company-dabbrev-code company-gtags company-etags company-keywords)
+     company-oddmuse company-dabbrev)))
  '(company-eclim-executable "/usr/lib/eclipse/eclim")
  '(custom-safe-themes
    (quote
@@ -28,6 +35,35 @@
  '(eclimd-autostart-with-default-workspace t)
  '(eclimd-default-workspace "~/.local/eclipse")
  '(elpy-rpc-backend "jedi")
+ '(helm-completing-read-handlers-alist
+   (quote
+    ((describe-function . helm-completing-read-symbols)
+     (describe-variable . helm-completing-read-symbols)
+     (describe-symbol . helm-completing-read-symbols)
+     (debug-on-entry . helm-completing-read-symbols)
+     (find-function . helm-completing-read-symbols)
+     (disassemble . helm-completing-read-symbols)
+     (trace-function . helm-completing-read-symbols)
+     (trace-function-foreground . helm-completing-read-symbols)
+     (trace-function-background . helm-completing-read-symbols)
+     (find-tag . helm-completing-read-default-find-tag)
+     (org-capture . helm-org-completing-read-tags)
+     (org-set-tags . helm-org-completing-read-tags)
+     (ffap-alternate-file)
+     (tmm-menubar)
+     (find-file . ido)
+     (find-file-at-point . ido)
+     (ffap . helm-completing-read-sync-default-handler)
+     (execute-extended-command)
+     (dired-do-rename . helm-read-file-name-handler-1)
+     (dired-do-copy . helm-read-file-name-handler-1)
+     (dired-do-symlink . helm-read-file-name-handler-1)
+     (dired-do-relsymlink . helm-read-file-name-handler-1)
+     (dired-do-hardlink . helm-read-file-name-handler-1)
+     (basic-save-buffer . helm-read-file-name-handler-1)
+     (write-file . helm-read-file-name-handler-1)
+     (write-region . helm-read-file-name-handler-1)
+     (find-file-read-only . ido))))
  '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
  '(help-at-pt-timer-delay 1.9)
  '(httpd-port 8380)
