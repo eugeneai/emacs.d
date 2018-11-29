@@ -26,7 +26,7 @@
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (setq inhibit-startup-screen t)
 (setq custom-file "~/.emacs.d/private/custom.el")
-(load-file custom-file)
+; (load-file custom-file)
 
 ;; Welcome!
 (setq user-full-name "Evgeny Cherkashin"
@@ -48,7 +48,7 @@
 ;(add-to-list 'load-path site-lisp-dir)
 
 
-(load-theme 'eugeneai-theme t)
+;(load-theme 'eugeneai-theme t)
 
 
 ;; Proxy Settings

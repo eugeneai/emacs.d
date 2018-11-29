@@ -56,7 +56,7 @@
 ;(add-to-list 'load-path site-lisp-dir)
 
 
-(load-theme 'eugeneai-theme t)
+;(load-theme 'eugeneai-theme t)
 
 
 ;; Proxy Settings
@@ -343,9 +343,9 @@
   )
 
 (use-package material-theme
-  :disabled t
+  ; :disabled nil
   :config
-  ; (load-theme 'material t)
+    (load-theme 'material t)
   )
 
 ;; An original method of spacemacs loading
@@ -397,19 +397,19 @@
 ;; Fix to git-gutter+
 ;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
 ;; Use the fringe if in graphical mode (not terminal).
-(if windowed-system
-    (progn
-      (if (or (display-graphic-p) (daemonp))
-          (require 'git-gutter-fringe+)
-        (require 'git-gutter+))
-      (global-git-gutter+-mode)
-      (diminish 'git-gutter+-mode)
-      )
-)
-;; ;; Eventually may be able to return to something like this:
-(use-package git-gutter-fringe+
-  :init (global-git-gutter+-mode)
-  :diminish git-gutter+-mode)
+;; (if windowed-system
+;;     (progn
+;;       (if (or (display-graphic-p) (daemonp))
+;;           (require 'git-gutter-fringe+)
+;;         (require 'git-gutter+))
+;;       (global-git-gutter+-mode)
+;;       (diminish 'git-gutter+-mode)
+;;       )
+;; )
+;; ;; ;; Eventually may be able to return to something like this:
+;; (use-package git-gutter-fringe+
+;;   :init (global-git-gutter+-mode)
+;;   :diminish git-gutter+-mode)
 
 ;; Interactive selection of things.
 ;; TODO: consider helm instead (see Sacha's config)
@@ -455,9 +455,9 @@
   ("C-M-<return>" . yas-expand-from-trigger-key)
   )
 
-(use-package yasnippet-snippets
-  :config
-  (yas-reload-all))
+;; (use-package yasnippet-snippets
+;;   :config
+;;   (yas-reload-all))
 
 
 
@@ -534,59 +534,59 @@
   :diminish flycheck-mode
   )
 
-(setq langtool-java-classpath
-      "/usr/share/languagetool:/usr/share/java/languagetool/*")
-(use-package langtool
-  :defer 1
-  :if (executable-find "/usr/bin/languagetool")
-  :config
-  ;(setq langtool-java-bin "/usr/bin/java")
-  ;;;;; (setq langtool-bin "/usr/bin/languagetool")
-  ;; (setq langtool-language-tool-jar "/usr/share/java/languagetool/languagetool-commandline.jar")
-  ;; (setq langtool-java-classpath
-  ;;       "/usr/share/java/languagetool/*")
-  (setq langtool-default-language "ru-RU")
-  (setq langtool-mother-tongue "ru")
-  (defun langtool-autoshow-detail-popup (overlays)
-    (when (require 'popup nil t)
-      ;; Do not interrupt current popup
-      (unless (or popup-instances
-                  ;; suppress popup after type `C-g' .
-                  (memq last-command '(keyboard-quit)))
-        (let ((msg (langtool-details-error-message overlays)))
-          (popup-tip msg)))))
+;; (setq langtool-java-classpath
+;;       "/usr/share/languagetool:/usr/share/java/languagetool/*")
+;; (use-package langtool
+;;   :defer 1
+;;   :if (executable-find "/usr/bin/languagetool")
+;;   :config
+;;   ;(setq langtool-java-bin "/usr/bin/java")
+;;   ;;;;; (setq langtool-bin "/usr/bin/languagetool")
+;;   ;; (setq langtool-language-tool-jar "/usr/share/java/languagetool/languagetool-commandline.jar")
+;;   ;; (setq langtool-java-classpath
+;;   ;;       "/usr/share/java/languagetool/*")
+;;   (setq langtool-default-language "ru-RU")
+;;   (setq langtool-mother-tongue "ru")
+;;   (defun langtool-autoshow-detail-popup (overlays)
+;;     (when (require 'popup nil t)
+;;       ;; Do not interrupt current popup
+;;       (unless (or popup-instances
+;;                   ;; suppress popup after type `C-g' .
+;;                   (memq last-command '(keyboard-quit)))
+;;         (let ((msg (langtool-details-error-message overlays)))
+;;           (popup-tip msg)))))
 
-  (setq langtool-autoshow-message-function
-        'langtool-autoshow-detail-popup)
+;;   (setq langtool-autoshow-message-function
+;;         'langtool-autoshow-detail-popup)
 
-  (defun my-lt-set-english ()
-    (interactive)
-    (setq langtool-default-language "en-US")
-    (message "Language tool set to English")
-    )
+;;   (defun my-lt-set-english ()
+;;     (interactive)
+;;     (setq langtool-default-language "en-US")
+;;     (message "Language tool set to English")
+;;     )
 
-  (defun my-lt-set-russian ()
-    (interactive)
-    (setq langtool-default-language "ru-RU")
-    (message "Language tool set to Russian")
-    )
+;;   (defun my-lt-set-russian ()
+;;     (interactive)
+;;     (setq langtool-default-language "ru-RU")
+;;     (message "Language tool set to Russian")
+;;     )
 
-  :bind
-    ("M-RET l t s" . langtool-check)
-    ("M-RET l t d" . langtool-check-done)
-    ("M-RET l t l" . langtool-switch-default-language)
-    ("M-RET l t s" . langtool-show-message-at-point)
-    ("M-RET l t c" . langtool-correct-buffer)
-    ("M-RET l t e" . my-lt-set-english)
-    ("M-RET l t r" . my-lt-set-russian)
-    ("\C-x4s" . langtool-check)
-    ("\C-x4q" . langtool-check-done)
-    ("\C-x4l" . langtool-switch-default-language)
-    ("\C-x44" . langtool-show-message-at-point)
-    ("\C-x4c" . langtool-correct-buffer)
-    ("\C-x4e" . my-lt-set-english)
-    ("\C-x4r" . my-lt-set-russian)
-    )
+;;   :bind
+;;     ("M-RET l t s" . langtool-check)
+;;     ("M-RET l t d" . langtool-check-done)
+;;     ("M-RET l t l" . langtool-switch-default-language)
+;;     ("M-RET l t s" . langtool-show-message-at-point)
+;;     ("M-RET l t c" . langtool-correct-buffer)
+;;     ("M-RET l t e" . my-lt-set-english)
+;;     ("M-RET l t r" . my-lt-set-russian)
+;;     ("\C-x4s" . langtool-check)
+;;     ("\C-x4q" . langtool-check-done)
+;;     ("\C-x4l" . langtool-switch-default-language)
+;;     ("\C-x44" . langtool-show-message-at-point)
+;;     ("\C-x4c" . langtool-correct-buffer)
+;;     ("\C-x4e" . my-lt-set-english)
+;;     ("\C-x4r" . my-lt-set-russian)
+;;     )
 
 (use-package company
   :config
@@ -816,110 +816,110 @@
   )
 
 ;; FIXME: Does not install
-(use-package tex
-  :defer t
-  :ensure auctex
-  :config
-  (custom-set-variables
-                                        ; '(TeX-install-font-lock 'tex-font-setup)
-   '(TeX-auto-save t)
-   '(TeX-parse-self t)
-   '(TeX-master nil)
-   '(TeX-save-query nil)
-   '(TeX-source-correlate-method (quote synctex))
-   '(TeX-source-correlate-mode t)
-   '(TeX-source-correlate-start-server (quote ask)))
-  (setq font-latex-fontify-script nil
-        font-latex-fontify-sectioning 'color)
-)
+;; (use-package tex
+;;   :defer t
+;;   :ensure auctex
+;;   :config
+;;   (custom-set-variables
+;;                                         ; '(TeX-install-font-lock 'tex-font-setup)
+;;    '(TeX-auto-save t)
+;;    '(TeX-parse-self t)
+;;    '(TeX-master nil)
+;;    '(TeX-save-query nil)
+;;    '(TeX-source-correlate-method (quote synctex))
+;;    '(TeX-source-correlate-mode t)
+;;    '(TeX-source-correlate-start-server (quote ask)))
+;;   (setq font-latex-fontify-script nil
+;;         font-latex-fontify-sectioning 'color)
+;; )
 
-(use-package auctex-latexmk
-  :defer t
-  :after tex
-  :config
-  (auctex-latexmk-setup)
-  (setq auctex-latexmk-inherit-TeX-PDF-mode t)
-  )
+;; (use-package auctex-latexmk
+;;   :defer t
+;;   :after tex
+;;   :config
+;;   (auctex-latexmk-setup)
+;;   (setq auctex-latexmk-inherit-TeX-PDF-mode t)
+;;   )
 
-(use-package slime
-  :config
-  ;; the SBCL configuration file is in Common Lisp
-  (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
-  ;; Open files with .cl extension in lisp-mode
-  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
-  ;; Add fancy slime contribs
-  (setq slime-contribs '(slime-fancy))
-  ;; rainbow-delimeters messes up colors in slime-repl, and doesn't seem to work
-  ;; anyway, so we won't use prelude-lisp-coding-defaults.
-  (add-hook 'slime-repl-mode-hook (lambda ()
-                                    (smartparens-strict-mode +1)
-                                    (whitespace-mode -1)))
-  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
-        slime-fuzzy-completion-in-place t
-        slime-enable-evaluate-in-emacs t
-        slime-autodoc-use-multiline-p t
-        inferior-lisp-program "sbcl"
-        slime-auto-start 'always)
-  (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
-  (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
-  )
+;; (use-package slime
+;;   :config
+;;   ;; the SBCL configuration file is in Common Lisp
+;;   (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
+;;   ;; Open files with .cl extension in lisp-mode
+;;   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
+;;   ;; Add fancy slime contribs
+;;   (setq slime-contribs '(slime-fancy))
+;;   ;; rainbow-delimeters messes up colors in slime-repl, and doesn't seem to work
+;;   ;; anyway, so we won't use prelude-lisp-coding-defaults.
+;;   (add-hook 'slime-repl-mode-hook (lambda ()
+;;                                     (smartparens-strict-mode +1)
+;;                                     (whitespace-mode -1)))
+;;   (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+;;         slime-fuzzy-completion-in-place t
+;;         slime-enable-evaluate-in-emacs t
+;;         slime-autodoc-use-multiline-p t
+;;         inferior-lisp-program "sbcl"
+;;         slime-auto-start 'always)
+;;   (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
+;;   (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
+;;   )
 
-;; Scheme support
-(use-package geiser
-  :defer 1
-  :config
-  ;(setq scheme-program-name "csi -:c")
-  ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
-  ;(define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
+;; ;; Scheme support
+;; (use-package geiser
+;;   :defer 1
+;;   :config
+;;   ;(setq scheme-program-name "csi -:c")
+;;   ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
+;;   ;(define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
 
-  (require 'cmuscheme)
+;;   (require 'cmuscheme)
 
-  ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
-  ;(define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
+;;   ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
+;;   ;(define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
 
-  (defun scheme-load-current-file (&optional switch)
-    (interactive "P")
-    (let ((file-name (buffer-file-name)))
-      (comint-check-source file-name)
-      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
-                                           (file-name-nondirectory file-name)))
-      (comint-send-string (scheme-proc) (concat "(load \""
-                                                file-name
-                                                "\"\)\n"))
-      (if switch
-          (switch-to-scheme t)
-        (message "\"%s\" loaded." file-name) ) ) )
+;;   (defun scheme-load-current-file (&optional switch)
+;;     (interactive "P")
+;;     (let ((file-name (buffer-file-name)))
+;;       (comint-check-source file-name)
+;;       (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
+;;                                            (file-name-nondirectory file-name)))
+;;       (comint-send-string (scheme-proc) (concat "(load \""
+;;                                                 file-name
+;;                                                 "\"\)\n"))
+;;       (if switch
+;;           (switch-to-scheme t)
+;;         (message "\"%s\" loaded." file-name) ) ) )
 
-  (defun scheme-compile-current-file (&optional switch)
-    (interactive "P")
-    (let ((file-name (buffer-file-name)))
-      (comint-check-source file-name)
-      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
-                                           (file-name-nondirectory file-name)))
-      (message "compiling \"%s\" ..." file-name)
-      (comint-send-string (scheme-proc) (concat "(compile-file \""
-                                                file-name
-                                                "\"\)\n"))
-      (if switch
-          (switch-to-scheme t)
-        (message "\"%s\" compiled and loaded." file-name) ) ) )
-  ;; Indenting module body code at column 0
-  (defun scheme-module-indent (state indent-point normal-indent) 0)
-  (put 'module 'scheme-indent-function 'scheme-module-indent)
+;;   (defun scheme-compile-current-file (&optional switch)
+;;     (interactive "P")
+;;     (let ((file-name (buffer-file-name)))
+;;       (comint-check-source file-name)
+;;       (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
+;;                                            (file-name-nondirectory file-name)))
+;;       (message "compiling \"%s\" ..." file-name)
+;;       (comint-send-string (scheme-proc) (concat "(compile-file \""
+;;                                                 file-name
+;;                                                 "\"\)\n"))
+;;       (if switch
+;;           (switch-to-scheme t)
+;;         (message "\"%s\" compiled and loaded." file-name) ) ) )
+;;   ;; Indenting module body code at column 0
+;;   (defun scheme-module-indent (state indent-point normal-indent) 0)
+;;   (put 'module 'scheme-indent-function 'scheme-module-indent)
 
-  (put 'and-let* 'scheme-indent-function 1)
-  (put 'parameterize 'scheme-indent-function 1)
-  (put 'handle-exceptions 'scheme-indent-function 1)
-  (put 'when 'scheme-indent-function 1)
-  (put 'unless 'scheme-indent-function 1)
-  (put 'match 'scheme-indent-function 1)
-  (require 'autoinsert)
-  (add-hook 'find-file-hooks 'auto-insert)
+;;   (put 'and-let* 'scheme-indent-function 1)
+;;   (put 'parameterize 'scheme-indent-function 1)
+;;   (put 'handle-exceptions 'scheme-indent-function 1)
+;;   (put 'when 'scheme-indent-function 1)
+;;   (put 'unless 'scheme-indent-function 1)
+;;   (put 'match 'scheme-indent-function 1)
+;;   (require 'autoinsert)
+;;   (add-hook 'find-file-hooks 'auto-insert)
 
-  (setq auto-insert-alist
-        '(("\\.scm" .
-           (insert "#!/bin/sh\n#| -*- scheme -*-\nexec csi -s $0 \"$@\"\n|#\n"))))
-  )
+;;   (setq auto-insert-alist
+;;         '(("\\.scm" .
+;;            (insert "#!/bin/sh\n#| -*- scheme -*-\nexec csi -s $0 \"$@\"\n|#\n"))))
+;;   )
 
 (use-package css-mode
   :defer t
@@ -1428,45 +1428,45 @@
 
 
 
-(use-package vala-mode)
-(use-package vala-snippets)
+;(use-package vala-mode)
+;(use-package vala-snippets)
 
-(use-package org)
-(use-package orgnav)
-(use-package org-bullets
-  :config
-  (add-hook 'org-mode-hook 'org-bullets-mode)
-  (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
-  ;; (setq org-ellipsis '("↝" "⇉" "⇝" "⇢" "⇨" "⇰" "➔" "➙" "➛" "➜" "➝" "➞"))
-  )
-; (use-package ox-pandoc)
-(use-package ox-twbs)
-(use-package ansi-color
-  :config
-  (defun my/ansi-colorize-buffer ()
-    (let ((buffer-read-only nil))
-      (ansi-color-apply-on-region (point-min) (point-max))))
-  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
-  )
+;; (use-package org)
+;; (use-package orgnav)
+;; (use-package org-bullets
+;;   :config
+;;   (add-hook 'org-mode-hook 'org-bullets-mode)
+;;   (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
+;;   ;; (setq org-ellipsis '("↝" "⇉" "⇝" "⇢" "⇨" "⇰" "➔" "➙" "➛" "➜" "➝" "➞"))
+;;   )
+;; ; (use-package ox-pandoc)
+;; (use-package ox-twbs)
+;; (use-package ansi-color
+;;   :config
+;;   (defun my/ansi-colorize-buffer ()
+;;     (let ((buffer-read-only nil))
+;;       (ansi-color-apply-on-region (point-min) (point-max))))
+;;   (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
+;;   )
 
-(use-package d-mode)
+;; (use-package d-mode)
 
 
 
 ;; lualatex preview
-(setq org-latex-pdf-process
-  '("lualatex -shell-escape -interaction nonstopmode %f"
-    "lualatex -shell-escape -interaction nonstopmode %f"))
+;; (setq org-latex-pdf-process
+;;   '("lualatex -shell-escape -interaction nonstopmode %f"
+;;     "lualatex -shell-escape -interaction nonstopmode %f"))
 
-(setq luamagick '(luamagick :programs ("lualatex" "convert")
-       :description "pdf > png"
-       :message "you need to install lualatex and imagemagick."
-       :use-xcolor t
-       :image-input-type "pdf"
-       :image-output-type "png"
-       :image-size-adjust (1.0 . 1.0)
-       :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
-       :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+;; (setq luamagick '(luamagick :programs ("lualatex" "convert")
+;;        :description "pdf > png"
+;;        :message "you need to install lualatex and imagemagick."
+;;        :use-xcolor t
+;;        :image-input-type "pdf"
+;;        :image-output-type "png"
+;;        :image-size-adjust (1.0 . 1.0)
+;;        :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+;;        :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
 
 ;(add-to-list 'org-preview-latex-process-alist luamagick)
 
@@ -1488,11 +1488,11 @@
               auto-mode-alist)
       )
 
-(autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
-(add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
-(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
-(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
-(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
+;; (autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
+;; (add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
+;; (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
+;; (add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
+;; (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
 
 (defun compile-test ()
   (interactive)
