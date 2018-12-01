@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+# -*- mode: snippet -*-
 # name: super
-# contributor: Gabriele Lanaro <gabriele.lanaro@gmail.com>
+# key: super
+# group: object oriented
 # --
-super(${1:`(prev-class-name)`},self).${2:`(prev-def-name)`}(${3:`(prev-def-args)`})
-    $0
+super(`(replace-regexp-in-string "\\([.]\\)[^.]+$" ", self)." (python-info-current-defun) nil nil 1)`($1)
+$0
