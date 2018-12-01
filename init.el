@@ -445,8 +445,8 @@
 
 (use-package yasnippet
   :config
-  ;(setq yas-snippet-dirs (append yas-snippet-dirs
-  ;                               '("~/.emacs.d/private/snippets")))
+  (setq yas-snippet-dirs (append yas-snippet-dirs
+                                 '("~/.emacs.d/private/snippets")))
   (yas-reload-all)
   (yas-global-mode 1)
   (add-hook 'prog-mode-hook #'yas-minor-mode)
@@ -1611,7 +1611,7 @@
 (global-set-key (kbd "C-<escape>") 'keyboard-escape-quit)
 (global-unset-key (kbd "<escape>-<escape>-<escape>"))
 (global-set-key (kbd "C-q") 'quoted-insert)
-;; (global-set-key (kbd "C-z") 'undo)
+(global-set-key (kbd "C-z") 'undo)
 
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
