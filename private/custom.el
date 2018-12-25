@@ -143,13 +143,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 143 :width normal))))
+ '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 127 :width normal))))
  '(company-scrollbar-bg ((t (:background "#4ccc4ccc4ccc"))))
  '(company-scrollbar-fg ((t (:background "#3fff3fff3fff"))))
  '(company-tooltip ((t (:inherit default :background "gray30" :foreground "white"))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face :background "goldenrod" :foreground "black"))))
  '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
- '(font-latex-verbatim-face ((t (:inherit "Fira Code" :foreground "burlywood"))))
+ '(font-latex-verbatim-face ((t (:family "Fira Code" :foreground "burlywood"))))
  '(line-number ((t (:inherit (shadow default) :background "gray30" :foreground "gold" :weight ultra-light :family "Ubuntu Mono"))))
  '(line-number-current-line ((t (:inherit line-number :background "forest green" :foreground "white"))))
  '(logtalk-default-face ((t (:inherit nil :stipple nil :background "gray20" :foreground "wheat1" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :foundry "CTDB" :family "Fira Code"))) t)

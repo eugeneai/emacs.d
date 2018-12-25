@@ -599,10 +599,6 @@
   ;(setq company-tooltip-flip-when-above t)
   )
 
-(use-package company-auctex
-  :config
-  (company-auctex-init))
-
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
   :config
@@ -831,7 +827,14 @@
    '(TeX-source-correlate-start-server (quote ask)))
   (setq font-latex-fontify-script nil
         font-latex-fontify-sectioning 'color)
-)
+  (add-to-list 'auto-mode-alist '("\\.tex\\'" . latex-mode))
+  (add-to-list 'auto-mode-alist '("\\.sty\\'" . latex-mode))
+
+  )
+
+(use-package company-auctex
+  :config
+  (company-auctex-init))
 
 (use-package auctex-latexmk
   :defer t
@@ -1132,10 +1135,14 @@
       ))
   (global-set-key (kbd "<f4>")   'fd-switch-dictionary)
   (add-hook 'text-mode-hook (lambda ()
+                              (message "+Flyspell!")
                               (flyspell-mode)
+                              (message "-Flyspell!")
                               (diminish 'flyspell-mode)))
   (add-hook 'prog-mode-hook (lambda ()
+                              (message "+Flyspell-prog!")
                               (flyspell-prog-mode)
+                              (message "-Flyspell-prog!")
                               (diminish 'flyspell-mode)))
   ; ispell-alternate-dictionary
   :bind ("C-M-<tab>" . flyspell-auto-correct-word)
@@ -1675,7 +1682,7 @@
 (defun my-ttt ()
   (erase-buffer)
   (face-remap-add-relative 'default '(
-          ;:family "Fira Mono Light"
+          ;:family "Fira Code"
           :height 160 ;Seseg
           ;:height 100
           ))
