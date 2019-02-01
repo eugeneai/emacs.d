@@ -5,6 +5,8 @@
 ;; init.el --- Emacs configuration
 
 ;; Consider using abbreviations.
+; (flyspell-mode t)
+(flyspell-mode nil)
 (add-hook 'text-mode-hook (lambda () (abbrev-mode 1)))
 (setq abbrev-file-name             ;; tell emacs where to read abbrev
       "~/.emacs.d/private/abbrev_defs")    ;; definitions from...
@@ -1682,9 +1684,9 @@
 (defun my-ttt ()
   (erase-buffer)
   (face-remap-add-relative 'default '(
-          ;:family "Fira Code"
-          :height 160 ;Seseg
-          ;:height 100
+          :family "Fira code"
+          ;:height 160 ;Seseg
+          :height 130
           ))
 )
 
