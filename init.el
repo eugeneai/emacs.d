@@ -96,6 +96,7 @@
                     (not (gnutls-available-p))))
        (proto (if t "http" "https")))
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
 
@@ -577,7 +578,7 @@
     ("M-RET l t s" . langtool-check)
     ("M-RET l t d" . langtool-check-done)
     ("M-RET l t l" . langtool-switch-default-language)
-    ("M-RET l t s" . langtool-show-message-at-point)
+    ("M-RET l t m" . langtool-show-message-at-point)
     ("M-RET l t c" . langtool-correct-buffer)
     ("M-RET l t e" . my-lt-set-english)
     ("M-RET l t r" . my-lt-set-russian)
