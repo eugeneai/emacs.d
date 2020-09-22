@@ -363,7 +363,7 @@
 
 ;; Get useful line behaviors when region is not active.
 (use-package whole-line-or-region
-  :config (whole-line-or-region-mode t)
+  :config (whole-line-or-region-global-mode t)
   :diminish whole-line-or-region-mode)
 
 
