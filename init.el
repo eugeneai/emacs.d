@@ -1138,14 +1138,10 @@
       ))
   (global-set-key (kbd "<f4>")   'fd-switch-dictionary)
   (add-hook 'text-mode-hook (lambda ()
-                              (message "+Flyspell!")
                               (flyspell-mode)
-                              (message "-Flyspell!")
                               (diminish 'flyspell-mode)))
   (add-hook 'prog-mode-hook (lambda ()
-                              (message "+Flyspell-prog!")
                               (flyspell-prog-mode)
-                              (message "-Flyspell-prog!")
                               (diminish 'flyspell-mode)))
   ; ispell-alternate-dictionary
   :bind ("C-M-<tab>" . flyspell-auto-correct-word)
@@ -1501,8 +1497,8 @@
 (autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
 (add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
 (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
-(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
-(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
+;(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
+;(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
 
 (defun compile-test ()
   (interactive)
@@ -1910,6 +1906,8 @@
 
 
 (put 'narrow-to-page 'disabled nil)
+
+(add-hook 'logtalk-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 ;;(switch-to-buffer "*Compile-Log*")
 ;;(delete-window)
