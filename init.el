@@ -362,6 +362,23 @@
 
 
 ;; Get useful line behaviors when region is not active.
+;; Prehack the keymap to save indent-rigidly ; C-x <tab> <- ... ->
+(defvar whole-line-or-region-local-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [remap kill-region] 'whole-line-or-region-kill-region)
+    (define-key map [remap kill-ring-save] 'whole-line-or-region-kill-ring-save)
+    (define-key map [remap copy-region-as-kill] 'whole-line-or-region-copy-region-as-kill)
+    (define-key map [remap delete-region] 'whole-line-or-region-delete-region)
+    (define-key map [remap comment-dwim] 'whole-line-or-region-comment-dwim-2)
+    (define-key map [remap comment-region] 'whole-line-or-region-comment-region)
+    (define-key map [remap uncomment-region] 'whole-line-or-region-uncomment-region)
+    ;; (define-key map [remap indent-rigidly-left-to-tab-stop] 'whole-line-or-region-indent-rigidly-left-to-tab-stop)
+    ;; (define-key map [remap indent-rigidly-right-to-tab-stop] 'whole-line-or-region-indent-rigidly-right-to-tab-stop)
+    ;; (define-key map [remap indent-rigidly-left] 'whole-line-or-region-indent-rigidly-left)
+    ;; (define-key map [remap indent-rigidly-right] 'whole-line-or-region-indent-rigidly-right)
+    map)
+  "Minor mode map for `whole-line-or-region-mode'.")
+
 (use-package whole-line-or-region
   :config (whole-line-or-region-global-mode t)
   :diminish whole-line-or-region-mode)
