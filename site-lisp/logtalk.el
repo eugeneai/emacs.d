@@ -4,8 +4,8 @@
 
 ;; Author: Paulo Moura <pmoura@logtalk.org>
 ;; Creation date: November 15, 2003
-;; Last modification date: August 3, 2018
-;; Version: 1.37
+;; Last modification date: July 31, 2020
+;; Version: 1.39
 
 ;; Installation:
 ;;
@@ -27,7 +27,7 @@
 
 ;; setup 
 
-(defvar logtalk-mode-version "1.37"
+(defvar logtalk-mode-version "1.39"
 	"Logtalk mode version number")
 
 (defvar logtalk-mode-hook nil)
@@ -136,11 +136,11 @@
 		("\\<\\(fa\\(?:il\\|lse\\)\\|true\\)\\>" 0 'logtalk-built-in-predicate-face)
 		("\\(!\\|->\\|;\\)" 0 'logtalk-built-in-predicate-face)
 		("\\<\\(?:instantiation\\|system\\)_error\\>" 0 'logtalk-built-in-predicate-face)
-		("\\<\\(\\(?:type\\|domain\\|existence\\|permission\\|representation\\|evaluation\\|resource\\|syntax\\)_error\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
+		("\\<\\(\\(?:uninstantiation\\|type\\|domain\\|existence\\|permission\\|representation\\|evaluation\\|resource\\|syntax\\)_error\\)\\([(]\\)" 1 'logtalk-built-in-predicate-face)
 		;;
 		;; multi-threading:
 		;;
-		("\\<\\(threaded\\(?:_\\(?:call\\|e\\(?:ngine\\(?:_\\(?:create\\|destroy\\|fetch\\|next\\(?:_reified\\)?\\|post\\|self\\|yield\\)\\)?\\|xit\\)\\|ignore\\|notify\\|once\\|peek\\|wait\\)\\)?\\)" 1 'logtalk-built-in-predicate-face)
+		("\\<\\(threaded\\(?:_\\(?:ca\\(?:ll\\|ncel\\)\\|e\\(?:ngine\\(?:_\\(?:create\\|destroy\\|fetch\\|next\\(?:_reified\\)?\\|post\\|self\\|yield\\)\\)?\\|xit\\)\\|ignore\\|notify\\|once\\|peek\\|wait\\)\\)?\\)" 1 'logtalk-built-in-predicate-face)
 		;;
 		;; logic and control:
 		;;
