@@ -1474,7 +1474,7 @@
 
 (use-package d-mode)
 
-
+(require 'magit-process nil t)
 
 ;; lualatex preview
 (setq org-latex-pdf-process
