@@ -801,10 +801,10 @@
   (define-key markdown-mode-map (kbd "M-n") nil)
   (define-key markdown-mode-map (kbd "M-p") nil))
 
-(use-package markdown-mode+
-  :defer t
-  :after markdown-mode
-  )
+;; (use-package markdown-mode+
+;;   :defer t
+;;   :after markdown-mode
+;;   )
 
 (use-package pandoc-mode
   :defer t
@@ -850,6 +850,13 @@
   (add-to-list 'auto-mode-alist '("\\.tex\\'" . latex-mode))
   (add-to-list 'auto-mode-alist '("\\.sty\\'" . latex-mode))
 
+  )
+
+(use-package company-tabnine
+  :ensure t
+  :config
+  (add-to-list 'company-backends #'company-tabnine)
+  ;;; Run M-x company-tabnine-install-binary to install the TabNine binary for your system.
   )
 
 (use-package company-auctex
@@ -1450,6 +1457,7 @@
 ;;   )
 
 
+(use-package forth-mode)
 
 (use-package vala-mode)
 (use-package vala-snippets)
