@@ -384,52 +384,6 @@
   :diminish whole-line-or-region-mode)
 
 
-;; Work with git with magic ease.
-(use-package magit
-  :if (executable-find "git")
-  :bind
-  ("C-x g" . magit-status)
-  ;:commands
-  ;(magit-status)
-  :config
-  (setq magit-push-always-verify nil)
-  (set-default 'magit-unstage-all-confirm t)
-  (set-default 'magit-stage-all-confirm t)
-  (set-default 'magit-revert-buffers 'silent)
-  (global-set-key "\C-x\ \C-m" 'magit-status)
-;; Don't use tabs, magit!
-  (add-hook 'git-commit-mode-hook
-            '(lambda () (untabify (point-min) (point-max))) t))
-
-(use-package magit-filenotify
-  :commands
-  (magit-after-save-refresh-status
-   magit-filenotify-mode)
-  :config
-  (add-hook 'after-save-hook 'magit-after-save-refresh-status)
-  (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)
-  )
-
-(use-package magithub
-  :disabled 1
-  :after magit)
-
-;; Fix to git-gutter+
-;; See https://github.com/nonsequitur/git-gutter-plus/pull/27
-;; Use the fringe if in graphical mode (not terminal).
-(if windowed-system
-    (progn
-      (if (or (display-graphic-p) (daemonp))
-          (require 'git-gutter-fringe+)
-        (require 'git-gutter+))
-      (global-git-gutter+-mode)
-      (diminish 'git-gutter+-mode)
-      )
-)
-;; ;; Eventually may be able to return to something like this:
-(use-package git-gutter-fringe+
-  :init (global-git-gutter+-mode)
-  :diminish git-gutter+-mode)
 
 ;; Interactive selection of things.
 ;; TODO: consider helm instead (see Sacha's config)
@@ -755,9 +709,35 @@
 
 ;; Use a nice JavaScript mode.
 (use-package js2-mode
+  :disabled 1
   :mode
   (("\\.js\\'" . js2-mode)
   ))
+
+(use-package lsp-mode
+  :config
+  (add-hook 'web-mode-hook #'lsp)
+  (add-hook 'js-mode-hook #'lsp)
+  )
+(use-package lsp-treemacs)
+(use-package helm-lsp)
+(use-package hydra)
+(use-package helm-xref
+  :config
+  (define-key global-map [remap find-file] #'helm-find-files)
+  (define-key global-map [remap execute-extended-command] #'helm-M-x)
+  (define-key global-map [remap switch-to-buffer] #'helm-mini))
+(use-package dap-mode
+  :config
+  (require 'dap-chrome)
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (yas-global-mode))
+
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      company-idle-delay 0.0
+      company-minimum-prefix-length 1
+      create-lockfiles nil) ;; lock files will kill `npm start'
 
 (use-package paredit
   :disabled 1
@@ -998,6 +978,7 @@
   (require 'company-css)
   (add-hook 'html-mode-hook 'visual-line-mode)
   (add-hook 'web-mode-hook 'visual-line-mode)
+  (add-hook 'js-mode-hook 'web-mode)
   (defun web-mode-flyspefll-verify ()
     (let ((f (get-text-property (- (point) 1) 'face)))
       (not (memq f '(web-mode-html-attr-value-face
@@ -1034,9 +1015,15 @@
    ("\\.hbs\\'"        . web-mode)
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
+   ("\\.js\\'"         . web-mode)
+   ("\\.jsx\\'"        . web-mode)
+   ("\\.html\\'"       . web-mode)
+   ("\\.htm\\'"        . web-mode)
    ("\\.djhtml\\'"     . web-mode)
    ("\\.pt\\'"         . web-mode)
    ))
+
+
 
 ;; Inpation mode
 
@@ -1482,7 +1469,39 @@
 
 (use-package d-mode)
 
+
+;; Work with git with magic ease.
+(use-package magit
+  :if (executable-find "git")
+  :bind
+  ("C-x g" . magit-status)
+  ;:commands
+  ;(magit-status)
+  :config
+  (setq magit-push-always-verify nil)
+  (set-default 'magit-unstage-all-confirm t)
+  (set-default 'magit-stage-all-confirm t)
+  (set-default 'magit-revert-buffers 'silent)
+  (global-set-key "\C-x\ \C-m" 'magit-status)
+;; Don't use tabs, magit!
+  (add-hook 'git-commit-mode-hook
+            '(lambda () (untabify (point-min) (point-max))) t))
+
+(use-package magit-filenotify
+  :commands
+  (magit-after-save-refresh-status
+   magit-filenotify-mode)
+  :config
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status)
+  (add-hook 'magit-status-mode-hook 'magit-filenotify-mode))
+
+(use-package magithub
+  ;; :disabled 1
+  :after magit)
+
 (require 'magit-process nil t)
+
+
 
 ;; lualatex preview
 (setq org-latex-pdf-process
