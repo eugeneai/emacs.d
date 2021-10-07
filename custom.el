@@ -84,7 +84,7 @@
  '(minibuffer-frame-alist '((width . 80) (height . 1)))
  '(mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . 0.5)))
  '(package-selected-packages
-   '(magithub forth-mode yaml-mode ac-php ac-php-core flymake-php php-mode php-refactor-mode lua-mode git-gutter-fringe+ docker dockerfile-mode company-auctex helm-swoop color-theme-modern spacemacs-theme material-theme zenburn-theme highlight-parentheses company omisharp-mode omnisharp omisharp langtool diminish company-php php+-mode d-mode vala-snippets ox-twbs ox-pandoc org-bullets orgnav org-mode csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package))
+   '(prettier-js prettier forth-mode yaml-mode ac-php ac-php-core flymake-php php-mode php-refactor-mode lua-mode git-gutter-fringe+ docker dockerfile-mode company-auctex helm-swoop color-theme-modern spacemacs-theme material-theme zenburn-theme highlight-parentheses company omisharp-mode omnisharp omisharp langtool diminish company-php php+-mode d-mode vala-snippets ox-twbs ox-pandoc org-bullets orgnav org-mode csharp-mode jedi-direx company-jedi company-jedu nlinum ergoemacs-mode ergoremacs-mode avy flycheck impatient-mode w3m fiplr color-theme auctex-latexmk auctex ac-ispell goto-last-change markdown-mode+ markdown-mode rainbow-delimiters rainbow-mode js2-mode ess py-autopep8 elpy zoom-frm multiple-cursors page-break-lines browse-kill-ring projectile smex flx-ido ido-vertical-mode magit-filenotify magit whole-line-or-region expand-region drag-stuff smartparens ag better-defaults mvn company-emacs-eclim switch-window switch-windows sr-speedbar package-build shut-up epl git commander f dash s cask ttl-mode vala-mode geiser company-web company-css company-web-html pandoc-mode pandoc slime comany which-key beacon smart-mode-line anzu htmlize ace-jump-mode pyenv-mode-auto pyenv-mode nose abbrev abbrev-mode cursor-chg helm-themes helm-pydoc helm-company helm-ag helm-ispell helm-ls-git helm use-package))
  '(prolog-program-name
    '(((getenv "EPROLOG")
       (eval
@@ -149,8 +149,6 @@
  '(magit-branch-local ((t (:background "turquoise4" :foreground "gold2"))))
  '(magit-branch-remote ((t (:background "saddle brown" :foreground "DarkSeaGreen2"))))
  '(minibuffer-prompt ((t (:foreground "CadetBlue1"))))
- '(mode-line ((t (:background "black" :foreground "gray60" :inverse-video nil :weight normal :height 0.65 :family "Fira Code"))))
- '(mode-line-inactive ((t (:background "#404045" :foreground "gray60" :inverse-video nil :height 0.6))))
  '(show-paren-match ((t (:inherit default :background "gray50" :foreground "gray100" :underline nil))))
  '(show-paren-mismatch ((t (:inherit default :foreground "#e0211d" :underline nil :bold nil))))
  '(tex-verbatim ((t (:family "Fira Code")))))

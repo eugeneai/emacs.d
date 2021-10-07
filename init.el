@@ -708,11 +708,37 @@
 
 
 ;; Use a nice JavaScript mode.
-(use-package js2-mode
-  :disabled 1
-  :mode
-  (("\\.js\\'" . js2-mode)
-  ))
+;; (use-package js2-mode
+;;   :disabled 1
+;;   :mode
+;;   (("\\.js\\'" . js2-mode)
+;;   ))
+
+
+(use-package rjsx-mode
+  :mode ("\\.js\\'")
+  :config
+  (setq js2-basic-offset 2)
+  (add-hook 'rjsx-mode-hook (lambda ()
+                              (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+                              ; (my/use-eslint-from-mode-modules)
+                              (flycheck-select-checker 'javascript-eslint)
+                              ))
+  ; (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
+  )
+
+(use-package react-snippets)
+
+(use-package emmet-mode
+  :hook (web-mode rjsx-mode)
+  :config
+  (add-hook 'emmet-mode-hook (lambda ()
+                               (setq emmet-indent-after-insert t))))
+
+(use-package mode-local
+  :config
+  (setq-mode-local rjsx-mode emmet-expand-jsx-className? t)
+  (setq-mode-local web-mode emmet-expand-jsx-className? nil))
 
 (use-package lsp-mode
   :config
@@ -724,9 +750,10 @@
 (use-package hydra)
 (use-package helm-xref
   :config
-  (define-key global-map [remap find-file] #'helm-find-files)
-  (define-key global-map [remap execute-extended-command] #'helm-M-x)
-  (define-key global-map [remap switch-to-buffer] #'helm-mini))
+  ; (define-key global-map [remap find-file] #'helm-find-files)
+  ; (define-key global-map [remap execute-extended-command] #'helm-M-x)
+  ; (define-key global-map [remap switch-to-buffer] #'helm-mini)
+  )
 (use-package dap-mode
   :config
   (require 'dap-chrome)
@@ -738,6 +765,16 @@
       company-idle-delay 0.0
       company-minimum-prefix-length 1
       create-lockfiles nil) ;; lock files will kill `npm start'
+
+
+(use-package prettier-js
+  :config
+  (setq prettier-js-args '(
+  "--trailing-comma" "none"
+  "--bracket-spacing" "false"
+  ))
+  :hook (web-mode rjsx-mode)
+  )
 
 (use-package paredit
   :disabled 1
@@ -804,8 +841,6 @@
                                (custom-set-variables
                                 '(ac-ispell-requires 3)
                                 '(ac-ispell-fuzzy-limit 2))
-                               ;(auto-complete-mode)
-                               ;(ac-ispell-ac-setup)
                                ))
   (ac-ispell-setup)
   ; TODO Does not work now
@@ -1952,6 +1987,10 @@
 (put 'narrow-to-page 'disabled nil)
 
 (add-hook 'logtalk-mode-hook (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'js2-mode-hook #'setup-tide-mode)
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+(add-hook 'rjsx-mode-hook #'setup-tide-mode)
+
 
 ;;(switch-to-buffer "*Compile-Log*")
 ;;(delete-window)
