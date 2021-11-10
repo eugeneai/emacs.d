@@ -14,6 +14,9 @@
 (setq save-abbrevs 'silently)
 ;; you will be asked before the abbreviations are saved
 
+;; Fix
+(defun magit-process-git (destination &rest args))
+
 ;; (setq debug-on-error nil)
 
 ;; Just a sec - have to clean things up a little!
@@ -277,7 +280,8 @@
 (global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
 
 (use-package ergoemacs-mode
-  :disabled 1
+  :disabled t
+  :defer t
   :config
   ;(setq ergoemacs-theme nil) ;; Uses Standard Ergoemacs keyboard theme
   ;(setq ergoemacs-keyboard-layout "us") ;; Assumes QWERTY keyboard layout
@@ -326,6 +330,7 @@
 
 ;; Move things around intuitively.
 (use-package drag-stuff
+  :defer t
   :config
   (drag-stuff-global-mode)
   (drag-stuff-define-keys)
@@ -418,6 +423,7 @@
 
 
 (use-package yasnippet
+  :defer t
   :config
   (setq yas-snippet-dirs (append yas-snippet-dirs
                                  '("~/.emacs.d/private/snippets")))
@@ -430,6 +436,7 @@
   )
 
 (use-package yasnippet-snippets
+  :defer t
   :config
   (yas-reload-all))
 
@@ -443,6 +450,7 @@
 
 ;; Add nice project functions for git repos.
 (use-package projectile
+  :defer t
   :commands
   (projectile-find-file)
   :config
@@ -454,7 +462,7 @@
 
 ;; Un-namespaced Common Lisp names.
 ;; https://github.com/browse-kill-ring/browse-kill-ring/pull/56
-(require 'cl)
+
 (use-package browse-kill-ring
   :config
   ;; Bind M-y to visual interactive kill ring.
@@ -468,6 +476,7 @@
 
 ;; Edit in multiple places at the same time.
 (use-package multiple-cursors
+  :defer t
   :bind
   ("M-RET m e" . mc/edit-lines)
   ("M-RET m m" . mc/mark-more-like-this-extended)
@@ -511,7 +520,7 @@
 (setq langtool-java-classpath
       "/usr/share/languagetool:/usr/share/java/languagetool/*")
 (use-package langtool
-  :defer 1
+  :defer t
   :if (executable-find "/usr/bin/languagetool")
   :config
   ;(setq langtool-java-bin "/usr/bin/java")
@@ -575,6 +584,7 @@
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
+  :defer t
   :config
   (progn
     ;; Use ipython if available.
@@ -658,11 +668,13 @@
   )
 
 (use-package py-autopep8
+  :defer t
   :config
   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
   )
 
 (use-package nose
+  :defer t
   :after elpy
   :commands (nosetests-one
              nosetests-pdb-one
@@ -672,7 +684,6 @@
              nosetests-pdb-module
              nosetests-suite
              nosetests-pdb-suite)
-  :init
   :config
   (progn
     (add-to-list 'nose-project-root-files "setup.cfg")
@@ -686,7 +697,7 @@
 
 (use-package pyenv-mode
   :if (executable-find "pyenv")
-  ;:defer t
+  :defer t
   ;:after elpy
   :config
   ;(add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
@@ -715,7 +726,11 @@
 ;;   ))
 
 
+(use-package tide
+  :defer t)
+
 (use-package rjsx-mode
+  :defer t
   :mode ("\\.js\\'")
   :config
   (setq js2-basic-offset 2)
@@ -727,38 +742,42 @@
   ; (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
   )
 
-(use-package react-snippets)
+(use-package react-snippets
+  :defer t)
 
 (use-package emmet-mode
+  :defer t
   :hook (web-mode rjsx-mode)
   :config
   (add-hook 'emmet-mode-hook (lambda ()
                                (setq emmet-indent-after-insert t))))
 
 (use-package mode-local
+  :defer t
   :config
   (setq-mode-local rjsx-mode emmet-expand-jsx-className? t)
   (setq-mode-local web-mode emmet-expand-jsx-className? nil))
 
-(use-package lsp-mode
-  :config
-  (add-hook 'web-mode-hook #'lsp)
-  (add-hook 'js-mode-hook #'lsp)
-  )
-(use-package lsp-treemacs)
-(use-package helm-lsp)
-(use-package hydra)
-(use-package helm-xref
-  :config
-  ; (define-key global-map [remap find-file] #'helm-find-files)
-  ; (define-key global-map [remap execute-extended-command] #'helm-M-x)
-  ; (define-key global-map [remap switch-to-buffer] #'helm-mini)
-  )
-(use-package dap-mode
-  :config
-  (require 'dap-chrome)
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (yas-global-mode))
+;; (use-package lsp-mode
+;;   :config
+;;   (add-hook 'web-mode-hook #'lsp)
+;;   (add-hook 'js-mode-hook #'lsp)
+;;   (add-hook 'rjsx-mode-hook #'lsp)
+;;   )
+;; (use-package lsp-treemacs)
+;; (use-package helm-lsp)
+;; (use-package hydra)
+;; (use-package helm-xref
+;;   :config
+;;   ; (define-key global-map [remap find-file] #'helm-find-files)
+;;   ; (define-key global-map [remap execute-extended-command] #'helm-M-x)
+;;   ; (define-key global-map [remap switch-to-buffer] #'helm-mini)
+;;   )
+;; (use-package dap-mode
+;;   :config
+;;   (require 'dap-chrome)
+;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+;;   (yas-global-mode))
 
 (setq gc-cons-threshold (* 100 1024 1024)
       read-process-output-max (* 1024 1024)
@@ -767,17 +786,22 @@
       create-lockfiles nil) ;; lock files will kill `npm start'
 
 
-(use-package prettier-js
+(use-package prettier
+  :defer t
   :config
-  (setq prettier-js-args '(
-  "--trailing-comma" "none"
-  "--bracket-spacing" "false"
-  ))
-  :hook (web-mode rjsx-mode)
+  ;; (setq prettier-js-args '(
+  ;;                          "--trailing-comma" "none"
+  ;;                          "--bracket-spacing" "false"
+  ;;                          ))
+  :hook ((js2-mode . prettier-mode)
+         (typescript-mode . prettier-mode)
+         (rjsx-mode . prettier-mode)
+         (css-mode . prettier-mode)
+         (web-mode . prettier-mode))
   )
 
 (use-package paredit
-  :disabled 1
+  :disabled t
   :diminish paredit-mode
   :after elpy
   :config
@@ -794,7 +818,8 @@
 
 ;; Ensure paredit is used EVERYWHERE!
 (use-package paredit-everywhere
-  :disabled
+  :defer t
+  :disabled t
   :diminish paredit-everywhere-mode
   :config
   (add-hook 'prog-mode-hook #'paredit-everywhere-mode)
@@ -887,6 +912,7 @@
   )
 
 (use-package slime
+  :defer t
   :config
   ;; the SBCL configuration file is in Common Lisp
   (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
@@ -911,7 +937,7 @@
 
 ;; Scheme support
 (use-package geiser
-  :defer 1
+  :defer t
   :config
   ;(setq scheme-program-name "csi -:c")
   ;(define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
@@ -959,7 +985,7 @@
   (put 'unless 'scheme-indent-function 1)
   (put 'match 'scheme-indent-function 1)
   (require 'autoinsert)
-  (add-hook 'find-file-hooks 'auto-insert)
+  (add-hook 'find-file-hook 'auto-insert)
 
   (setq auto-insert-alist
         '(("\\.scm" .
@@ -1062,7 +1088,8 @@
 
 ;; Inpation mode
 
-(use-package impatient-mode)
+(use-package impatient-mode
+  :defer t)
 
 ;;; CONTINUE:
 ;;; TODO: Other languages
@@ -1078,6 +1105,7 @@
 
 (use-package w3m
   :if (executable-find "w3m")
+  :defer t
   :config
   ;; Multitran dictionary lookup
   (defun multitran-lookup-english (keyword)
@@ -1094,6 +1122,8 @@
   )
 
 (use-package recentf
+                                        ; :disabled t
+  :defer t
   :config
   (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
   (recentf-mode t)
@@ -1109,26 +1139,26 @@
   )
 
 (use-package swiper
-  :disabled t
+  ;; :disabled t
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (global-set-key "\C-s" 'swiper)
   (global-set-key (kbd "C-c C-r") 'ivy-resume)
   (global-set-key (kbd "<f6>") 'ivy-resume)
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c k") 'counsel-ag)
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+  ;; (global-set-key (kbd "M-x") 'counsel-M-x)
+  ;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  ;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  ;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  ;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  ;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  ;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  ;; (global-set-key (kbd "C-c g") 'counsel-git)
+  ;; (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  ;; (global-set-key (kbd "C-c k") 'counsel-ag)
+  ;; (global-set-key (kbd "C-x l") 'counsel-locate)
+  ;; (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  ;; (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
   )
 
 (use-package ace-jump-mode
@@ -1153,6 +1183,7 @@
   )
 
 (use-package htmlize
+  :defer t
   :commands
   (htmlize-buffer
    htmlfontify-buffer)
@@ -1399,13 +1430,16 @@
 
 (use-package helm-ispell)
 ;(use-package helm-git)
-(use-package helm-ag)
+(use-package helm-ag
+  :defer t)
 (use-package helm-company
+  :defer t
   :config
   (define-key company-mode-map (kbd "C-:") 'helm-company)
   (define-key company-active-map (kbd "C-:") 'helm-company)
   )
 (use-package helm-pydoc
+  :defer t
   :config
   (define-key python-mode-map (kbd "C-c C-d") 'helm-pydoc))
 
@@ -1429,9 +1463,11 @@
 ;;   (toggle-cursor-type-when-idle 1) ; On when idle
 ;;   )
 
-(use-package jedi-direx)
+(use-package jedi-direx
+  :defer t)
 
 (use-package company-jedi
+  :defer t
   :config
   (add-to-list 'company-backends 'company-jedi)
   )
@@ -1440,6 +1476,7 @@
   :config
   (add-hook 'ttl-mode-hook    ; Turn on font lock when in ttl mode
             'turn-on-font-lock)
+  :defer t
   :mode
   (("\\.ttl\\'"      . ttl-mode)
    ("\\.n3\\'"       . ttl-mode)
@@ -1479,21 +1516,28 @@
 ;;   )
 
 
-(use-package forth-mode)
+(use-package forth-mode
+  :defer t)
 
-(use-package vala-mode)
-(use-package vala-snippets)
+(use-package vala-mode
+  :defer t)
+(use-package vala-snippets
+  :defer t)
 
-(use-package org)
-(use-package orgnav)
+(use-package org
+  :defer t)
+(use-package orgnav
+  :defer t)
 (use-package org-bullets
+  :defer t
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
   (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
   ;; (setq org-ellipsis '("↝" "⇉" "⇝" "⇢" "⇨" "⇰" "➔" "➙" "➛" "➜" "➝" "➞"))
   )
 ; (use-package ox-pandoc)
-(use-package ox-twbs)
+(use-package ox-twbs
+  :defer t)
 (use-package ansi-color
   :config
   (defun my/ansi-colorize-buffer ()
@@ -1502,41 +1546,8 @@
   (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
   )
 
-(use-package d-mode)
-
-
-;; Work with git with magic ease.
-(use-package magit
-  :if (executable-find "git")
-  :bind
-  ("C-x g" . magit-status)
-  ;:commands
-  ;(magit-status)
-  :config
-  (setq magit-push-always-verify nil)
-  (set-default 'magit-unstage-all-confirm t)
-  (set-default 'magit-stage-all-confirm t)
-  (set-default 'magit-revert-buffers 'silent)
-  (global-set-key "\C-x\ \C-m" 'magit-status)
-;; Don't use tabs, magit!
-  (add-hook 'git-commit-mode-hook
-            '(lambda () (untabify (point-min) (point-max))) t))
-
-(use-package magit-filenotify
-  :commands
-  (magit-after-save-refresh-status
-   magit-filenotify-mode)
-  :config
-  (add-hook 'after-save-hook 'magit-after-save-refresh-status)
-  (add-hook 'magit-status-mode-hook 'magit-filenotify-mode))
-
-(use-package magithub
-  ;; :disabled 1
-  :after magit)
-
-(require 'magit-process nil t)
-
-
+(use-package d-mode
+  :defer t)
 
 ;; lualatex preview
 (setq org-latex-pdf-process
@@ -1987,14 +1998,81 @@
 (put 'narrow-to-page 'disabled nil)
 
 (add-hook 'logtalk-mode-hook (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'js2-mode-hook #'setup-tide-mode)
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
-(add-hook 'rjsx-mode-hook #'setup-tide-mode)
-
 
 ;;(switch-to-buffer "*Compile-Log*")
 ;;(delete-window)
 ;;(switch-to-buffer "*scratch*")
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+;; (add-hook 'before-save-hook 'tide-format-before-save)
+;; (add-hook 'js2-mode-hook #'setup-tide-mode)
+;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
+;; (add-hook 'rjsx-mode-hook #'setup-tide-mode)
+
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              ; (setup-tide-mode)
+              (prettier-mode)
+              )
+            )
+          )
+
+(eval-after-load 'web-mode
+  '(progn
+       (add-hook 'web-mode-hook #'add-node-modules-path)
+       (add-hook 'web-mode-hook #'prettier-mode)
+       (flycheck-add-mode 'typescript-tslint 'web-mode)))
+
+;; Work with git with magic ease.
+(use-package magit
+  :defer t
+  :if (executable-find "git")
+  :bind
+  ("C-x g" . magit-status)
+  ;:commands
+  ;(magit-status)
+  :config
+  (setq magit-push-always-verify nil)
+  (set-default 'magit-unstage-all-confirm t)
+  (set-default 'magit-stage-all-confirm t)
+  (set-default 'magit-revert-buffers 'silent)
+  (global-set-key "\C-x\ \C-m" 'magit-status)
+;; Don't use tabs, magit!
+  (add-hook 'git-commit-mode-hook
+            '(lambda () (untabify (point-min) (point-max))) t))
+
+;; (use-package magit-filenotify
+;;   :commands
+;;   (magit-after-save-refresh-status
+;;    magit-filenotify-mode)
+;;   :config
+;;   (add-hook 'after-save-hook 'magit-after-save-refresh-status)
+;;   (add-hook 'magit-status-mode-hook 'magit-filenotify-mode))
+
+(use-package magithub
+  ;; :disabled 1
+  :defer t
+  :after magit)
+
+; (require 'magit-process nil t)
+
 
 (provide 'init)
 ;;; init.el ends here
