@@ -281,16 +281,15 @@
 
 (use-package ergoemacs-mode
   :disabled t
-  :defer t
+  ; :defer t
   :config
-  ;(setq ergoemacs-theme nil) ;; Uses Standard Ergoemacs keyboard theme
-  ;(setq ergoemacs-keyboard-layout "us") ;; Assumes QWERTY keyboard layout
-  ;(ergoemacs-mode 1)
+  (setq ergoemacs-theme nil) ;; Uses Standard Ergoemacs keyboard theme
+  (setq ergoemacs-keyboard-layout "us") ;; Assumes QWERTY keyboard layout
+  (ergoemacs-mode 1)
   )
 
 (use-package ag
   :defer t)
-
 
 ;; `smartparens` manages parens well.
 (use-package smartparens
@@ -330,7 +329,7 @@
 
 ;; Move things around intuitively.
 (use-package drag-stuff
-  :defer t
+  ; :defer t
   :config
   (drag-stuff-global-mode)
   (drag-stuff-define-keys)
@@ -436,7 +435,7 @@
   )
 
 (use-package yasnippet-snippets
-  :defer t
+  ; :defer t
   :config
   (yas-reload-all))
 
