@@ -27,8 +27,8 @@
 
 (define-key special-event-map [config-changed-event] 'ignore)
 
-(setq custom-file "~/.emacs.d/private/custom.el")
-(load-file custom-file)
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
 (add-to-list 'display-buffer-alist
              '("." nil (reusable-frames . t)))
@@ -1772,7 +1772,7 @@
   (face-remap-add-relative 'default '(
           :family "Fira code"
           ;:height 160 ;Seseg
-          :height 130
+          :height 80
           ))
 )
 
