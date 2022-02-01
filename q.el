@@ -25,7 +25,7 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (setq inhibit-startup-screen t)
-(setq custom-file "~/.emacs.d/private/custom.el")
+(setq custom-file "~/.emacs.d/custom.el")
 (load-file custom-file)
 
 ;; Welcome!

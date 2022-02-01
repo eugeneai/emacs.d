@@ -19,3 +19,4 @@
 /semanticdb
 /.cache*
 ido.last
+/private/gram-creds.el

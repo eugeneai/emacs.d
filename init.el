@@ -2072,6 +2072,13 @@
 
 ; (require 'magit-process nil t)
 
+;; (use-package grammarly
+;;   :config
+;;   (require 'gram-creds)
+;;   )
+
+;; (use-package flycheck-grammarly)
+
 
 (provide 'init)
 ;;; init.el ends here
