@@ -1462,6 +1462,11 @@
 ;;   (change-cursor-mode 1) ; On for overwrite/read-only/input mode
 ;;   (toggle-cursor-type-when-idle 1) ; On when idle
 ;;   )
+(use-package helm-tramp
+  :config
+  (setq tramp-default-method "ssh")
+  (define-key global-map  (kbd "M-RET h t")  'helm-tramp)
+  )
 
 (use-package jedi-direx
   :defer t)
@@ -2080,6 +2085,8 @@
 
 ;; (use-package flycheck-grammarly)
 
+;;(require 'tramp)
+;;(setq tramp-default-method "scp")
 
 (provide 'init)
 ;;; init.el ends here
