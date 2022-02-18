@@ -293,6 +293,7 @@
 
 ;; `smartparens` manages parens well.
 (use-package smartparens
+  :disabled t
   :config
   (require 'smartparens-config)
   (smartparens-global-mode t)
