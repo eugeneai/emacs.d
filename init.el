@@ -1778,7 +1778,7 @@
   (face-remap-add-relative 'default '(
           :family "Fira code"
           ;:height 160 ;Seseg
-          :height 80
+          ;:height 80
           ))
 )
 
