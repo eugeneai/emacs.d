@@ -61,6 +61,7 @@
      (write-file . helm-read-file-name-handler-1)
      (write-region . helm-read-file-name-handler-1)
      (find-file-read-only . ido)))
+ '(helm-completion-style 'helm)
  '(help-at-pt-display-when-idle '(flymake-overlay) nil (help-at-pt))
  '(help-at-pt-timer-delay 1.9)
  '(httpd-port 8380)
@@ -103,7 +104,8 @@
  '(rw-hunspell-make-dictionary-menu t)
  '(rw-hunspell-use-rw-ispell t)
  '(safe-local-variable-values
-   '((TeX-engine . lualatex)
+   '((test-case-name . pymeta\.test\.test_runtime)
+     (TeX-engine . lualatex)
      (TeX-command-extra-options . "-shell-escape")
      (TeX-auto-save . t)
      (TeX-parse-self . t)
@@ -136,7 +138,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 198 :width normal))))
+ '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 149 :width normal))))
  '(company-preview ((t (:inherit default :background "medium blue" :foreground "darkgray"))))
  '(company-scrollbar-bg ((t (:background "#4ccc4ccc4ccc"))) t)
  '(company-scrollbar-fg ((t (:background "#3fff3fff3fff"))) t)
