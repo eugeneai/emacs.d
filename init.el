@@ -1616,6 +1616,9 @@
 (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
 ;(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
 ;(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
+(add-hook 'logtalk-mode-hook (lambda ()
+                               (yas-minor-mode-on)
+                               ))
 
 (defun compile-test ()
   (interactive)
