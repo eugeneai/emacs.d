@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:forall/2
+# key: for
+# group: logtalk.json
+# description: Template and modes
+forall(+callable, +callable)
+
+Description
+For all solutions of Generator, Test is true. This built-in meta-predicate is declared as a private method and thus cannot be used as a message to an object.
+
+# prefix: forall
+# --
+forall(${1:Generator}, ${2:Test})$0

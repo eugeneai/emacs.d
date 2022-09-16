@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:instantiates_class/2-3
+# key: ic
+# group: logtalk.json
+# description: Template and modes
+instantiates_class(?object_identifier, ?object_identifier)
+instantiates_class(?object_identifier, ?object_identifier, ?scope)
+
+Description
+Enumerates, by backtracking, all pairs of objects such that the first one instantiates the second. The relation scope is represented by the atoms public, protected, and private.
+
+# prefix: instantiates_class
+# --
+instantiates_class(${1:Instance}, ${2:Class})$0

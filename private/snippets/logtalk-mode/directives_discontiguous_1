@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: directives:discontiguous/1
+# key: dis
+# description: Template and modes
+discontiguous(+predicate_indicator_term)
+discontiguous(+non_terminal_indicator_term)
+
+Description
+Declares discontiguous predicates and discontiguous grammar rule non-terminals. The use of this directive should be avoided as not all backend Prolog compilers support discontiguous predicates.
+
+# prefix: :- discontiguous
+# --
+:- discontiguous(${1:Functor/Arity}).

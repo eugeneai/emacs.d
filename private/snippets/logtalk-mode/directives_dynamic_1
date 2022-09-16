@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: directives:dynamic/1
+# key: dyna
+# group: logtalk.json
+# description: Template and modes
+dynamic(+qualified_predicate_indicator_term)
+dynamic(+qualified_non_terminal_indicator_term)
+
+Description
+Declares dynamic predicates and dynamic grammar rule non-terminals. Note that an object can be static and have both static and dynamic predicates/non-terminals. Dynamic predicates cannot be declared as synchronized. When the dynamic predicates are local to an object, declaring them also as private predicates allows the Logtalk compiler to generate optimized code for asserting and retracting predicate clauses. Categories can also contain dynamic predicate directives but cannot contain clauses for dynamic predicates.
+
+# prefix: :- dynamic
+# --
+:- dynamic(${1:Functor/Arity}).

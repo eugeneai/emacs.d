@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: predicates:imports_category/2-3
+# key: ic
+# group: logtalk.json
+# description: Template and modes
+imports_category(?object_identifier, ?category_identifier)
+
+imports_category(?object_identifier, ?category_identifier, ?scope)
+
+Description
+Enumerates, by backtracking, importation relations between objects and categories. The relation scope is represented by the atoms public, protected, and private.
+
+# prefix: imports_category
+# --
+imports_category(${1:Object}, ${2:Category})$0

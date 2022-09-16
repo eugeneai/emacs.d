@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:message_prefix_stream/4
+# key: mps
+# group: logtalk.json
+# description: Template and modes
+message_prefix_stream(?nonvar, ?nonvar, ?atom, ?stream_or_alias)
+
+Description
+User-defined hook method for specifying the default prefix and stream for printing a message for a given kind and component. This method is declared in the logtalk built-in object as a public, multifile, and dynamic predicate.
+
+# prefix: message_prefix_stream
+# --
+message_prefix_stream(${1:Kind}, ${2:Component}, ${3:Prefix}, ${4:Stream})$0

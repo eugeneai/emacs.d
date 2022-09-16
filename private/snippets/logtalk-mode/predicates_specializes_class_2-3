@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:specializes_class/2-3
+# key: sc
+# group: logtalk.json
+# description: Template and modes
+specializes_class(?object_identifier, ?object_identifier)
+specializes_class(?object_identifier, ?object_identifier, ?scope)
+
+Description
+Enumerates, by backtracking, all pairs of objects such that the first one specializes the second. The relation scope is represented by the atoms public, protected, and private.
+
+# prefix: specializes_class
+# --
+specializes_class(${1:Class}, ${2:Superclass})$0

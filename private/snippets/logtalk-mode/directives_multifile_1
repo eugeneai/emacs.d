@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: directives:multifile/1
+# key: mf
+# group: logtalk.json
+# description: Template and modes
+multifile(+qualified_predicate_indicator_term)
+multifile(+qualified_non_terminal_indicator_term)
+
+Description
+Declares multifile predicates and multifile grammar rule non-terminals. In the case of object or category multifile predicates, the predicate (or non-terminal) must also have a scope directive in the object or category holding its primary declaration (i.e. the declaration without the Entity:: prefix). Entities holding multifile predicate primary declarations must be compiled and loaded prior to any entities contributing with clauses for the multifile predicates.
+
+# prefix: :- multifile
+# --
+:- multifile(${1:Functor/Arity}).

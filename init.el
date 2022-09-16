@@ -1554,6 +1554,28 @@
 (use-package d-mode
   :defer t)
 
+(use-package dante
+  :ensure t
+  :after haskell-mode
+  :commands 'dante-mode
+  :init
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; OR for flymake support:
+  (add-hook 'haskell-mode-hook 'flymake-mode)
+  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+
+  (add-hook 'haskell-mode-hook 'dante-mode)
+  :bind (:map haskell-mode-map
+              ("M-RET h e" . dante-eval-block)
+              ;; ("M-RET e n" . next-error)
+              ;; ("M-RET e p" . previous-error)
+              ;; ("M-RET b d" . python-add-breakpoint)
+              ;; ("M-RET b u" . python-add-pubreakpoint)
+              )
+  :config
+  (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
+  )
+
 ;; lualatex preview
 (setq org-latex-pdf-process
   '("lualatex -shell-escape -interaction nonstopmode %f"

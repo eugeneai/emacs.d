@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_engine_post/2
+# key: thenp
+# group: logtalk.json
+# description: Template and modes
+threaded_engine_post(@nonvar, @term)
+
+Description
+Posts a term to the engine term queue.
+
+# prefix: threaded_engine_post
+# --
+threaded_engine_post(${1:Engine}, ${2:Term})$0

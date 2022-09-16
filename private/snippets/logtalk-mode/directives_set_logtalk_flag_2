@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: directives:set_logtalk_flag/2
+# key: slf
+# group: logtalk.json
+# description: Template and modes
+set_logtalk_flag(+atom, +nonvar)
+
+Description
+Sets Logtalk flag values. The scope of this directive is the entity or the source file containing it. For global scope, use the corresponding set_logtalk_flag/2 built-in predicate within an initialization/1 directive.
+
+# prefix: :- set_logtalk_flag
+# --
+:- set_logtalk_flag(${1:Flag}, ${2:Value}).

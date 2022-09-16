@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:ignore/1
+# key: ign
+# group: logtalk.json
+# description: Template and modes
+ignore(+callable)
+
+Description
+This predicate succeeds whether its argument succeeds or fails and it is not re-executable. This built-in meta-predicate is declared as a private method and thus cannot be used as a message to an object.
+
+# prefix: ignore
+# --
+ignore(${1:Goal})$0

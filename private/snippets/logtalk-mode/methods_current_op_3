@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:current_op/3
+# key: curop
+# group: logtalk.json
+# description: Template and modes
+current_op(?operator_priority, ?operator_specifier, ?atom)
+
+Description
+Enumerates, by backtracking, the visible operators declared for an object. Operators not declared using a scope directive are not enumerated.
+
+# prefix: current_op
+# --
+current_op(${1:Priority}, ${2:Specifier}, ${3:Operator})$0

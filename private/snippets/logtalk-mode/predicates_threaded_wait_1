@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_wait/1
+# key: thw
+# group: logtalk.json
+# description: Template and modes
+threaded_wait(?term)
+threaded_wait(+list(term))
+
+Description
+Suspends the thread making the call until a notification is received that unifies with Term. The call must be made within the same object (this) containing the calls to the threaded_notify/1 predicate that will eventually send the notification. The argument may also be a list of notifications, [Term| Terms]. In this case, the thread making the call will suspend until all notifications in the list are received.
+
+# prefix: threaded_wait
+# --
+threaded_wait(${1:Term})$0

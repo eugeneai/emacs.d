@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:retract/1
+# key: re
+# group: logtalk.json
+# description: Template and modes
+retract(+clause)
+
+Description
+Retracts a clause for a dynamic predicate. When the predicate indicator for Head is declared in a uses/2 or use_module/2 directive, the clause is retracted in the referenced object or module. Otherwise the clause is retracted in an object's dynamic predicate. On backtracking, the predicate retracts the next matching clause.
+
+# prefix: retract
+# --
+retract(${1:Head})$0

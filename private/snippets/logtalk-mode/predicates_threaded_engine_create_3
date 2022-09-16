@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_engine_create/3
+# key: thec
+# group: logtalk.json
+# description: Template and modes
+threaded_engine_create(@term, @callable, ?nonvar)
+
+Description
+Creates a new engine for proving the given goal and defines an answer template for retrieving the goal solution bindings. A message queue for passing arbitrary terms to the engine is also created. If the name for the engine is not given, a unique name is generated and returned.
+
+# prefix: threaded_engine_create
+# --
+threaded_engine_create(${1:AnswerTemplate}, ${2:Goal}, ${3:Engine})$0

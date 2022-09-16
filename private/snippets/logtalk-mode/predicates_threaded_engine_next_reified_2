@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_engine_next_reified/2
+# key: thenr
+# group: logtalk.json
+# description: Template and modes
+threaded_engine_next_reified(@nonvar, ?nonvar)
+
+Description
+Retrieves the next reified answer from an engine. This predicate predicate always succeeds and blocks until an answer becomes available. Answers are returned using the terms the(Answer), no, and exception(Error).
+
+# prefix: threaded_engine_next_reified
+# --
+threaded_engine_next_reified(${1:Engine}, ${2:Answer})$0

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: directives:elif/1
+# key: elif
+# group: logtalk.json
+# description: Template and modes
+elif(@callable)
+
+Description
+Supports embedded conditionals when performing conditional compilation. The code following the directive is compiled if Goal is true. The goal is subjected to goal expansion when the directive occurs in a source file.
+
+# prefix: :- elif
+# --
+:- elif(${1:Goal}).

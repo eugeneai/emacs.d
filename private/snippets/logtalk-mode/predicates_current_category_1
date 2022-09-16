@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:current_category/1
+# key: cc
+# group: logtalk.json
+# description: Template and modes
+current_category(?category_identifier)
+
+Description
+Enumerates, by backtracking, all currently defined categories. All categories are found, either static, dynamic, or built-in.
+
+# prefix: current_category
+# --
+current_category(${1:Category})$0

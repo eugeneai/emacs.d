@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:after/3
+# key: af
+# group: logtalk.json
+# description: Template and modes
+after(?object_identifier, ?callable, ?object_identifier)
+
+Description
+User-defined method for handling after events. This method is declared in the monitoring built-in protocol as a public predicate. Note that you can make its scope protected or private by using, respectively, protected or private implementation of the monitoring protocol.
+
+# prefix: after
+# --
+after(${1:Object}, ${2:Message}, ${3:Sender})$0

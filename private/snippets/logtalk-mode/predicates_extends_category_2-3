@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:extends_category/2-3
+# key: extc
+# group: logtalk.json
+# description: Template and modes
+extends_category(?category_identifier, ?category_identifier)
+extends_category(?category_identifier, ?category_identifier, ?scope)
+
+Description
+Enumerates, by backtracking, all pairs of categories such that the first one extends the second. The relation scope is represented by the atoms public, protected, and private.
+
+# prefix: extends_category
+# --
+extends_category(${1:Category1}, ${2:Category2})$0

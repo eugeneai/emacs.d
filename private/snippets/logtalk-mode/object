@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# name: object
+# key: oiie
+# --
+
+:- object(${1:Prototype},
+    implements(${2:Protocol}),
+    imports(${3:Category}),
+    extends(${4:Parent})).
+
+    :- info([
+        version is 1:0:0,
+        author is '`(shell-command-to-string "echo -n $(git config --global --get user.name)")` <`(shell-command-to-string "echo -n $(git config --global --get user.email)")`>',
+        date is '`(shell-command-to-string "echo -n $(date +%Y-%m-%d)")`',
+        comment is '${5:Description}'
+    ]).
+
+$0
+
+:- end_object.

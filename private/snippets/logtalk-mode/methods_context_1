@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:context/1
+# key: con
+# group: logtalk.json
+# description: Template and modes
+context(--callable)
+
+Description
+Returns the execution context for a predicate call using the format logtalk(Call,ExecutionContext). Mainly used for providing a default error context when type-checking predicate arguments. The ExecutionContext should be regarded as an opaque term, which can be decoded using the logtalk::execution_context/7 predicate. Calls to this predicate are inlined at compilation time.
+
+# prefix: context
+# --
+context(${1:Context})$0

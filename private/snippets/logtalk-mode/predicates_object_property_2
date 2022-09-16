@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:object_property/2
+# key: opr
+# group: logtalk.json
+# description: Template and modes
+object_property(?object_identifier, ?object_property)
+
+Description
+Enumerates, by backtracking, the properties associated with the defined objects. The valid object properties are listed in the language grammar.
+
+# prefix: object_property
+# --
+object_property(${1:Object}, ${2:Property})$0

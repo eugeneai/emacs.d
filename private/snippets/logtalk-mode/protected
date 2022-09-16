@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: protected
+# key: pro
+# group: snippets.json
+# description: (with no arguments)
+# prefix: protected
+# --
+    :- protected(${1:Functor}/0).
+    :- mode(${1:Functor}, ${2:Solutions}).
+    :- info(${1:Functor}/0, [
+        comment is '${3:Description}'
+    ]).
+
+$0

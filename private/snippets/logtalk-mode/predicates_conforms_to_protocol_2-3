@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: predicates:conforms_to_protocol/2-3
+# key: confp
+# group: logtalk.json
+# description: Template and modes
+conforms_to_protocol(?object_identifier, ?protocol_identifier)
+conforms_to_protocol(?category_identifier, ?protocol_identifier)
+
+conforms_to_protocol(?object_identifier, ?protocol_identifier, ?scope)
+conforms_to_protocol(?category_identifier, ?protocol_identifier, ?scope)
+
+Description
+Enumerates, by backtracking, all pairs of entities such that an object or a category conforms to a protocol. The relation scope is represented by the atoms public, protected, and private. This predicate implements a transitive closure for the protocol implementation relation.
+
+# prefix: conforms_to_protocol
+# --
+conforms_to_protocol(${1:Object}, ${2:Protocol})$0

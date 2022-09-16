@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:expand_term/2
+# key: expt
+# group: logtalk.json
+# description: Template and modes
+expand_term(?term, ?term)
+
+Description
+Expands a term. The most common use is to expand a grammar rule into a clause. Users may override the default Logtalk grammar rule translator by defining clauses for the term_expansion/2 hook predicate.
+
+# prefix: expand_term
+# --
+expand_term(${1:Term}, ${2:Expansion})$0

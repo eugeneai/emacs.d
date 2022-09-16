@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:forward/1
+# key: forw
+# group: logtalk.json
+# description: Template and modes
+forward(+callable)
+
+Description
+User-defined method for forwarding unknown messages sent to an object (using the ::/2 control construct), automatically called by the runtime when defined. This method is declared in the forwarding built-in protocol as a public predicate. Note that you can make its scope protected or private by using, respectively, protected or private implementation of the forwarding protocol.
+
+# prefix: forward
+# --
+forward(${1:Message})$0

@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: directives:built_in/0
+# key: bi
+# description: Template and modes
+built_in
+
+Description
+Declares an entity as built-in. Built-in entities cannot be redefined once loaded.
+
+# --
+:- built_in$0.

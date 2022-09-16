@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: directives:op/3
+# key: op
+# group: logtalk.json
+# description: Template and modes
+op(+integer, +associativity, +atom_or_atom_list)
+
+Description
+Declares operators. Operators declared inside entities have local scope. Global operators can be declared inside a source file by writing the respective directives before the entity opening directives.
+
+# prefix: :- op
+# --
+:- op(${1:Precedence}, ${2:Associativity}, ${3:Operator}).

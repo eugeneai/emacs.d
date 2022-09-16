@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:phrase//1
+# key: ph
+# group: logtalk.json
+# description: Template and modes
+phrase(+callable)
+
+Description
+This non-terminal takes a non-terminal or a grammar rule body and parses it using the current implicit list of tokens. A common use is to wrap what otherwise would be a naked variable in a grammar rule body.
+
+# prefix: phrase
+# --
+phrase(${1:NonTerminal})$0

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:define_events/5
+# key: defev
+# group: logtalk.json
+# description: Template and modes
+define_events(@term, @term, @term, @term, +object_identifier)
+
+Description
+Defines a new set of events. The two types of events are represented by the atoms before and after. When the predicate is called with the first argument unbound, both types of events are defined. The object Monitor must define the event handler methods required by the Event argument.
+
+# prefix: define_events
+# --
+define_events(${1:Event}, ${2:Object}, ${3:Message}, ${4:Sender}, ${5:Monitor})$0

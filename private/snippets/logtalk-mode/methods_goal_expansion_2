@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:goal_expansion/2
+# key: goexp
+# group: logtalk.json
+# description: Template and modes
+goal_expansion(+callable, -callable)
+
+Description
+Defines an expansion for a goal. The first argument is the goal to be expanded. The expanded goal is returned in the second argument. This predicate is called recursively on the expanded goal until a fixed point is reached. Thus, care must be taken to avoid compilation loops. This predicate, when defined and within scope, is automatically called by the expand_goal/2 method. Use of this predicate by the expand_goal/2 method may be restricted by changing its default public scope.
+
+# prefix: goal_expansion
+# --
+goal_expansion(${1:Goal}, ${2:ExpandedGoal})$0

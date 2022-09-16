@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:message_hook/4
+# key: mh
+# group: logtalk.json
+# description: Template and modes
+message_hook(@nonvar, @nonvar, @nonvar, @list(nonvar))
+
+Description
+User-defined hook method for intercepting printing of a message, declared in the logtalk built-in object as a public, multifile, and dynamic predicate. This hook method is automatically called by the print_message/3 method. When the call succeeds, the print_message/3 method assumes that the message have been successfully printed.
+
+# prefix: message_hook
+# --
+message_hook(${1:Message}, ${2:Kind}, ${3:Component}, ${4:Tokens})$0

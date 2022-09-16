@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:parameter/2
+# key: par
+# group: logtalk.json
+# description: Template and modes
+parameter(+integer, ?term)
+
+Description
+Used in parametric objects (and parametric categories), this private method provides runtime access to the parameter values of the entity that contains the predicate clause whose body is being executed by using the argument number in the entity identifier. This predicate is implemented as a unification between its second argument and the corresponding implicit execution-context argument in the predicate containing the call. This unification occurs at the clause head when the second argument is not instantiated (the most common case). When the second argument is instantiated, the unification must be delayed to runtime and thus occurs at the clause body. See also this/1.
+
+# prefix: parameter
+# --
+parameter(${1:Number}, ${2:Term})$0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: directive:objrelation
+# key: orel
+# --
+${1|imports,implements,extends,instantiates,specializes|}($2)

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:phrase/2
+# key: ph2
+# group: logtalk.json
+# description: Template and modes
+phrase(+callable, ?list)
+
+Description
+True when the GrammarRuleBody grammar rule body can be applied to the Input list of tokens. In the most common case, GrammarRuleBody is a non-terminal defined by a grammar rule. This built-in method is declared private and thus cannot be used as a message to an object. When using a back-end Prolog compiler supporting a module system, calls in the format phrase(Module:GrammarRuleBody, Input) may also be used.
+
+# prefix: phrase
+# --
+phrase(${1:GrammarRuleBody}, ${2:Input})$0

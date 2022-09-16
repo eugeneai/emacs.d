@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: directives:use_module/2
+# key: um
+# group: logtalk.json
+# description: Template and modes
+use_module(+module_identifier, +predicate_indicator_list)
+
+Description
+This directive declares that all calls (made from predicates defined in the category or object containing the directive) to the specified predicates are to be interpreted as calls to explicitly-qualified module predicates. Thus, this directive may be used to simplify writing of predicate definitions by allowing the programmer to omit the Module: prefix when using the predicates listed in the directive (as long as the predicate calls do not occur as arguments for non-standard Prolog meta-predicates not declared on the adapter files). It is also possible to include operator declarations, op(Precedence, Associativity, Operator), in the second argument.
+
+# prefix: :- use_module
+# --
+:- use_module(${1:Module}, ${2:Predicates}).

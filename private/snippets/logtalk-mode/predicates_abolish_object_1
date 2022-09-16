@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:abolish_object/1
+# key: abo
+# group: logtalk.json
+# description: Template and modes
+abolish_object(+object_identifier)
+
+Description
+Abolishes a dynamic object.
+
+# prefix: abolish_object
+# --
+abolish_object(${1:Object})$0

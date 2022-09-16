@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: directive:catrelation
+# key: crel
+# --
+${1|implements,extends,complements|}($2)

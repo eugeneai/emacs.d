@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_engine_self/1
+# key: thens
+# group: logtalk.json
+# description: Template and modes
+threaded_engine_self(?nonvar)
+
+Description
+Queries the name of engine calling the predicate.
+
+# prefix: threaded_engine_self
+# --
+threaded_engine_self(${1:Engine})$0

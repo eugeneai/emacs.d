@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_engine_fetch/1
+# key: thef
+# group: logtalk.json
+# description: Template and modes
+threaded_engine_fetch(?term)
+
+Description
+Fetches a term from the engine term queue. Blocks until a term is available. Fails in not called from within an engine.
+
+# prefix: threaded_engine_fetch
+# --
+threaded_engine_fetch(${1:Term})$0

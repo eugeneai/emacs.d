@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: methods:coinductive_success_hook/1-2
+# key: csh
+# group: logtalk.json
+# description: Template and modes
+coinductive_success_hook(+callable, +callable)
+coinductive_success_hook(+callable)
+
+Description
+User-defined hook predicates that are automatically called in case of coinductive success when proving a query for a coinductive predicates. The hook predicates are called with the head of the coinductive predicate on coinductive success and, optionally, with the hypothesis used that to reach coinductive success.
+
+# prefix: coinductive_success_hook
+# --
+coinductive_success_hook(${1:Head}, ${2:Hypothesis})$0

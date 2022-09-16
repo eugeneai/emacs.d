@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: directives:public/1
+# key: dpu
+# group: logtalk.json
+# description: Template and modes
+public(+predicate_indicator_term)
+public(+non_terminal_indicator_term)
+public(+operator_declaration)
+
+Description
+Declares public predicates, public grammar rule non-terminals, and public operators. A public predicate can be called from any object. A public non-terminal can be used as an argument in phrase/2 and phrase/3 calls from any object. Public operators are not exported but declaring them provides useful information for defining client objects.
+
+# prefix: :- public
+# --
+:- public(${1:Functor/Arity}).

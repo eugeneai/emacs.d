@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:findall/3
+# key: fall
+# group: logtalk.json
+# description: Template and modes
+findall(?term, +callable, ?list)
+
+Description
+Collects a list of solutions for the goal. The order of the elements in the list follows the order of the goal solutions. It succeeds returning an empty list when the goal have no solutions.
+
+# prefix: findall
+# --
+findall(${1:Template}, ${2:Goal}, ${3:List})$0

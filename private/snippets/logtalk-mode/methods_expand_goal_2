@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:expand_goal/2
+# key: expg
+# group: logtalk.json
+# description: Template and modes
+expand_goal(?term, ?term)
+
+Description
+Expands a goal.
+
+# prefix: expand_goal
+# --
+expand_goal(${1:Goal}, ${2:ExpandedGoal})$0

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:ask_question/5
+# key: aq
+# group: logtalk.json
+# description: Template and modes
+ask_question(+nonvar, +nonvar, +nonvar, +callable, -term)
+
+Description
+Built-in method for asking a question represented by a term, Question, which is converted to the question text using the logtalk::message_tokens(Question, Component) hook predicate. This method is declared in the logtalk built-in object as a public predicate. The default question prompt and the input stream used for each Kind-Component pair can be found using the logtalk::question_prompt_stream(Kind, Component, Prompt, Stream) hook predicate. The Check argument is a closure that is converted into a checking goal by extending it with the user supplied answer. This predicate implements a read-loop that terminates when the checking predicate succeeds.
+
+# prefix: ask_question
+# --
+ask_question(${1:Question}, ${2:Kind}, ${3:Component}, ${4:Check}, ${5:Answer})$0

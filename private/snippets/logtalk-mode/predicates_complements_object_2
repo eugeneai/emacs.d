@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:complements_object/2
+# key: compo
+# group: logtalk.json
+# description: Template and modes
+complements_object(?category_identifier, ?object_identifier)
+
+Description
+Enumerates, by backtracking, all category–object pairs such that the category explicitly complements the object.
+
+# prefix: complements_object
+# --
+complements_object(${1:Category}, ${2:Object})$0

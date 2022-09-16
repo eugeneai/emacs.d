@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: directives:meta_predicate/1
+# key: mp
+# group: logtalk.json
+# description: Template and modes
+meta_predicate(+meta_predicate_template_term)
+
+meta_predicate(+object_identifier::+meta_predicate_template_term)
+meta_predicate(+category_identifier::+meta_predicate_template_term)
+
+meta_predicate(+module_identifier:+meta_predicate_template_term)
+
+Description
+Declares meta-predicates, i.e., predicates that have arguments that will be called as goals. An argument may also be a closure instead of a goal if the meta-predicate uses the call/N Logtalk built-in methods to construct and call the actual goal from the closure and the additional arguments.
+
+# prefix: :- meta_predicate
+# --
+:- meta_predicate(${1:MetaPredicateTemplate}).

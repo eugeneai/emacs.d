@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: directive:object
+# key: do
+# --
+:- object(${1:name}).
+    $2
+:- end_object.

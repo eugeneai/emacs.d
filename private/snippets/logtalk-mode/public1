@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: public1
+# key: puba
+# group: snippets.json
+# description: Public predicate
+# prefix: public
+# --
+    :- public(${1:Functor}/${2:Arity}).
+    :- mode(${1:Functor}(${3:Arguments}), ${4:Solutions}).
+    :- info(${1:Functor}/${2:Arity}, [
+        comment is '${5:Description}',
+        arguments is ['$6'-'$7']
+    ]).
+
+$0

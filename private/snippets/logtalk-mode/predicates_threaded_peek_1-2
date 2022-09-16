@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_peek/1-2
+# key: thp
+# group: logtalk.json
+# description: Template and modes
+threaded_peek(+callable)
+threaded_peek(+callable, +nonvar)
+
+Description
+Checks if the result of proving Goal in a new thread is already available. This call succeeds or fails without blocking execution waiting for a reply to be available.
+
+# prefix: threaded_peek
+# --
+threaded_peek(${1:Goal})$0

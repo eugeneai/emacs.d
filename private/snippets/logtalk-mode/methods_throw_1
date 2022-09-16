@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:throw/1
+# key: thr
+# group: logtalk.json
+# description: Template and modes
+throw(+nonvar)
+
+Description
+Throws an exception. This built-in predicate is declared as a private method and thus cannot be used as a message to an object.
+
+# prefix: throw
+# --
+throw(${1:Exception})$0

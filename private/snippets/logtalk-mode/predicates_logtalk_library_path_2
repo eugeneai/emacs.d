@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:logtalk_library_path/2
+# key: llp
+# group: logtalk.json
+# description: Template and modes
+logtalk_library_path(?atom, -atom)
+logtalk_library_path(?atom, -compound)
+
+Description
+Dynamic and multifile user-defined predicate, allowing the declaration of aliases to library paths. Library aliases may also be used on the second argument (using the notation alias(path)). Paths must always end with the path directory separator character ('/').
+
+# prefix: logtalk_library_path
+# --
+logtalk_library_path(${1:Library}, ${2:Path})$0

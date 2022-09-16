@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:sender/1
+# key: sen
+# group: logtalk.json
+# description: Template and modes
+sender(?object_identifier)
+
+Description
+Returns the object that has sent the message under processing. This private method is translated into a unification between its argument and the corresponding implicit context argument in the predicate containing the call. This unification occurs at the clause head when the argument is not instantiated (the most common case).
+
+# prefix: sender
+# --
+sender(${1:Sender})$0

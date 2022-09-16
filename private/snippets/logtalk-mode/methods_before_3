@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:before/3
+# key: bef
+# group: logtalk.json
+# description: Template and modes
+before(?object_identifier, ?callable, ?object_identifier)
+
+Description
+User-defined method for handling before events. This method is declared in the monitoring built-in protocol as a public predicate. Note that you can make its scope protected or private by using, respectively, protected or private implementation of the monitoring protocol.
+
+# prefix: before
+# --
+before(${1:Object}, ${2:Message}, ${3:Sender})$0

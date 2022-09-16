@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:abolish_protocol/1
+# key: abp
+# group: logtalk.json
+# description: Template and modes
+abolish_protocol(@protocol_identifier)
+
+Description
+Abolishes a dynamic protocol.
+
+# prefix: abolish_protocol
+# --
+abolish_protocol(${1:Protocol})$0

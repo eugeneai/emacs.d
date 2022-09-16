@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_exit/1-2
+# key: thex
+# group: logtalk.json
+# description: Template and modes
+threaded_exit(+callable)
+threaded_exit(+callable, +nonvar)
+
+Description
+Retrieves the result of proving Goal in a new thread. This predicate blocks execution until the reply is sent to the this message queue by the thread executing the goal. When there is no thread proving the goal, the predicate generates an exception. This predicate is non-deterministic, providing access to any alternative solutions of its argument.
+
+# prefix: threaded_exit
+# --
+threaded_exit(${1:Goal})$0

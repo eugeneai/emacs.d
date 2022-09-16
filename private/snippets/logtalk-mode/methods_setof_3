@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:setof/3
+# key: set
+# group: logtalk.json
+# description: Template and modes
+setof(@term, +callable, -list)
+
+Description
+Collects a set of solutions for the goal for each set of instantiations of the free variables in the goal. The solutions are sorted using standard term order. The free variables in the goal are the variables that occur in the goal but not in the template. Free variables can be ignored, however, by using the ^/2 existential qualifier. For example, if T is term containing all the free variables that we want to ignore, we can write T^Goal. Note that the term T can be written as V1^V2^....
+
+# prefix: setof
+# --
+setof(${1:Template}, ${2:Goal}, ${3:List})$0

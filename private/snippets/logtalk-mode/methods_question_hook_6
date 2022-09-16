@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:question_hook/6
+# key: qh
+# group: logtalk.json
+# description: Template and modes
+question_hook(+nonvar, +nonvar, +nonvar, +list(nonvar), +callable, -term)
+
+Description
+User-defined hook method for intercepting asking a question, declared in the logtalk built-in object as a public, multifile, and dynamic predicate. This hook method is automatically called by the ask_question/5 method. When the call succeeds, the ask_question/5 method assumes that the question have been successfully asked and replied.
+
+# prefix: question_hook
+# --
+question_hook(${1:Question}, ${2:Kind}, ${3:Component}, ${4:Tokens}, ${5:Check}, ${6:Answer})$0

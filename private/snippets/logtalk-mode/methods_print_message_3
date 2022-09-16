@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:print_message/3
+# key: pm3
+# group: logtalk.json
+# description: Template and modes
+print_message(+nonvar, +nonvar, +nonvar)
+
+Description
+Built-in method for printing a message represented by a term, which is converted to the message text using the logtalk::message_tokens(Term, Component) hook non-terminal. This method is declared in the logtalk built-in object as a public predicate. The line prefix and the output stream used for each Kind-Component pair can be found using the logtalk::message_prefix_stream(Kind, Component, Prefix, Stream) hook predicate.
+
+# prefix: print_message
+# --
+print_message(${1:Kind}, ${2:Component}, ${3:Term})$0

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:findall/4
+# key: fall4
+# group: logtalk.json
+# description: Template and modes
+findall(?term, +callable, ?list, +list)
+
+Description
+Variant of the findall/3 method that allows passing the tail of the results list. It succeeds returning the  tail argument when the goal have no solutions.
+
+# prefix: findall
+# --
+findall(${1:Template}, ${2:Goal}, ${3:List}, ${4:Tail})$0

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: abcat
+# key: predicates:abolish_category/1
+# group: logtalk.json
+# description: Template and modes
+abolish_category(+category_identifier)
+
+Description
+Abolishes a dynamic category.
+
+# prefix: abolish_category
+# --
+abolish_category(${1:Category})$0

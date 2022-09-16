@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: directives:private/1
+# key: dpri
+# group: logtalk.json
+# description: Template and modes
+private(+predicate_indicator_term)
+private(+non_terminal_indicator_term)
+private(+operator_declaration)
+
+Description
+Declares private predicates, private grammar rule non-terminals, and private operators. A private predicate can only be called from the object containing the private directive. A private non-terminal can only be used in a call of the phrase/2 and phrase/3 methods from the object containing the private directive.
+
+# prefix: :- private
+# --
+:- private(${1:Functor/Arity}).

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:question_prompt_stream/4
+# key: qps
+# group: logtalk.json
+# description: Template and modes
+question_prompt_stream(?nonvar, ?nonvar, ?atom, ?stream_or_alias)
+
+Description
+User-defined hook method for specifying the default prompt and input stream for asking a question for a given kind and component. This method is declared in the logtalk built-in object as a public, multifile, and dynamic predicate.
+
+# prefix: question_prompt_stream
+# --
+question_prompt_stream(${1:Kind}, ${2:Component}, ${3:Prompt}, ${4:Stream})$0

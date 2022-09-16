@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:create_category/4
+# key: cc
+# group: logtalk.json
+# description: Template and modes
+create_category(?category_identifier, +list, +list, +list)
+
+Description
+Creates a new, dynamic category. This predicate is often used as a primitive to implement high-level category creation methods.
+
+# prefix: create_category
+# --
+create_category(${1:Identifier}, ${2:Relations}, ${3:Directives}, ${4:Clauses})$0

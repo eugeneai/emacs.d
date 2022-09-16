@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: directives:if/1
+# key: if
+# group: logtalk.json
+# description: Template and modes
+if(@callable)
+
+Description
+Starts conditional compilation. The code following the directive is compiled if Goal is true. The goal is subjected to goal expansion when the directive occurs in a source file.
+
+# prefix: :- if
+# --
+:- if(${1:Goal}).

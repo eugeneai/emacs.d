@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:protocol_property/2
+# key: ppr
+# group: logtalk.json
+# description: Template and modes
+protocol_property(?protocol_identifier, ?protocol_property)
+
+Description
+Enumerates, by backtracking, the properties associated with the currently defined protocols. The valid protocol properties are listed in the language grammar.
+
+# prefix: protocol_property
+# --
+protocol_property(${1:Protocol}, ${2:Property})$0

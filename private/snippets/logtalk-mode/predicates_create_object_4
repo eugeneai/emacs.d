@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:create_object/4
+# key: co
+# group: logtalk.json
+# description: Template and modes
+create_object(?object_identifier, +list, +list, +list)
+
+Description
+Creates a new, dynamic object. The word object is used here as a generic term. This predicate can be used to create new prototypes, instances, and classes. This predicate is often used as a primitive to implement high-level object creation methods. 
+
+# prefix: create_object
+# --
+create_object(${1:Identifier}, ${2:Relations}, ${3:Directives}, ${4:Clauses})$0

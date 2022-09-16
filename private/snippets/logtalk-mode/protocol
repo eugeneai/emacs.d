@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: protocol
+# key: pe
+# group: snippets.json
+# description: Extended protocol
+# prefix: protocol
+# --
+
+:- protocol(${1:Extended},
+    extends(${2:Minimal})).
+
+    :- info([
+        version is 1:0:0,
+        author is '`(shell-command-to-string "echo -n $(git config --global --get user.name)")` <`(shell-command-to-string "echo -n $(git config --global --get user.email)")`>',
+        date is '`(shell-command-to-string "echo -n $(date +%Y-%m-%d)")`',
+        comment is '${3:Description}'
+    ]).
+
+$0
+
+:- end_protocol.

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: directives:info/1
+# key: inf
+# group: logtalk.json
+# description: Template and modes
+info(+entity_info_list)
+
+Description
+Documentation directive for objects, protocols, and categories. The directive argument is a list of pairs using the format Key is Value. See the documenting Logtalk programs section for a description of the default keys.
+
+# prefix: :- info
+# --
+:- info(${1:List}).

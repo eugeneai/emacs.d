@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:once/1
+# key: once
+# group: logtalk.json
+# description: Template and modes
+once(+callable)
+
+Description
+This predicate behaves as call(Goal) but it is not re-executable. This built-in meta-predicate is declared as a private method and thus cannot be used as a message to an object.
+
+# prefix: once
+# --
+once(${1:Goal})$0

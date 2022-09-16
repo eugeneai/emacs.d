@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:extends_object/2-3
+# key: exto
+# group: logtalk.json
+# description: Template and modes
+extends_object(?object_identifier, ?object_identifier)
+extends_object(?object_identifier, ?object_identifier, ?scope)
+
+Description
+Enumerates, by backtracking, all pairs of objects such that the first one extends the second. The relation scope is represented by the atoms public, protected, and private.
+
+# prefix: extends_object
+# --
+extends_object(${1:Prototype}, ${2:Parent})$0

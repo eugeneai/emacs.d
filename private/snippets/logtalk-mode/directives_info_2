@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: directives:info/2
+# key: inf2
+# group: logtalk.json
+# description: Template and modes
+info(+predicate_indicator, +predicate_info_list)
+info(+non_terminal_indicator, +predicate_info_list)
+
+Description
+Documentation directive for predicates and grammar rule non-terminals. The first argument is either a predicate indicator or a grammar rule non-terminal indicator. The second argument is a list of pairs using the format Key is Value. See the documenting Logtalk programs section for a description of the default keys.
+
+# prefix: :- info
+# --
+:- info(${1:Functor/Arity}, ${2:List}).

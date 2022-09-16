@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: directive:category
+# key: dc
+# --
+:- category(${1:name}).
+    $2
+:- end_category.

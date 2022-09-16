@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded/1
+# key: thed
+# group: logtalk.json
+# description: Template and modes
+threaded(+callable)
+
+Description
+Proves each goal in a conjunction (disjunction) of goals in its own thread. This predicate is deterministic and opaque to cuts. The predicate argument is not flattened.
+
+# prefix: threaded
+# --
+threaded(${1:Goals})$0

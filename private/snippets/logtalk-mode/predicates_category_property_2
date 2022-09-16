@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:category_property/2
+# key: catp
+# group: logtalk.json
+# description: Template and modes
+category_property(?category_identifier, ?category_property)
+
+Description
+Enumerates, by backtracking, the properties associated with the defined categories. The valid category properties are listed in the language grammar.
+
+# prefix: category_property
+# --
+category_property(${1:Category}, ${2:Property})$0

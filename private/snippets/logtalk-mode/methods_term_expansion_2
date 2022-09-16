@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: methods:term_expansion/2
+# key: texp
+# group: logtalk.json
+# description: Template and modes
+term_expansion(+nonvar, -nonvar)
+term_expansion(+nonvar, -list(nonvar))
+
+Description
+Defines an expansion for a term. This predicate, when defined and within scope, is automatically called by the expand_term/2 method. When that is not the case, the expand_term/2 method only uses the default expansions. Use of this predicate by the expand_term/2 method may be restricted by changing its default public scope.
+
+# prefix: term_expansion
+# --
+term_expansion(${1:Term}, ${2:Expansion})$0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: directive:prorelation
+# key: ext
+# --
+extends(${1})

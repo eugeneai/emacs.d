@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:current_event/5
+# key: ce
+# group: logtalk.json
+# description: Template and modes
+current_event(?event, ?term, ?term, ?term, ?object_identifier)
+
+Description
+Enumerates, by backtracking, all defined events. The two types of events are represented by the atoms before and after.
+
+# prefix: current_event
+# --
+current_event(${1:Event}, ${2:Object}, ${3:Message}, ${4:Sender}, ${5:Monitor})$0

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:assertz/1
+# key: az
+# group: logtalk.json
+# description: Template and modes
+assertz(+clause)
+
+Description
+Asserts a clause as the last one for a dynamic predicate. When the predicate indicator for Head is declared in a uses/2 or use_module/2 directive, the clause is asserted in the referenced object or module. Otherwise the clause is asserted for an object's dynamic predicate. If the predicate is not previously declared (using a scope directive), then a dynamic predicate declaration is added to the object (assuming that we are asserting locally or that the compiler flag dynamic_declarations was set to allow when the object was created or compiled).
+
+# prefix: assertz
+# --
+assertz(${1:Head})$0

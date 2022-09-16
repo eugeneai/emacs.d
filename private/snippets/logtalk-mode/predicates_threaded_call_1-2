@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_call/1-2
+# key: thc
+# group: logtalk.json
+# description: Template and modes
+threaded_call(@callable)
+threaded_call(@callable, -nonvar)
+
+Description
+Proves Goal asynchronously using a new thread. The argument can be a message sending goal. Calls to this predicate always succeeds and return immediately. The results (success, failure, or exception) are sent back to the message queue of the object containing the call (this); they can be retrieved by calling the threaded_exit/1 predicate.
+
+# prefix: threaded_call
+# --
+threaded_call(${1:Goal})$0

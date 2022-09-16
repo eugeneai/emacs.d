@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:eos//0
+# key: eos
+# group: logtalk.json
+# description: Template and modes
+eos
+
+Description
+This non-terminal matches the end-of-input. It is implemented by checking that the implicit difference list unifies with []-[]. 
+
+# prefix: eos
+# --
+eos$0$0

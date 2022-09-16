@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: predicates:implements_protocol/2-3
+# key: ip
+# group: logtalk.json
+# description: Template and modes
+implements_protocol(?object_identifier, ?protocol_identifier)
+implements_protocol(?category_identifier, ?protocol_identifier)
+
+implements_protocol(?object_identifier, ?protocol_identifier, ?scope)
+implements_protocol(?category_identifier, ?protocol_identifier, ?scope)
+
+Description
+Enumerates, by backtracking, all pairs of entities such that an object or a category implements a protocol. The relation scope is represented by the atoms public, protected, and private. This predicate only returns direct implementation relations; it does not implement a transitive closure.
+
+# prefix: implements_protocol
+# --
+implements_protocol(${1:Object}, ${2:Protocol})$0

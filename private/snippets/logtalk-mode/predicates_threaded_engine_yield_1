@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_engine_yield/1
+# key: they
+# group: logtalk.json
+# description: Template and modes
+threaded_engine_yield(@term)
+
+Description
+Returns an answer independent of the solutions of the engine goal. Fails if not called from within an engine. This predicate is usually used when the engine goal is call to a recursive predicate processing terms from the engine term queue.
+
+# prefix: threaded_engine_yield
+# --
+threaded_engine_yield(${1:Answer})$0

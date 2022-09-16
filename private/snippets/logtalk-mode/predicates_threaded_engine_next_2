@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:threaded_engine_next/2
+# key: then
+# group: logtalk.json
+# description: Template and modes
+threaded_engine_next(@nonvar, ?term)
+
+Description
+Retrieves the next answer from an engine. This predicate blocks until an answer becomes available. The predicate fails when there are no more solutions to the engine goal. If the engine goal throws an exception, calling this predicate will re-throw the exception and subsequent calls will fail.
+
+# prefix: threaded_engine_next
+# --
+threaded_engine_next(${1:Engine}, ${2:Answer})$0

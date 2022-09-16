@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:current_protocol/1
+# key: cp
+# group: logtalk.json
+# description: Template and modes
+current_protocol(?protocol_identifier)
+
+Description
+Enumerates, by backtracking, all currently defined protocols. All protocols are found, either static, dynamic, or built-in.
+
+# prefix: current_protocol
+# --
+current_protocol(${1:Protocol})$0

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:print_message_tokens/3
+# key: pmts
+# group: logtalk.json
+# description: Template and modes
+print_message_tokens(@stream_or_alias, +atom, @list(nonvar))
+
+Description
+Built-in method for printing a list of message tokens, declared in the logtalk built-in object as a public predicate. This method is automatically called by the print_message/3 method (assuming that the message was not intercepted by a message_hook/4 definition) and calls the user-defined hook predicate print_message_token/4 for each token. When a call to this hook predicate succeeds, the print_message_tokens/3 predicate assumes that the token have been printed. When the call fails, the print_message_tokens/3 predicate uses a default printing procedure for the token.
+
+# prefix: print_message_tokens
+# --
+print_message_tokens(${1:Stream}, ${2:Prefix}, ${3:Tokens})$0

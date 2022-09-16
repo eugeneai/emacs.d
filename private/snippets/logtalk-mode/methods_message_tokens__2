@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: methods:message_tokens//2
+# key: mt
+# group: logtalk.json
+# description: Template and modes
+message_tokens(+nonvar, +nonvar)
+
+Description
+User-defined non-terminal hook used to rewrite a message term into a list of tokens and declared in the logtalk built-in object as a public, multifile, and dynamic non-terminal. The list of tokens can be printed by calling the print_message_tokens/3 method. This non-terminal hook is automatically called by the print_message/3 method.
+
+# prefix: message_tokens
+# --
+message_tokens(${1:Message}, ${2:Component})$0

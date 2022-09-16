@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:set_logtalk_flag/2
+# key: slf
+# group: logtalk.json
+# description: Template and modes
+set_logtalk_flag(+atom, +nonvar)
+
+Description
+Sets Logtalk default, global, flag values. For local flag scope, use the corresponding set_logtalk_flag/2 directive. To set a global flag value when compiling and loading a source file, wrap the calls to this built-in predicate with an initialization/1 directive.
+
+# prefix: set_logtalk_flag
+# --
+set_logtalk_flag(${1:Flag}, ${2:Value})$0

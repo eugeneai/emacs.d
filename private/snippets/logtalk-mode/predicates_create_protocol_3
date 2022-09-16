@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:create_protocol/3
+# key: cp
+# group: logtalk.json
+# description: Template and modes
+create_protocol(?protocol_identifier, +list, +list)
+
+Description
+Creates a new, dynamic, protocol. This predicate is often used as a primitive to implement high-level protocol creation methods.
+
+# prefix: create_protocol
+# --
+create_protocol(${1:Identifier}, ${2:Relations}, ${3:Directives})$0

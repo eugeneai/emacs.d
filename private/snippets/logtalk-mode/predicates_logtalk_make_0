@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: predicates:logtalk_make/0
+# key: lm
+# group: logtalk.json
+# description: Template and modes
+logtalk_make
+
+Description
+Reloads all Logtalk source files that have been modified since the time they are last loaded. Only source files loaded using the logtalk_load/1-2 predicates are reloaded. Non-modified files will also be reloaded when there is a change to the compilation mode (i.e. when the files were loaded without explicit debug/1 or optimize/1 flags and the default values of these flags changed after loading; no check is made, however, for other implicit compiler flags that may have changed since loading). When an included file is modified, this predicate reloads its main file (i.e. the file that contains the include/1 directive).
+
+# prefix: logtalk_make
+# --
+logtalk_make$0$0
