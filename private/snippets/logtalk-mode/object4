@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: object
-# key: o
+# key: ob
 # --
 
 :- object(${1:Object}).

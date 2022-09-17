@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: object
-# key: oiie
+# key: obiie
 # --
 
 :- object(${1:Prototype},

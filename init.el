@@ -390,6 +390,8 @@
 
 
 
+
+
 ;; Interactive selection of things.
 ;; TODO: consider helm instead (see Sacha's config)
 ;; NOTE: "C-j: Use the current input string verbatim."
@@ -428,11 +430,16 @@
   (setq yas-snippet-dirs (append yas-snippet-dirs
                                  '("~/.emacs.d/private/snippets")))
   (yas-reload-all)
+  (setq yas-prompt-functions
+        '(yas-ido-prompt yas-x-prompt yas-completing-prompt))
+  (setq yas-wrap-around-region t)
+
   (yas-global-mode 1)
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   :bind
   ("C-<return>" . yas-expand-from-trigger-key)
   ("C-M-<return>" . yas-expand-from-trigger-key)
+  ("M-RET i s" . yas-insert-snippet)
   )
 
 (use-package yasnippet-snippets
@@ -572,14 +579,25 @@
     )
 
 (use-package company
+  :defer 1
+  :diminish company-mode
   :config
+  (use-package company-flx
+    :config (company-flx-mode +1))
   (add-hook 'after-init-hook 'global-company-mode)
+
   (setq company-idle-delay 0.2)
   (setq company-tooltip-limit 20)
   (setq company-minimum-prefix-length 2)
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
   ;(setq company-tooltip-flip-when-above t)
+  (setq company-etags-ignore-case t)
+  (setq company-show-numbers t)
+  (setq company-echo-delay 0)      ; remove annoying blinking
+  (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
+  (add-to-list 'company-backends 'company-jedi)
+  (add-to-list 'company-backends 'company-racer)
   )
 
 ;; Elpy the Emacs Lisp Python Environment.
