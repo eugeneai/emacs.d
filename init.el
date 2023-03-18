@@ -2132,5 +2132,13 @@
 ;;(require 'tramp)
 ;;(setq tramp-default-method "scp")
 
+(use-package oberon
+  :defer 1
+  :mode (("\\.oberon\\'" . oberon-mode))
+  :config
+  (add-hook 'oberon-mode-hook (lambda () (abbrev-mode t)))
+  )
+
+
 (provide 'init)
 ;;; init.el ends here
