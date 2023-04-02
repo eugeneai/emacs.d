@@ -14,6 +14,18 @@
 (setq save-abbrevs 'silently)
 ;; you will be asked before the abbreviations are saved
 
+;; set env var PATH, by appending a new path to existing PATH value
+(setenv "PATH"
+        (concat
+         "/home/eugeneai/.local/bin" path-separator
+         "/home/eugeneai/.cabal/bin" path-separator
+         "/home/eugeneai/.ghcup/bin" path-separator
+         "/home/eugeneai/.nix-profile/bin" path-separator
+         "/nix/var/nix/profiles/default/bin" path-separator
+         "C:/cygwin/usr/bin" path-separator
+         "C:/cygwin/bin" path-separator
+         (getenv "PATH")))
+
 ;; Fix
 (defun magit-process-git (destination &rest args))
 
@@ -27,7 +39,7 @@
 
 (define-key special-event-map [config-changed-event] 'ignore)
 
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file "~/.emacs.d/private/custom.el")
 (load custom-file)
 
 (add-to-list 'display-buffer-alist
@@ -776,12 +788,36 @@
   (setq-mode-local rjsx-mode emmet-expand-jsx-className? t)
   (setq-mode-local web-mode emmet-expand-jsx-className? nil))
 
-;; (use-package lsp-mode
-;;   :config
-;;   (add-hook 'web-mode-hook #'lsp)
-;;   (add-hook 'js-mode-hook #'lsp)
-;;   (add-hook 'rjsx-mode-hook #'lsp)
-;;   )
+(use-package lsp-mode
+  :defer t
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (add-hook 'web-mode-hook #'lsp-deferred)
+  (add-hook 'js-mode-hook #'lsp-deferred)
+  (add-hook 'rjsx-mode-hook #'lsp-deferred)
+;;  (add-hook 'prog-mode-hook #'lsp-deferred)
+  :hook (
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands (lsp-deferred))
+;; optionally
+(use-package lsp-ui
+  :commands lsp-ui-mode)
+;; if you are helm user
+(use-package helm-lsp
+  :commands helm-lsp-workspace-symbol)
+;; if you are ivy user
+;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs
+  :commands lsp-treemacs-errors-list)
+
+
+(use-package lsp-haskell
+  :config
+  (add-hook 'haskell-mode-hook #'lsp-deferred)
+  (add-hook 'haskell-literate-mode-hook #'lsp-deferred)
+  :defer 1)
+
 ;; (use-package lsp-treemacs)
 ;; (use-package helm-lsp)
 ;; (use-package hydra)
@@ -792,6 +828,7 @@
 ;;   ; (define-key global-map [remap switch-to-buffer] #'helm-mini)
 ;;   )
 ;; (use-package dap-mode
+;;   :defer 1
 ;;   :config
 ;;   (require 'dap-chrome)
 ;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
