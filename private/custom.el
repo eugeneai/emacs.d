@@ -142,7 +142,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro Medium" :slant normal :weight normal :height 210 :width normal))))
+ '(default ((t (:family "Source Code Pro Medium" :slant normal :weight normal :height 180 :width normal))))
  '(company-preview ((t (:inherit default :background "medium blue" :foreground "darkgray"))))
  '(company-scrollbar-bg ((t (:background "#4ccc4ccc4ccc"))) t)
  '(company-scrollbar-fg ((t (:background "#3fff3fff3fff"))) t)

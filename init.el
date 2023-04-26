@@ -818,6 +818,11 @@
   (add-hook 'haskell-literate-mode-hook #'lsp-deferred)
   :defer 1)
 
+(use-package hindent
+  :hook
+  (add-hook 'haskell-mode-hook #'hindent-mode)
+  )
+
 ;; (use-package lsp-treemacs)
 ;; (use-package helm-lsp)
 ;; (use-package hydra)
@@ -1609,27 +1614,32 @@
 (use-package d-mode
   :defer t)
 
-(use-package dante
-  :ensure t
-  :after haskell-mode
-  :commands 'dante-mode
-  :init
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  ;; OR for flymake support:
-  (add-hook 'haskell-mode-hook 'flymake-mode)
-  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+;; (use-package dante
+;;   :ensure t
+;;   :after haskell-mode
+;;   :commands 'dante-mode
+;;   :init
+;;   (add-hook 'haskell-mode-hook 'flycheck-mode)
+;;   ;; OR for flymake support:
+;;   (add-hook 'haskell-mode-hook 'flymake-mode)
+;;   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
 
-  (add-hook 'haskell-mode-hook 'dante-mode)
-  :bind (:map haskell-mode-map
-              ("M-RET h e" . dante-eval-block)
-              ;; ("M-RET e n" . next-error)
-              ;; ("M-RET e p" . previous-error)
-              ;; ("M-RET b d" . python-add-breakpoint)
-              ;; ("M-RET b u" . python-add-pubreakpoint)
-              )
-  :config
-  (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
+;;   (add-hook 'haskell-mode-hook 'dante-mode)
+;;   :bind (:map haskell-mode-map
+;;               ("M-RET h e" . dante-eval-block)
+;;               ;; ("M-RET e n" . next-error)
+;;               ;; ("M-RET e p" . previous-error)
+;;               ;; ("M-RET b d" . python-add-breakpoint)
+;;               ;; ("M-RET b u" . python-add-pubreakpoint)
+;;               )
+;;   :config
+;;   (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
+;;   )
+
+(use-package haskell-mode
+  :defer 1
   )
+
 
 ;; lualatex preview
 (setq org-latex-pdf-process
@@ -2176,6 +2186,7 @@
   (add-hook 'oberon-mode-hook (lambda () (abbrev-mode t)))
   )
 
+(use-package julia-mode)
 
 (provide 'init)
 ;;; init.el ends here
