@@ -39,15 +39,16 @@
 
 (define-key special-event-map [config-changed-event] 'ignore)
 
-(setq custom-file "~/.emacs.d/private/custom.el")
+;; (setq custom-file "~/.emacs.d/private/custom.el")
+(setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
 (add-to-list 'display-buffer-alist
              '("." nil (reusable-frames . t)))
 
 ;; Compilation output
-(setq compilation-scroll-output t)
-;  (setq compilation-scroll-output 'first-error)
+; (setq compilation-scroll-output t)
+(setq compilation-scroll-output 'first-error)
 
 ;; Welcome!
 (setq user-full-name "Evgeny Cherkashin"
@@ -286,10 +287,10 @@
 (setq x-select-enable-clipboard t)
 
 ;; make cursor movement keys under right hand's home-row.
-(global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
-(global-set-key (kbd "M-l") 'forward-char)  ; was downcase-word
-(global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
-(global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
+;(global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
+;(global-set-key (kbd "M-l") 'forward-char)  ; was downcase-word
+;(global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
+;(global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
 
 (use-package ergoemacs-mode
   :disabled t
@@ -823,6 +824,9 @@
   (add-hook 'haskell-mode-hook #'hindent-mode)
   )
 
+(use-package vue-mode
+  :defer 1
+  )
 ;; (use-package lsp-treemacs)
 ;; (use-package helm-lsp)
 ;; (use-package hydra)
@@ -1137,7 +1141,7 @@
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
    ("\\.js\\'"         . web-mode)
-   ("\\.jsx\\'"        . web-mode)
+   ; ("\\.jsx\\'"        . web-mode)
    ("\\.html\\'"       . web-mode)
    ("\\.htm\\'"        . web-mode)
    ("\\.djhtml\\'"     . web-mode)
@@ -1228,9 +1232,9 @@
 
 (use-package avy
   :bind
-  ("<print> c" . avy-goto-char)
-  ("<print> w" . avy-goto-word-1)
-  ("<print> l" . avy-goto-line)
+  ("<print>" . avy-goto-char)
+  ; ("<print> w" . avy-goto-word-1)
+  ; ("<print> l" . avy-goto-line)
   )
 
 (use-package anzu
@@ -1513,7 +1517,6 @@
 
 (use-package helm-themes)
 
-
 ;; (use-package cursor-chg
 ;;   :config
 ;;   (setq curchg-default-cursor-color "LightSkyBlue1")
@@ -1522,6 +1525,7 @@
 ;;   (change-cursor-mode 1) ; On for overwrite/read-only/input mode
 ;;   (toggle-cursor-type-when-idle 1) ; On when idle
 ;;   )
+
 (use-package helm-tramp
   :config
   (setq tramp-default-method "ssh")
@@ -2004,6 +2008,7 @@
 (global-set-key (kbd "M-RET c c") 'compile)
 (global-set-key (kbd "M-RET c r") 'recompile)
 (global-set-key (kbd "<XF86Calculator>") 'recompile)
+(global-set-key (kbd "M-RET m w") 'web-mode)
 
 (defun my-add-tilde ()
   (interactive)
@@ -2141,7 +2146,8 @@
   :defer t
   :if (executable-find "git")
   :bind
-  ("C-x g" . magit-status)
+  (("C-x g" . magit-status)
+   ("M-RET m s" . magit-status))
   ;:commands
   ;(magit-status)
   :config
