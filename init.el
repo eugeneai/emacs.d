@@ -286,60 +286,8 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq x-select-enable-clipboard t)
 
-;; make cursor movement keys under right hand's home-row.
-;(global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
-;(global-set-key (kbd "M-l") 'forward-char)  ; was downcase-word
-;(global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
-;(global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
-
-(use-package ergoemacs-mode
-  :disabled t
-  ; :defer t
-  :config
-  (setq ergoemacs-theme nil) ;; Uses Standard Ergoemacs keyboard theme
-  (setq ergoemacs-keyboard-layout "us") ;; Assumes QWERTY keyboard layout
-  (ergoemacs-mode 1)
-  )
-
 (use-package ag
   :defer t)
-
-;; `smartparens` manages parens well.
-(use-package smartparens
-  :disabled t
-  :config
-  (require 'smartparens-config)
-  (smartparens-global-mode t)
-  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-forward-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-sexp)
-  ;; C-M-j isn't standard, but C-M-d doesn't work for me.
-  (define-key smartparens-mode-map (kbd "C-M-j") 'sp-down-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-c") 'sp-copy-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-[") 'sp-rewrap-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-]") 'sp-backward-unwrap-sexp)
-  (define-key smartparens-mode-map (kbd "C-M-z") 'sp-slurp-hybrid-sexp)
-  ;; markdown-mode
-  (sp-with-modes '(markdown-mode gfm-mode rst-mode)
-    (sp-local-pair "*" "*"
-                   :wrap "C-*"
-                   :unless '(sp-point-after-word-p sp-point-at-bol-p)
-                   :post-handlers '(("[d1]" "SPC"))
-                   :skip-match 'sp--gfm-skip-asterisk)
-    (sp-local-pair "**" "**")
-    (sp-local-pair "_" "_" :wrap "C-_" :unless '(sp-point-after-word-p)))
-  (defun sp--gfm-skip-asterisk (ms mb me)
-    (save-excursion
-      (goto-char mb)
-      (save-match-data (or (looking-at "^\\* ")
-                           (looking-at "^ \\* ")))))
-  ;; Don't highlight when wrapping.
-  (setq sp-highlight-pair-overlay nil)
-  (setq sp-highlight-wrap-overlay nil)
-  (setq sp-highlight-wrap-tag-overlay nil)
-  (show-smartparens-mode 1)
-  :diminish smartparens-mode)
-
 
 ;; Move things around intuitively.
 (use-package drag-stuff
@@ -611,7 +559,8 @@
   (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
   (add-to-list 'company-backends 'company-jedi)
   (add-to-list 'company-backends 'company-racer)
-  )
+  (setq company-dabbrev-downcase nil)
+)
 
 ;; Elpy the Emacs Lisp Python Environment.
 (use-package elpy
@@ -1551,39 +1500,6 @@
    ("\\.n3\\'"       . ttl-mode)
    )
   )
-
-;; (use-package omnisharp
-;;   :config
-;;   (defun local-csharp-mode-hook ()
-;;     (interactive "")
-;;     ;; enable the stuff you want for C# here
-;;     (omnisharp-mode)
-;;     (company-mode)
-;;     (flycheck-mode)
-;;     (setq indent-tabs-mode nil)
-;;     (setq c-syntactic-indentation t)
-;;     (c-set-style "ellemtel")
-;;     (setq c-basic-offset 4)
-;;     (setq truncate-lines t)
-;;     (setq tab-width 4)
-;;     (setq evil-shift-width 4)
-;;     (electric-pair-mode 1)       ;; Emacs 24
-;;     (electric-pair-local-mode 1) ;; Emacs 25
-;;     )
-;;   (add-to-list 'company-backends #'company-omnisharp)
-;;   ; FIXME: these do not work due to endless recursion
-;;   ;(add-to-list 'load-path "~/.emacs.d/site-lisp/paket.el/")
-;;   ;(require 'paket)
-;;   :hook (csharp-mode . local-csharp-mode-hook)
-;;   :mode ("\\.cs\\'" . csharp-mode)
-;;   :bind (:map csharp-mode-map
-;;               ("M-RET c c" . compile)
-;;               ("M-RET r c" . recompile)
-;;               ("M-RET r r" . omnisharp-run-code-action-refactoring)
-;;               ("<pause>" . omnisharp-run-code-action-refactoring)
-;;               )
-;;   )
-
 
 (use-package forth-mode
   :defer t)
