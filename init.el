@@ -236,6 +236,10 @@
 ;; Jump easily to beginning and end.
 (global-set-key (kbd "C-|") 'beginning-of-buffer)
 (global-set-key (kbd "C-}") 'end-of-buffer)
+(global-set-key (kbd "C-<next>") 'end-of-buffer)
+(global-set-key (kbd "C-<prior>") 'beginning-of-buffer)
+
+
 
 ;; Easily memorable whole-buffer selection.
 (global-set-key (kbd "M-A") 'mark-whole-buffer)
