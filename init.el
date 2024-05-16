@@ -649,6 +649,7 @@
               ("M-RET b d" . python-add-breakpoint)
               ("M-RET b u" . python-add-pubreakpoint)
               )
+  ;; pip install -U yapf==0.40.1
   )
 
 (use-package py-autopep8
@@ -2112,7 +2113,27 @@
   (add-hook 'oberon-mode-hook (lambda () (abbrev-mode t)))
   )
 
-(use-package julia-mode)
+(use-package julia-mode
+  :defer 1
+  )
+
+(use-package clips-mode
+  :defer 1
+  :config
+  (setq inferior-clips-program "clips")
+  )
+
+(use-package go-tranlate
+  :defer 1
+  :disabled 1
+  :config
+  (setq gts-translate-list '(("en" "zh")))
+  (setq gts-default-translator
+        (gts-translator
+         :picker (gts-prompt-picker)
+         :engines (list (gts-google-engine) (gts-google-rpc-engine))
+         :render (gts-buffer-render)))
+  )
 
 (provide 'init)
 ;;; init.el ends here
