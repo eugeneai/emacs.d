@@ -426,7 +426,7 @@
   :commands
   (projectile-find-file)
   :config
-  (projectile-global-mode)
+  (projectile-mode)
   (global-set-key (kbd "C-<f6>") 'projectile-find-file)
   :diminish projectile-mode
   )
@@ -558,7 +558,7 @@
   ;; is displayed on top (happens near the bottom of windows)
   ;(setq company-tooltip-flip-when-above t)
   (setq company-etags-ignore-case t)
-  (setq company-show-numbers t)
+  (setq company-show-quick-access t)
   (setq company-echo-delay 0)      ; remove annoying blinking
   (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
   (add-to-list 'company-backends 'company-jedi)
@@ -776,6 +776,7 @@
 (use-package hindent
   :hook
   (add-hook 'haskell-mode-hook #'hindent-mode)
+  :disabled t
   )
 
 (use-package vue-mode
@@ -943,7 +944,8 @@
   (add-hook 'slime-repl-mode-hook (lambda ()
                                     (smartparens-strict-mode +1)
                                     (whitespace-mode -1)))
-  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+  (setq sli
+        me-complete-symbol-function 'slime-fuzzy-complete-symbol
         slime-fuzzy-completion-in-place t
         slime-enable-evaluate-in-emacs t
         slime-autodoc-use-multiline-p t
@@ -2076,11 +2078,8 @@
   (set-default 'magit-unstage-all-confirm t)
   (set-default 'magit-stage-all-confirm t)
   (set-default 'magit-revert-buffers 'silent)
-  (global-set-key "\C-x\ \C-m" 'magit-status)
+  (global-set-key "\C-x\ \C-m" 'magit-status))
 ;; Don't use tabs, magit!
-  (add-hook 'git-commit-mode-hook
-            '(lambda () (untabify (point-min) (point-max))) t))
-
 ;; (use-package magit-filenotify
 ;;   :commands
 ;;   (magit-after-save-refresh-status
@@ -2090,7 +2089,7 @@
 ;;   (add-hook 'magit-status-mode-hook 'magit-filenotify-mode))
 
 (use-package magithub
-  ;; :disabled 1
+  :disabled 1
   :defer t
   :after magit)
 
@@ -2134,6 +2133,34 @@
          :engines (list (gts-google-engine) (gts-google-rpc-engine))
          :render (gts-buffer-render)))
   )
+
+(use-package guess-language
+  :defer 1
+  :config
+  (setq guess-language-languages '(en ru de))
+  (setq guess-language-min-paragraph-length 35)
+  (add-hook 'text-mode-hook (lambda () (guess-language-mode 1)))
+  )
+
+(use-package txl
+  :defer 1
+  :config
+  (setq txl-languages '(EN-US . RU))
+  (setq txl-deepl-api-key "my-api-key")
+  (setq txl-deepl-api-url "https://api-free.deepl.com/v2/translate")
+  :bind
+  (
+   ("M-RET t d" . txl-translate-region-or-paragraph))
+  )
+
+(use-package babel
+  :defer 1
+  :config
+  (setq babel-preferred-from-language "English")
+  (setq babel-preferred-to-language "Russian")
+  :bind
+  (
+   ("M-RET t b" . babel-region)))
 
 (provide 'init)
 ;;; init.el ends here
