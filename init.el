@@ -66,7 +66,7 @@
 ;; If async is installed
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/private")
-(add-to-list 'load-path "~/.emacs.d/site-lisp/helm")
+; (add-to-list 'load-path "~/.emacs.d/site-lisp/helm")
 (add-to-list 'load-path "~/.emacs.d/site-lisp/async")
 
 ;(setq dotfiles-dir (expand-file-name "~/.emacs.d/"))
@@ -477,6 +477,12 @@
 ;;   ("C-=" . zoom-in/out)
 ;;   ("C-+" . zoom-in/out)
 ;;   ("C--" . zoom-in/out))
+(use-package default-text-scale
+  :bind
+   ("C-=" . default-text-scale-increase)
+   ("C-+" . default-text-scale-increase)
+   ("C--" . default-text-scale-decrease)
+  )
 
 ;; Check syntax, make life better.
 (use-package flycheck
@@ -727,8 +733,8 @@
   ; (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
   )
 
-(use-package react-snippets
-  :defer t)
+;; (use-package react-snippets
+;;   :defer t)
 
 (use-package emmet-mode
   :defer t
@@ -1332,7 +1338,7 @@
 (global-set-key (kbd "M-<f1>") 'bookmark-bmenu-list)
 
 ;; highlight the current line
-(global-hl-line-mode 0)
+(global-hl-line-mode 1)
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -1390,10 +1396,12 @@
   (global-set-key (kbd "M-x") 'helm-M-x)
                                         ;(global-set-key (kbd "C-x C-m") 'helm-M-x)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (global-set-key (kbd "M-s o") 'helm-occur)
+  (global-set-key (kbd "M-/") 'helm-dabbrev)
   (global-set-key (kbd "C-x b") 'helm-mini)
+  (global-set-key (kbd "C-h a") 'helm-apropos)
   (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
                                         ;(global-set-key (kbd "C-x C-f") 'helm-find-files)
-  (global-set-key (kbd "C-h f") 'helm-apropos)
   (global-set-key (kbd "C-h r") 'helm-info-emacs)
   (global-set-key (kbd "C-h C-l") 'helm-locate-library)
   (global-set-key (kbd "C-x C-r") 'helm-recentf)
@@ -1978,38 +1986,38 @@
   (byte-recompile-directory "~/.emacs.d/elpa" 0 t))
 
 
-(when
-    windowed-system
-    (progn
-      ;; This script is set for a `text-scale-mode-step` of `1.04`
-      (setq text-scale-mode-step 1.2)
-      ;;
-      ;; List: `Sub-Zoom Font Heights per text-scale-mode-step`
-      ;;   eg.  For a default font-height of 120 just remove the leading `160 150 140 130`
-      (defvar sub-zoom-ht (list 160 150 140 130 120 120 110 100 100  90  80  80  80  80  70  70  60  60  50  50  50  40  40  40  30  20  20  20  20  20  20  10  10  10  10  10  10  10  10  10  10   5   5   5   5   5   2   2   2   2   2   2   2   2   1   1   1   1   1   1   1   1   1   1   1   1))
-      (defvar sub-zoom-len (safe-length sub-zoom-ht))
-      (defvar def-zoom-ht (car sub-zoom-ht))
-      ;(set-face-attribute 'default nil :height def-zoom-ht)
+;; (when
+;;     windowed-system
+;;     (progn
+;;       ;; This script is set for a `text-scale-mode-step` of `1.04`
+;;       (setq text-scale-mode-step 1.2)
+;;       ;;
+;;       ;; List: `Sub-Zoom Font Heights per text-scale-mode-step`
+;;       ;;   eg.  For a default font-height of 120 just remove the leading `160 150 140 130`
+;;       (defvar sub-zoom-ht (list 160 150 140 130 120 120 110 100 100  90  80  80  80  80  70  70  60  60  50  50  50  40  40  40  30  20  20  20  20  20  20  10  10  10  10  10  10  10  10  10  10   5   5   5   5   5   2   2   2   2   2   2   2   2   1   1   1   1   1   1   1   1   1   1   1   1))
+;;       (defvar sub-zoom-len (safe-length sub-zoom-ht))
+;;       (defvar def-zoom-ht (car sub-zoom-ht))
+;;       ;(set-face-attribute 'default nil :height def-zoom-ht)
 
-      ;; Adjust line number fonts.
+;;       ;; Adjust line number fonts.
 
-      (setq my-def-linum-text-height
-            (face-attribute 'default :height))
+;;       (setq my-def-linum-text-height
+;;             (face-attribute 'default :height))
 
-      ;; Zoom font via Numeric Keypad
+;;       ;; Zoom font via Numeric Keypad
 
-      (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase)
-      (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease)
-      (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust)
-      (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase)
-      (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease)
-      (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase)
-      (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease)
+;;       (define-key global-map (kbd "<C-kp-add>") 'text-scale-increase)
+;;       (define-key global-map (kbd "<C-kp-subtract>") 'text-scale-decrease)
+;;       (define-key global-map (kbd "<C-kp-multiply>") 'text-scale-adjust)
+;;       (define-key global-map (kbd "<M-mouse-4>") 'text-scale-increase)
+;;       (define-key global-map (kbd "<M-mouse-5>") 'text-scale-decrease)
+;;       (define-key global-map (kbd "<M-wheel-up>") 'text-scale-increase)
+;;       (define-key global-map (kbd "<M-wheel-down>") 'text-scale-decrease)
 
-      ;; (set-scroll-bar-mode 'right)   ; replace 'right with 'left to place it to the left
-      (setq popup-use-optimized-column-computation nil) ; May be tie menu size to default text size.
-  )
-  )
+;;       ;; (set-scroll-bar-mode 'right)   ; replace 'right with 'left to place it to the left
+;;       (setq popup-use-optimized-column-computation nil) ; May be tie menu size to default text size.
+;;   )
+;;   )
 
 (require 'cursor-chg)
 (setq curchg-default-cursor-color "LightSkyBlue1")
