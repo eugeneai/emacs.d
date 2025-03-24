@@ -76,7 +76,7 @@
      ("1.8-64" . "/usr/lib64/jvm/java-8-openjdk")))
  '(jdee-server-dir "~/.local/jdee-server")
  '(js-indent-level 2)
- '(load-prefer-newer t)
+ '(load-prefer-newer t t)
  '(lsp-haskell-server-path
    "/home/eugeneai/.ghcup/bin/haskell-language-server-9.6.1~1.10.0.0")
  '(magit-auto-revert-mode t)
