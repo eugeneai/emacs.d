@@ -27,7 +27,7 @@
          (getenv "PATH")))
 
 ;; Fix
-(defun magit-process-git (destination &rest args))
+;; (defun magit-process-git (destination &rest args))
 
 ;; (setq debug-on-error nil)
 
@@ -2089,10 +2089,10 @@
 ;;   (add-hook 'after-save-hook 'magit-after-save-refresh-status)
 ;;   (add-hook 'magit-status-mode-hook 'magit-filenotify-mode))
 
-(use-package magithub
-  ;; :disabled 1
-  :defer t
-  :after magit)
+;; (use-package magithub
+;;   ;; :disabled 1
+;;   :defer t
+;;   :after magit)
 
 ; (require 'magit-process nil t)
 
