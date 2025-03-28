@@ -105,7 +105,39 @@
  '(minibuffer-auto-raise t)
  '(minibuffer-frame-alist '((width . 80) (height . 1)))
  '(mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . 0.5)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(0blayout abbrev abbrev-mode ac-haskell-process ac-ispell ac-php
+              ac-php-core ace-jump-mode ag anzu auctex auctex-latexmk
+              avy babel beacon better-defaults browse-kill-ring cask
+              clips-mode color-theme color-theme-modern comany
+              commander company company-auctex company-css
+              company-emacs-eclim company-jedi company-jedu
+              company-php company-web company-web-html csharp-mode
+              cursor-chg d-mode dante dap-mode dash default-text-scale
+              diminish docker dockerfile-mode drag-stuff elpy epl
+              ergoemacs-mode ergoremacs-mode ess expand-region f fiplr
+              flx-ido flycheck flycheck-ghcmod flycheck-grammarly
+              flycheck-haskell flycheck-julia flymake-php forth-mode
+              fsharp-mode geiser git git-gutter-fringe+
+              goto-last-change grammarly guess-language helm helm-ag
+              helm-company helm-ispell helm-ls-git helm-lsp helm-pydoc
+              helm-swoop helm-themes helm-tramp highlight-parentheses
+              htmlize ido-vertical-mode impatient-mode jedi-direx
+              js2-mode julia-formatter julia-mode julia-repl
+              julia-shell julia-snail langtool lsp-haskell lsp-julia
+              lsp-ui lua-mode magit magit-filenotify magithub
+              markdown-mode markdown-mode+ material-theme matlab-mode
+              multiple-cursors mvn nlinum nose oberon oberon-mode
+              omisharp omisharp-mode omnisharp org-bullets org-mode
+              orgnav ormolu ox-pandoc ox-twbs package-build
+              page-break-lines pandoc pandoc-mode php+-mode php-mode
+              php-refactor-mode projectile py-autopep8 pyenv-mode
+              pyenv-mode-auto rainbow-delimiters rainbow-mode s
+              shut-up slime smart-mode-line smartparens smex
+              spacemacs-theme sr-speedbar ssh switch-window
+              switch-windows ttl-mode txl use-package vala-mode
+              vala-snippets vue-mode w3m which-key
+              whole-line-or-region yaml-mode zenburn-theme zoom-frm))
  '(prolog-program-name
    '(((getenv "EPROLOG") (eval (getenv "EPROLOG"))) (eclipse "eclipse")
      (mercury nil) (sicstus "sicstus") (swi "swipl") (gnu "gprolog")
@@ -146,7 +178,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :slant normal :weight semi-bold :height 203 :width normal :foundry "ADBO"))))
+ '(default ((t (:family "Source Code Pro" :slant normal :weight semi-bold :height 177 :width normal :foundry "ADBO"))))
  '(company-preview ((t (:inherit default :background "medium blue" :foreground "darkgray"))))
  '(company-scrollbar-bg ((t (:background "#4ccc4ccc4ccc"))) t)
  '(company-scrollbar-fg ((t (:background "#3fff3fff3fff"))) t)
