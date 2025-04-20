@@ -112,14 +112,14 @@
                     (not (gnutls-available-p))))
        (proto (if t "http" "https")))
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-  (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
+  ;; (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  ;; (add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
 
   ;; (add-to-list 'package-archives (cons "marmalade" (concat proto "://marmalade-repo.org/packages/")) t)
-  (add-to-list 'package-archives (cons "elpa" (concat proto "://elpa.gnu.org/packages/")) t)
+  ;; (add-to-list 'package-archives (cons "elpa" (concat proto "://elpa.gnu.org/packages/")) t)
   (add-to-list 'package-archives (cons "elpy" (concat proto "://jorgenschaefer.github.io/packages/")) t)
-  (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
+  ;; (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
   )
 
 (when (< emacs-major-version 24)
@@ -1056,6 +1056,9 @@
 
 (use-package company-web
   :defer t)
+
+(use-package add-node-modules-path
+  )
 
 (use-package web-mode
   :defer t
@@ -2135,6 +2138,14 @@
   :bind
   (
    ("M-RET t b" . babel-region)))
+
+(use-package sparql-mode
+  :defer 1
+  :config
+  (add-to-list 'auto-mode-alist '("\\.sparql$" . sparql-mode))
+  (add-to-list 'auto-mode-alist '("\\.rq$" . sparql-mode))
+  (add-hook 'sparql-mode-hook 'global-company-mode)
+  )
 
 (provide 'init)
 ;;; init.el ends here
