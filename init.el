@@ -1058,6 +1058,8 @@
 (use-package company-web
   :defer t)
 
+(use-package add-node-modules-path )
+
 (use-package web-mode
   :defer t
   :after company-web
