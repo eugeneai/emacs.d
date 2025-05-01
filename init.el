@@ -1697,6 +1697,30 @@
   ;(replace-regexp "\\s-+" "_")
   )
 
+(defun reconstruct-paragraph-simple ()
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)
+    )
+  ;(replace-regexp "\\(\\w+\\)[-­]\\s-+\\(\\w+\\)" "\\1\\2" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\(\\w+\\)­\\(\\w+\\)" "\\1-\\2" nil (line-beginning-position) (line-end-position))
+  (replace-regexp "\\s-*вЂ\”" "~--" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\s—" "~--" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\(\\w+\\)-\\(\\w+\\)" "\\1\"=\\2" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\.\\.\\." "\\\\ldots{}" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\[\\([[:digit:]]+\\)\\]" "\\\\cite{b\\1}" nil (line-beginning-position) (line-end-position))
+  ;; (replace-regexp "\\(\\w\\|\\.\\):" "\\1\\\\,:" nil (line-beginning-position) (line-end-position))
+  (replace-regexp "\\([тТ]\\.\\)\\s-*\\(\\w\\.\\)" "\\1~\\2" nil (line-beginning-position) (line-end-position))
+  (replace-regexp "\\([[:upper:]]\\.\\)\\s-*\\([[:upper:]]\\.\\)\\s-+\\([[:upper:]]\\w*\\)" "\\1~\\2~\\3" nil (line-beginning-position) (line-end-position))
+  (replace-regexp "\\([[:upper:]]\\.\\)\\s-+\\([[:upper:]]\\w*\\)" "\\1~\\2" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\"\\(\\w+\\)" "<<\1" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\(\\w+\\)\"" "\1>>" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\"\\(\\.\\)\"" "<<\1>>" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\s-+" "_")
+  )
+
+
 (defun reconstruct-minted ()
   "From cursor till '\end{' performs text cleaning."
   (interactive)
@@ -1727,7 +1751,8 @@
   )
 
 ;; Handy key definition
-(define-key global-map [f9] 'reconstruct-paragraph)
+(define-key global-map [f9] 'reconstruct-paragraph-simple)
+(define-key global-map [C-f9] 'reconstruct-paragraph)
 (define-key global-map [f12] 'reconstruct-minted-line)
 (define-key global-map [f8] 'delete-other-windows)
 (define-key global-map [C-f8] 'delete-window)
@@ -2146,6 +2171,51 @@
   (add-to-list 'auto-mode-alist '("\\.rq$" . sparql-mode))
   (add-hook 'sparql-mode-hook 'global-company-mode)
   )
+
+(use-package request)
+
+(defun babel-libretranslate-translation (from to)
+  (and
+   (assoc from babel-libretranslate-languages)
+   (assoc to babel-libretranslate-languages)))
+
+;; FIXME: Custom URL
+(defun babel-libretranslate-fetch (msg from to)
+  "Connect to localhost and request the translation."
+  (unless (babel-libretranslate-translation from to)
+    (error "Libretranslate can't translate from %s to %s" from to))
+  (let* ((pairs `(("source" . ,from)
+		  ("target" . ,to)
+		  ("q" . ,msg)
+          ("sentencesplit" . "true")
+		  ("api_key" . "")))
+	 (url-request-extra-headers
+          '(("Content-Type" . "application/x-www-form-urlencoded")
+	    ("Origin" . "https://lt.iscnet.ru")))
+	 (request-url "https://lt.iscnet.ru/translate")
+	 (url-request-method "POST")
+	 (url-request-data (babel-form-encode pairs)))
+    (babel-url-retrieve request-url)))
+
+(defun babel-libretranslate-wash ()
+  "Parse JSON response of Libretranslate.com."
+  (goto-char (point-min))
+  (let* ((json-object-type 'alist)
+	 (json-response (json-read))
+	 (translation (json-get json-response '(translatedText)))
+	 (error-message (json-get json-response '(error))))
+    (erase-buffer)
+    (when error-message
+      (error "Api error: %s" error-message))
+    (insert translation)))
+
+(defun babel-line ()
+  "Use a web translation service to translate the current line.
+   Yank the translation to the kill-ring."
+  (interactive)
+  (kill-new (babel-as-string-default (thing-at-point 'line t))))
+
+(define-key global-map [f7] 'babel-line)
 
 (provide 'init)
 ;;; init.el ends here
