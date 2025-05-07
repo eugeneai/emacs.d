@@ -14,6 +14,7 @@
  '(TeX-source-correlate-start-server 'ask)
  '(ac-ispell-fuzzy-limit 2)
  '(ac-ispell-requires 3)
+ '(babel-preferred-from-language "English")
  '(blink-cursor-mode nil)
  '(bookmark-default-file "/home/eugeneai/.emacs.d/bookmarks.bmk")
  '(column-number-mode t)
@@ -106,38 +107,23 @@
  '(minibuffer-frame-alist '((width . 80) (height . 1)))
  '(mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . 0.5)))
  '(package-selected-packages
-   '(0blayout abbrev abbrev-mode ac-haskell-process ac-ispell ac-php
-              ac-php-core ace-jump-mode ag anzu auctex auctex-latexmk
-              avy babel beacon better-defaults browse-kill-ring cask
-              clips-mode color-theme color-theme-modern comany
-              commander company company-auctex company-css
-              company-emacs-eclim company-jedi company-jedu
-              company-php company-web company-web-html csharp-mode
-              cursor-chg d-mode dante dap-mode dash default-text-scale
-              diminish docker dockerfile-mode drag-stuff elpy epl
-              ergoemacs-mode ergoremacs-mode ess expand-region f fiplr
-              flx-ido flycheck flycheck-ghcmod flycheck-grammarly
-              flycheck-haskell flycheck-julia flymake-php forth-mode
-              fsharp-mode geiser git git-gutter-fringe+
-              goto-last-change grammarly guess-language helm helm-ag
-              helm-company helm-ispell helm-ls-git helm-lsp helm-pydoc
-              helm-swoop helm-themes helm-tramp highlight-parentheses
-              htmlize ido-vertical-mode impatient-mode jedi-direx
-              js2-mode julia-formatter julia-mode julia-repl
-              julia-shell julia-snail langtool lsp-haskell lsp-julia
-              lsp-ui lua-mode magit magit-filenotify magithub
-              markdown-mode markdown-mode+ material-theme matlab-mode
-              multiple-cursors mvn nlinum nose oberon oberon-mode
-              omisharp omisharp-mode omnisharp org-bullets org-mode
-              orgnav ormolu ox-pandoc ox-twbs package-build
-              page-break-lines pandoc pandoc-mode php+-mode php-mode
-              php-refactor-mode projectile py-autopep8 pyenv-mode
-              pyenv-mode-auto rainbow-delimiters rainbow-mode s
-              shut-up slime smart-mode-line smartparens smex
-              spacemacs-theme sr-speedbar ssh switch-window
-              switch-windows ttl-mode txl use-package vala-mode
-              vala-snippets vue-mode w3m which-key
-              whole-line-or-region yaml-mode zenburn-theme zoom-frm))
+   '(ac-ispell ace-jump-mode add-node-modules-path ag anzu auctex-latexmk
+               babel better-defaults browse-kill-ring clips-mode
+               company-auctex company-flx company-jedi company-tabnine
+               company-web d-mode default-text-scale diminish
+               drag-stuff elpy emmet-mode expand-region fiplr flx-ido
+               forth-mode geiser goto-last-change haskell-mode helm-ag
+               helm-company helm-ispell helm-ls-git helm-lsp
+               helm-pydoc helm-swoop helm-themes helm-tramp
+               highlight-parentheses ido-vertical-mode impatient-mode
+               jedi-direx julia-mode langtool lsp-haskell lsp-treemacs
+               lsp-ui magit multiple-cursors nose oberon org-bullets
+               orgnav ox-twbs page-break-lines pandoc-mode prettier
+               projectile py-autopep8 pyenv-mode rjsx-mode slime
+               smart-mode-line smex sparql-mode sr-speedbar swiper
+               switch-window tide ttl-mode txl vala-mode vala-snippets
+               vue-mode w3m web-mode whole-line-or-region
+               yasnippet-snippets))
  '(prolog-program-name
    '(((getenv "EPROLOG") (eval (getenv "EPROLOG"))) (eclipse "eclipse")
      (mercury nil) (sicstus "sicstus") (swi "swipl") (gnu "gprolog")
