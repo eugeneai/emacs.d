@@ -2172,65 +2172,67 @@
   (add-hook 'sparql-mode-hook 'global-company-mode)
   )
 
-(use-package request)
+(use-package babel
+  :defer t
+  :config
+  (defun babel-libretranslate-fetch (msg from to)
+    "Connect to localhost and request the translation."
+    (unless (babel-libretranslate-translation from to)
+      (error "Libretranslate can't translate from %s to %s" from to))
+    (let* ((pairs `(("source" . ,from)
+                    ("target" . ,to)
+                    ("q" . ,msg)
+                    ("sentencesplit" . "false")
+                    ("api_key" . "")))
+           (url-request-extra-headers
+            '(("Content-Type" . "application/x-www-form-urlencoded")
+              ("Origin" . "https://lt.iscnet.ru")))
+           (request-url "https://lt.iscnet.ru/translate")
+           (url-request-method "POST")
+           (url-request-data (babel-form-encode pairs)))
+      (babel-url-retrieve request-url)))
+
+  (defun babel-libretranslate-wash ()
+    "Parse JSON response of Libretranslate.com."
+    (goto-char (point-min))
+    (let* ((json-object-type 'alist)
+           (json-response (json-read))
+           (translation (json-get json-response '(translatedText)))
+           (error-message (json-get json-response '(error))))
+      (erase-buffer)
+      (when error-message
+        (error "Api error: %s" error-message))
+      (insert translation)))
+
+  (defun babel-line ()
+    "Use a web translation service to translate the current line.
+   Yank the translation to the kill-ring."
+    (interactive)
+    (kill-new (babel-as-string-default (thing-at-point 'line t))))
+
+  (defun babel-selection ()
+    "Use a web translation service to translate the current line.
+   Yank the translation to the kill-ring."
+    (interactive)
+    (let
+        (
+         (trans (babel-as-string-default (buffer-substring-no-properties (mark) (point))))
+         )
+      (kill-new trans)
+      (kill-region (mark) (point))
+      (insert trans)))
+
+
+
+  (define-key global-map [f7] 'babel-line)
+  (define-key global-map [S-f7] 'babel-selection)
+  )
 
 (defun babel-libretranslate-translation (from to)
   (and
    (assoc from babel-libretranslate-languages)
    (assoc to babel-libretranslate-languages)))
 
-;; FIXME: Custom URL
-(defun babel-libretranslate-fetch (msg from to)
-  "Connect to localhost and request the translation."
-  (unless (babel-libretranslate-translation from to)
-    (error "Libretranslate can't translate from %s to %s" from to))
-  (let* ((pairs `(("source" . ,from)
-                  ("target" . ,to)
-                  ("q" . ,msg)
-                  ("sentencesplit" . "false")
-                  ("api_key" . "")))
-         (url-request-extra-headers
-          '(("Content-Type" . "application/x-www-form-urlencoded")
-            ("Origin" . "https://lt.iscnet.ru")))
-         (request-url "https://lt.iscnet.ru/translate")
-         (url-request-method "POST")
-         (url-request-data (babel-form-encode pairs)))
-    (babel-url-retrieve request-url)))
-
-(defun babel-libretranslate-wash ()
-  "Parse JSON response of Libretranslate.com."
-  (goto-char (point-min))
-  (let* ((json-object-type 'alist)
-         (json-response (json-read))
-         (translation (json-get json-response '(translatedText)))
-         (error-message (json-get json-response '(error))))
-    (erase-buffer)
-    (when error-message
-      (error "Api error: %s" error-message))
-    (insert translation)))
-
-(defun babel-line ()
-  "Use a web translation service to translate the current line.
-   Yank the translation to the kill-ring."
-  (interactive)
-  (kill-new (babel-as-string-default (thing-at-point 'line t))))
-
-(defun babel-selection ()
-  "Use a web translation service to translate the current line.
-   Yank the translation to the kill-ring."
-  (interactive)
-  (let
-      (
-       (trans (babel-as-string-default (buffer-substring-no-properties (mark) (point))))
-       )
-    (kill-new trans)
-    (kill-region (mark) (point))
-    (insert trans)))
-
-
-
-(define-key global-map [f7] 'babel-line)
-(define-key global-map [S-f7] 'babel-selection)
 
 (provide 'init)
 ;;; init.el ends here
