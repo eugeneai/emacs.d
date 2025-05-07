@@ -2160,21 +2160,6 @@
   :config
   (setq babel-preferred-from-language "English")
   (setq babel-preferred-to-language "Russian")
-  :bind
-  (
-   ("M-RET t b" . babel-region)))
-
-(use-package sparql-mode
-  :defer 1
-  :config
-  (add-to-list 'auto-mode-alist '("\\.sparql$" . sparql-mode))
-  (add-to-list 'auto-mode-alist '("\\.rq$" . sparql-mode))
-  (add-hook 'sparql-mode-hook 'global-company-mode)
-  )
-
-(use-package babel
-  :defer t
-  :config
   (defun babel-libretranslate-fetch (msg from to)
     "Connect to localhost and request the translation."
     (unless (babel-libretranslate-translation from to)
@@ -2222,17 +2207,26 @@
       (kill-region (mark) (point))
       (insert trans)))
 
+  (defun babel-libretranslate-translation (from to)
+    (and
+     (assoc from babel-libretranslate-languages)
+     (assoc to babel-libretranslate-languages))
+
+    :bind
+    (
+     ("M-RET t b" . babel-region))))
+
+(define-key global-map [f7] 'babel-line)
+(define-key global-map [S-f7] 'babel-selection)
 
 
-  (define-key global-map [f7] 'babel-line)
-  (define-key global-map [S-f7] 'babel-selection)
+(use-package sparql-mode
+  :defer 1
+  :config
+  (add-to-list 'auto-mode-alist '("\\.sparql$" . sparql-mode))
+  (add-to-list 'auto-mode-alist '("\\.rq$" . sparql-mode))
+  (add-hook 'sparql-mode-hook 'global-company-mode)
   )
-
-(defun babel-libretranslate-translation (from to)
-  (and
-   (assoc from babel-libretranslate-languages)
-   (assoc to babel-libretranslate-languages)))
-
 
 (provide 'init)
 ;;; init.el ends here
