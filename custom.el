@@ -14,6 +14,7 @@
  '(TeX-source-correlate-start-server 'ask)
  '(ac-ispell-fuzzy-limit 2)
  '(ac-ispell-requires 3)
+ '(babel-preferred-from-language "English")
  '(babel-select-output-window nil)
  '(blink-cursor-mode nil)
  '(bookmark-default-file "/home/eugeneai/.emacs.d/bookmarks.bmk")
