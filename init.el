@@ -27,7 +27,7 @@
          (getenv "PATH")))
 
 ;; Fix
-;(defun magit-process-git (destination &rest args))
+;; (defun magit-process-git (destination &rest args))
 
 ;; (setq debug-on-error nil)
 
@@ -112,14 +112,14 @@
                     (not (gnutls-available-p))))
        (proto (if t "http" "https")))
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-  (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
+  ;; (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  ;; (add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
 
   ;; (add-to-list 'package-archives (cons "marmalade" (concat proto "://marmalade-repo.org/packages/")) t)
-  (add-to-list 'package-archives (cons "elpa" (concat proto "://elpa.gnu.org/packages/")) t)
+  ;; (add-to-list 'package-archives (cons "elpa" (concat proto "://elpa.gnu.org/packages/")) t)
   (add-to-list 'package-archives (cons "elpy" (concat proto "://jorgenschaefer.github.io/packages/")) t)
-  (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
+  ;; (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
   )
 
 (when (< emacs-major-version 24)
@@ -426,7 +426,7 @@
   :commands
   (projectile-find-file)
   :config
-  (projectile-mode)
+  (projectile-global-mode)
   (global-set-key (kbd "C-<f6>") 'projectile-find-file)
   :diminish projectile-mode
   )
@@ -565,6 +565,7 @@
   ;(setq company-tooltip-flip-when-above t)
   (setq company-etags-ignore-case t)
   (setq company-show-quick-access t)
+  (setq company-show-numbers t)
   (setq company-echo-delay 0)      ; remove annoying blinking
   (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
   (add-to-list 'company-backends 'company-jedi)
@@ -1694,6 +1695,30 @@
   ;(replace-regexp "\\s-+" "_")
   )
 
+(defun reconstruct-paragraph-simple ()
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)
+    )
+  ;(replace-regexp "\\(\\w+\\)[-­]\\s-+\\(\\w+\\)" "\\1\\2" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\(\\w+\\)­\\(\\w+\\)" "\\1-\\2" nil (line-beginning-position) (line-end-position))
+  (replace-regexp "\\s-*вЂ\”" "~--" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\s—" "~--" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\(\\w+\\)-\\(\\w+\\)" "\\1\"=\\2" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\.\\.\\." "\\\\ldots{}" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\[\\([[:digit:]]+\\)\\]" "\\\\cite{b\\1}" nil (line-beginning-position) (line-end-position))
+  ;; (replace-regexp "\\(\\w\\|\\.\\):" "\\1\\\\,:" nil (line-beginning-position) (line-end-position))
+  (replace-regexp "\\([тТ]\\.\\)\\s-*\\(\\w\\.\\)" "\\1~\\2" nil (line-beginning-position) (line-end-position))
+  (replace-regexp "\\([[:upper:]]\\.\\)\\s-*\\([[:upper:]]\\.\\)\\s-+\\([[:upper:]]\\w*\\)" "\\1~\\2~\\3" nil (line-beginning-position) (line-end-position))
+  (replace-regexp "\\([[:upper:]]\\.\\)\\s-+\\([[:upper:]]\\w*\\)" "\\1~\\2" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\"\\(\\w+\\)" "<<\1" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\(\\w+\\)\"" "\1>>" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\"\\(\\.\\)\"" "<<\1>>" nil (line-beginning-position) (line-end-position))
+  ;(replace-regexp "\\s-+" "_")
+  )
+
+
 (defun reconstruct-minted ()
   "From cursor till '\end{' performs text cleaning."
   (interactive)
@@ -1724,7 +1749,8 @@
   )
 
 ;; Handy key definition
-(define-key global-map [f9] 'reconstruct-paragraph)
+(define-key global-map [f9] 'reconstruct-paragraph-simple)
+(define-key global-map [C-f9] 'reconstruct-paragraph)
 (define-key global-map [f12] 'reconstruct-minted-line)
 (define-key global-map [f8] 'delete-other-windows)
 (define-key global-map [C-f8] 'delete-window)
@@ -2132,9 +2158,82 @@
   :config
   (setq babel-preferred-from-language "English")
   (setq babel-preferred-to-language "Russian")
-  :bind
-  (
-   ("M-RET t b" . babel-region)))
+  (defun babel-libretranslate-fetch (msg from to)
+    "Connect to localhost and request the translation."
+    (unless (babel-libretranslate-translation from to)
+      (error "Libretranslate can't translate from %s to %s" from to))
+    (let* ((pairs `(("source" . ,from)
+                    ("target" . ,to)
+                    ("q" . ,msg)
+                    ("sentencesplit" . "false")
+                    ("api_key" . "")))
+           (url-request-extra-headers
+            '(("Content-Type" . "application/x-www-form-urlencoded")
+              ("Origin" . "https://lt.iscnet.ru")))
+           (request-url "https://lt.iscnet.ru/translate")
+           (url-request-method "POST")
+           (url-request-data (babel-form-encode pairs)))
+      (babel-url-retrieve request-url)))
+
+  (defun babel-libretranslate-wash ()
+    "Parse JSON response of Libretranslate.com."
+    (goto-char (point-min))
+    (let* ((json-object-type 'alist)
+           (json-response (json-read))
+           (translation (json-get json-response '(translatedText)))
+           (error-message (json-get json-response '(error))))
+      (erase-buffer)
+      (when error-message
+        (error "Api error: %s" error-message))
+      (insert translation)))
+
+  (defun babel-line ()
+    "Use a web translation service to translate the current line.
+   Yank the translation to the kill-ring."
+    (interactive)
+    (kill-new (babel-as-string-default (thing-at-point 'line t))))
+
+  (defun babel-selection ()
+    "Use a web translation service to translate the current line.
+   Yank the translation to the kill-ring."
+    (interactive)
+    (let
+        (
+         (trans (babel-as-string-default (buffer-substring-no-properties (mark) (point))))
+         )
+      (kill-new trans)
+      (kill-region (mark) (point))
+      (insert trans)))
+
+  (defun babel-libretranslate-translation (from to)
+    (and
+     (assoc from babel-libretranslate-languages)
+     (assoc to babel-libretranslate-languages))
+
+    :bind
+    (
+     ("M-RET t b" . babel-region))))
+
+(define-key global-map [f7] 'babel-line)
+(define-key global-map [S-f7] 'babel-selection)
+
+
+(use-package sparql-mode
+  :defer 1
+  :config
+  (add-to-list 'auto-mode-alist '("\\.sparql$" . sparql-mode))
+  (add-to-list 'auto-mode-alist '("\\.rq$" . sparql-mode))
+  (add-hook 'sparql-mode-hook 'global-company-mode)
+  )
+
+(use-package yaml-mode
+  :defer 1
+  :config
+    (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+    (add-hook 'yaml-mode-hook
+      '(lambda ()
+        (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+  )
 
 (provide 'init)
 ;;; init.el ends here
