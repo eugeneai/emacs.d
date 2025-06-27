@@ -14,7 +14,6 @@
  '(TeX-source-correlate-start-server 'ask)
  '(ac-ispell-fuzzy-limit 2)
  '(ac-ispell-requires 3)
- '(babel-preferred-from-language "English")
  '(babel-select-output-window nil)
  '(blink-cursor-mode nil)
  '(bookmark-default-file "/home/eugeneai/.emacs.d/bookmarks.bmk")
@@ -122,9 +121,9 @@
                orgnav ox-twbs page-break-lines pandoc-mode prettier
                projectile py-autopep8 pyenv-mode rjsx-mode slime
                smart-mode-line smex sparql-mode sr-speedbar swiper
-               switch-window tide ttl-mode txl vala-mode vala-snippets
-               vue-mode w3m web-mode whole-line-or-region
-               yasnippet-snippets))
+               switch-window tide transient ttl-mode txl vala-mode
+               vala-snippets vue-mode w3m web-mode
+               whole-line-or-region yaml-mode yasnippet-snippets))
  '(prolog-program-name
    '(((getenv "EPROLOG") (eval (getenv "EPROLOG"))) (eclipse "eclipse")
      (mercury nil) (sicstus "sicstus") (swi "swipl") (gnu "gprolog")
