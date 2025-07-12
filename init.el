@@ -951,8 +951,7 @@
   (add-hook 'slime-repl-mode-hook (lambda ()
                                     (smartparens-strict-mode +1)
                                     (whitespace-mode -1)))
-  (setq sli
-        me-complete-symbol-function 'slime-fuzzy-complete-symbol
+  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
         slime-fuzzy-completion-in-place t
         slime-enable-evaluate-in-emacs t
         slime-autodoc-use-multiline-p t
