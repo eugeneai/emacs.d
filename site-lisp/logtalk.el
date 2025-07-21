@@ -9,9 +9,9 @@
 
 ;; Installation:
 ;;
-;; First, copy this file to the appropriated directory. For FSF Emacs this will 
+;; First, copy this file to the appropriated directory. For FSF Emacs this will
 ;; probably be /usr/local/share/emacs/site-lisp. For XEmacs, the directory is
-;; usully /usr/local/lib/xemacs/site-lisp. You may also copy the file to a 
+;; usully /usr/local/lib/xemacs/site-lisp. You may also copy the file to a
 ;; sub-directory in your home directory depending on your Emacs configuration.
 ;; Type "C-h v load-path" in Emacs to find the list of paths that are searched
 ;; for when looking for lisp files.
@@ -25,7 +25,7 @@
 
 
 
-;; setup 
+;; setup
 
 (defvar logtalk-mode-version "1.40"
 	"Logtalk mode version number")
@@ -39,13 +39,13 @@
 
 
 
-;; syntax highlighting 
+;; syntax highlighting
 
 (defvar logtalk-font-lock-keywords nil)
 
 
 
-;; syntax table 
+;; syntax table
 
 (defvar logtalk-mode-syntax-table
 	(let ((logtalk-mode-syntax-table (make-syntax-table)))
@@ -279,9 +279,9 @@
 
 ;; entry function
 
-(defun logtalk-mode ()
+(define-derived-mode logtalk-mode prog-mode "Logtalk"
 	"Major mode for editing Logtalk files"
-	(interactive)
+	;;(interactive)
 	(kill-all-local-variables)
 	(setq indent-tabs-mode t)
 	(setq tab-width (default-value 'tab-width))
@@ -293,4 +293,4 @@
 	(setq mode-name "Logtalk")
 	(run-hooks 'logtalk-mode-hook))
 
-(provide 'logtalk-mode) 
+(provide 'logtalk-mode)
