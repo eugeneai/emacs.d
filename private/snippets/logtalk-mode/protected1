@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: protected1
+# name: protected-arguments
 # key: proa
 # group: snippets.json
 # description: Protected predicate
