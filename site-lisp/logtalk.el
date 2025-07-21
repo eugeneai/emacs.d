@@ -32,7 +32,7 @@
 
 (defvar logtalk-mode-hook nil)
 
-(defvar logtalk-mode-map nil) 
+(defvar logtalk-mode-map nil)
 
 (if logtalk-mode-map nil
 	(setq logtalk-mode-map (make-keymap)))

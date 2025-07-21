@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: protocol1
+# name: protocol-arguments
 # key: p
 # group: snippets.json
 # description: Protocol
@@ -8,13 +8,13 @@
 
 :- protocol(${1:Protocol}).
 
-    :- info([
-        version is 1:0:0,
-        author is '`(shell-command-to-string "echo -n $(git config --global --get user.name)")` <`(shell-command-to-string "echo -n $(git config --global --get user.email)")`>',
-        date is '`(shell-command-to-string "echo -n $(date +%Y-%m-%d)")`',
-        comment is '${2:Description}'
-    ]).
+   :- info([
+       version is 1:0:0,
+       author is '`(shell-command-to-string "echo -n $(git config --global --get user.name)")` <`(shell-command-to-string "echo -n $(git config --global --get user.email)")`>',
+       date is `(shell-command-to-string "echo -n $(date +%Y-%m-%d)")`,
+       comment is '${2:Description}'
+   ]).
 
-$0
+   $0
 
 :- end_protocol.

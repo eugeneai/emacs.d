@@ -1,15 +1,15 @@
 # -*- mode: snippet -*-
-# name: private1
+# name: private-arguments
 # key: priva
 # group: snippets.json
 # description: Private predicate
 # prefix: private
 # --
-    :- private(${1:Functor}/${2:Arity}).
-    :- mode($1(${3:Arguments}), ${4:Solutions}).
-    :- info($1/$2, [
-        comment is '${5:Description}',
-        arguments is ['$6'-'$7']
-    ]).
+   :- private(${1:Functor}/${2:Arity}).
+   :- mode($1(${3:Arguments}), ${4:Solutions}).
+   :- info($1/$2, [
+       comment is '${5:Description}',
+       arguments is ['$6'-'$7']
+   ]).
 
-$0
+   $0

@@ -400,6 +400,9 @@
   (setq yas-wrap-around-region t)
 
   (yas-global-mode 1)
+  (setq yas-indent-line 'fixed)
+  (setq yas-also-auto-indent-first-line t)
+
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   :bind
   ("C-<return>" . yas-expand-from-trigger-key)
@@ -2235,6 +2238,8 @@
       '(lambda ()
         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
   )
+
+(global-company-mode)
 
 (provide 'init)
 ;;; init.el ends here

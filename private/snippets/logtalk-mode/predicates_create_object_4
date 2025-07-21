@@ -6,7 +6,7 @@
 create_object(?object_identifier, +list, +list, +list)
 
 Description
-Creates a new, dynamic object. The word object is used here as a generic term. This predicate can be used to create new prototypes, instances, and classes. This predicate is often used as a primitive to implement high-level object creation methods. 
+Creates a new, dynamic object. The word object is used here as a generic term. This predicate can be used to create new prototypes, instances, and classes. This predicate is often used as a primitive to implement high-level object creation methods.
 
 # prefix: create_object
 # --

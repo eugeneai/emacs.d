@@ -3,5 +3,5 @@
 # key: pro
 # --
 :- protocol(${1:name}).
-    $2
+   $2
 :- end_protocol.

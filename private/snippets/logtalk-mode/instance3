@@ -1,18 +1,18 @@
 # -*- mode: snippet -*-
-# name: object
+# name: object-inst
 # key: i
 # --
 
 :- object(${1:Instance},
-    instantiates(${2:Class})).
+   instantiates(${2:Class})).
 
-    :- info([
-        version is 1:0:0,
-        author is '`(shell-command-to-string "echo -n $(git config --global --get user.name)")` <`(shell-command-to-string "echo -n $(git config --global --get user.email)")`>',
-        date is '`(shell-command-to-string "echo -n $(date +%Y-%m-%d)")`',
-        comment is '${3:Description}'
-    ]).
+   :- info([
+       version is 1:0:0,
+       author is '`(shell-command-to-string "echo -n $(git config --global --get user.name)")` <`(shell-command-to-string "echo -n $(git config --global --get user.email)")`>',
+       date is `(shell-command-to-string "echo -n $(date +%Y-%m-%d)")`,
+       comment is '${3:Description}'
+   ]).
 
-$0
+   $0
 
 :- end_object.
