@@ -6,7 +6,7 @@
 eos
 
 Description
-This non-terminal matches the end-of-input. It is implemented by checking that the implicit difference list unifies with []-[]. 
+This non-terminal matches the end-of-input. It is implemented by checking that the implicit difference list unifies with []-[].
 
 # prefix: eos
 # --

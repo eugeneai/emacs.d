@@ -400,6 +400,9 @@
   (setq yas-wrap-around-region t)
 
   (yas-global-mode 1)
+  (setq yas-indent-line 'fided)
+  (setq yas-also-auto-indent-first-line t)
+
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   :bind
   ("C-<return>" . yas-expand-from-trigger-key)

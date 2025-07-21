@@ -4,18 +4,18 @@
 # --
 
 :- object(${1:Class},
-    implements(${2:Protocol}),
-    imports(${3:Category}),
-    instantiates(${4:Metaclass}),
-    specializes(${5:Superclass})).
+   implements(${2:Protocol}),
+   imports(${3:Category}),
+   instantiates(${4:Metaclass}),
+   specializes(${5:Superclass})).
 
-    :- info([
-        version is 1:0:0,
-        author is '`(shell-command-to-string "echo -n $(git config --global --get user.name)")` <`(shell-command-to-string "echo -n $(git config --global --get user.email)")`>',
-        date is '`(shell-command-to-string "echo -n $(date +%Y-%m-%d)")`',
-        comment is '${6:Description}'
-    ]).
+   :- info([
+       version is 1:0:0,
+       author is '`(shell-command-to-string "echo -n $(git config --global --get user.name)")` <`(shell-command-to-string "echo -n $(git config --global --get user.email)")`>',
+       date is '`(shell-command-to-string "echo -n $(date +%Y-%m-%d)")`',
+       comment is '${6:Description}'
+   ]).
 
-$0
+   $0
 
 :- end_object.
