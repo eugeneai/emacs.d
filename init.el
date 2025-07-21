@@ -400,7 +400,7 @@
   (setq yas-wrap-around-region t)
 
   (yas-global-mode 1)
-  (setq yas-indent-line 'fided)
+  (setq yas-indent-line 'fixed)
   (setq yas-also-auto-indent-first-line t)
 
   (add-hook 'prog-mode-hook #'yas-minor-mode)
@@ -2240,5 +2240,6 @@
         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
   )
 
+(global-company-mode)
 (provide 'init)
 ;;; init.el ends here
