@@ -1,15 +1,15 @@
 # -*- mode: snippet -*-
-# name: protected1
+# name: protected-arguments
 # key: proa
 # group: snippets.json
 # description: Protected predicate
 # prefix: protected
 # --
-    :- protected(${1:Functor}/${2:Arity}).
-    :- mode($1(${3:Arguments}), ${4:Solutions}).
-    :- info($1/$2, [
-        comment is '${5:Description}',
-        arguments is ['$6'-'$7']
-    ]).
+   :- protected(${1:Functor}/${2:Arity}).
+   :- mode($1(${3:Arguments}), ${4:Solutions}).
+   :- info($1/$2, [
+       comment is '${5:Description}',
+       arguments is ['$6'-'$7']
+   ]).
 
-$0
+   $0

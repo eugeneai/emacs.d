@@ -400,6 +400,9 @@
   (setq yas-wrap-around-region t)
 
   (yas-global-mode 1)
+  (setq yas-indent-line 'fixed)
+  (setq yas-also-auto-indent-first-line t)
+
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   :bind
   ("C-<return>" . yas-expand-from-trigger-key)
@@ -951,8 +954,7 @@
   (add-hook 'slime-repl-mode-hook (lambda ()
                                     (smartparens-strict-mode +1)
                                     (whitespace-mode -1)))
-  (setq sli
-        me-complete-symbol-function 'slime-fuzzy-complete-symbol
+  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol
         slime-fuzzy-completion-in-place t
         slime-enable-evaluate-in-emacs t
         slime-autodoc-use-multiline-p t
@@ -2234,6 +2236,8 @@
       '(lambda ()
         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
   )
+
+(global-company-mode)
 
 (provide 'init)
 ;;; init.el ends here
