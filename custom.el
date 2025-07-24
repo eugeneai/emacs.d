@@ -183,4 +183,5 @@
  '(mode-line-inactive ((t (:background "#404045" :foreground "gray60" :inverse-video nil :height 0.6))))
  '(show-paren-match ((t (:inherit default :background "gray50" :foreground "gray100" :underline nil))))
  '(show-paren-mismatch ((t (:inherit default :foreground "#e0211d" :underline nil :bold nil))))
- '(tex-verbatim ((t (:family "Fira Code")))))
+ '(tex-verbatim ((t (:family "Fira Code"))))
+ '(whitespace-tab ((t (:background "gray18" :foreground "gray24")))))

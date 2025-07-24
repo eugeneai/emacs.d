@@ -1619,10 +1619,10 @@
 (autoload 'logtalk-mode "logtalk" "Major mode for editing Logtalk programs." t)
 (add-to-list 'auto-mode-alist '("\\.lgt\\'" . logtalk-mode))
 (add-to-list 'auto-mode-alist '("\\.logtalk\\'" . logtalk-mode))
-;(add-to-list 'auto-mode-alist '("\\.lgt\\'" . prolog-mode))
-;(add-to-list 'auto-mode-alist '("\\.logtalk\\'" . prolog-mode))
 (add-hook 'logtalk-mode-hook (lambda ()
                                (yas-minor-mode-on)
+                               (setq tab-width 3)
+                               (setq-default indent-tabs-mode nil)
                                ))
 
 (defun compile-test ()
@@ -2024,8 +2024,6 @@
 
 
 (put 'narrow-to-page 'disabled nil)
-
-(add-hook 'logtalk-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 ;;(switch-to-buffer "*Compile-Log*")
 ;;(delete-window)
