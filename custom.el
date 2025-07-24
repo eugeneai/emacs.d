@@ -119,9 +119,10 @@
                multiple-cursors nose oberon org-bullets orgnav ox-twbs
                page-break-lines pandoc-mode prettier projectile
                py-autopep8 pyenv-mode rjsx-mode slime smart-mode-line
-               smex sr-speedbar swiper switch-window tide ttl-mode txl
-               vala-mode vala-snippets vue-mode w3m web-mode
-               whole-line-or-region yasnippet-snippets))
+               smex sparql-mode sr-speedbar swiper switch-window tide
+               ttl-mode txl vala-mode vala-snippets vue-mode w3m
+               web-mode whole-line-or-region yaml-mode
+               yasnippet-snippets))
  '(prolog-program-name
    '(((getenv "EPROLOG") (eval (getenv "EPROLOG"))) (eclipse "eclipse")
      (mercury nil) (sicstus "sicstus") (swi "swipl") (gnu "gprolog")
@@ -151,7 +152,7 @@
      (py-master-file . "/path/to/interactivetest.py")
      (whitespace-line-column . 80) (lexical-binding . t)))
  '(show-paren-mode t)
- '(tab-width 4)
+ '(tab-width 3)
  '(text-mode-hook '(turn-on-flyspell text-mode-hook-identify))
  '(tool-bar-mode nil)
  '(w3-honor-stylesheets t)
