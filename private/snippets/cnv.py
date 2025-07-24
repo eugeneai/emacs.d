@@ -3,11 +3,13 @@ from glob import glob
 from pprint import pprint
 import re
 
-DIR = "/home/eugeneai/.emacs.d/private/snippets/logtalk-mode/*[!py]"
+DIR = "/home/eugeneai/.emacs.d/private/snippets/logtalk-mode/*"
+#DIR = "/home/eugeneai/.emacs.d/private/snippets/logtalk-mode/category"
 
 files = glob(DIR)
 
-TAB = "   "
+TAB = "\t"
+TAB_SIZE=3
 
 
 def count_spaces(s):
@@ -17,10 +19,10 @@ def count_spaces(s):
         if c == " ":
             cn += 1
             i += 1
-        if c == "\t":
-            cn += 4
-            cn = cn // 4
-            cn = cn * 4
+        elif c == "\t":
+            cn += TAB_SIZE
+            en = cn % TAB_SIZE
+            cn -= en
             i += 1
         else:
             break
@@ -28,6 +30,7 @@ def count_spaces(s):
 
 
 for file in files:
+    print("File:{}".format(file))
     ls = open(file).readlines()
     o = open(file, "w")
     skip = True
@@ -47,10 +50,13 @@ for file in files:
                     o.write(l)
                     continue
                 c, rest = count_spaces(l)
-                w = c // 4
-                p = c % 4
-                l = TAB*w+rest
+                w = c // TAB_SIZE
+                p = c % TAB_SIZE
+                print(c,'-',repr(l))
+                print('-','-',repr(rest))
+                l = (TAB*w) +rest
                 o.write(l)
+                print(w,p, repr(l))
                 continue
         else:
             skip = False

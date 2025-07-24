@@ -1060,8 +1060,6 @@
 (use-package company-web
   :defer t)
 
-(use-package add-node-modules-path )
-
 (use-package web-mode
   :defer t
   :after company-web
@@ -2090,10 +2088,10 @@
 ;;   (add-hook 'after-save-hook 'magit-after-save-refresh-status)
 ;;   (add-hook 'magit-status-mode-hook 'magit-filenotify-mode))
 
-(use-package magithub
-  :disabled 1
-  :defer t
-  :after magit)
+;; (use-package magithub
+;;   :disabled 1
+;;   :defer t
+;;   :after magit)
 
 ; (require 'magit-process nil t)
 
