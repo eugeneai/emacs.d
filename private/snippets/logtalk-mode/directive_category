@@ -3,5 +3,5 @@
 # key: dc
 # --
 :- category(${1:name}).
-    $2
+	$2
 :- end_category.

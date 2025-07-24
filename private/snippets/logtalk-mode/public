@@ -5,11 +5,11 @@
 # description: (with no arguments)
 # prefix: public
 # --
-   :- public(${1:Functor}/${2:0}).
-   :- mode($1, ${3:Solutions}).
-   :- info($1/$2, [
-      comment is '${4:Description}',
-      argnames is []
-   ]).
+	:- public(${1:Functor}/${2:0}).
+	:- mode($1, ${3:Solutions}).
+	:- info($1/$2, [
+		comment is '${4:Description}',
+		argnames is []
+	]).
 
-   $0
+	$0
