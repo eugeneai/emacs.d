@@ -14,6 +14,8 @@
 (setq save-abbrevs 'silently)
 ;; you will be asked before the abbreviations are saved
 
+(setq default-buffer-file-coding-system 'utf-8)
+
 ;; set env var PATH, by appending a new path to existing PATH value
 (setenv "PATH"
         (concat
