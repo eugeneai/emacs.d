@@ -106,23 +106,23 @@
  '(minibuffer-frame-alist '((width . 80) (height . 1)))
  '(mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . 0.5)))
  '(package-selected-packages
-   '(ac-ispell ace-jump-mode ag anzu auctex-latexmk babel better-defaults
-               browse-kill-ring clips-mode company-auctex company-flx
-               company-jedi company-tabnine company-web d-mode
-               default-text-scale diminish drag-stuff elpy emmet-mode
-               expand-region fiplr flx-ido forth-mode geiser
-               goto-last-change haskell-mode helm-ag helm-company
-               helm-ispell helm-ls-git helm-lsp helm-pydoc helm-swoop
-               helm-themes helm-tramp highlight-parentheses
-               ido-vertical-mode impatient-mode jedi-direx julia-mode
-               langtool lsp-haskell lsp-treemacs lsp-ui magit
-               multiple-cursors nose oberon org-bullets orgnav ox-twbs
-               page-break-lines pandoc-mode prettier projectile
-               py-autopep8 pyenv-mode rjsx-mode slime smart-mode-line
-               smex sparql-mode sr-speedbar swiper switch-window tide
-               ttl-mode txl vala-mode vala-snippets vue-mode w3m
-               web-mode whole-line-or-region yaml-mode
-               yasnippet-snippets))
+   '(0blayout ac-ispell ace-jump-mode ag anzu auctex-latexmk babel
+              better-defaults browse-kill-ring clips-mode
+              company-auctex company-flx company-jedi company-tabnine
+              company-web d-mode default-text-scale diminish
+              drag-stuff elpy emmet-mode expand-region fiplr flx-ido
+              forth-mode geiser goto-last-change haskell-mode helm-ag
+              helm-company helm-ispell helm-ls-git helm-lsp helm-pydoc
+              helm-swoop helm-themes helm-tramp highlight-parentheses
+              ido-vertical-mode impatient-mode jedi-direx julia-mode
+              langtool lsp-haskell lsp-treemacs lsp-ui magit
+              multiple-cursors nose oberon org-bullets orgnav ox-twbs
+              page-break-lines pandoc-mode prettier projectile
+              py-autopep8 pyenv-mode rjsx-mode slime smart-mode-line
+              smex sparql-mode sr-speedbar swiper switch-window tide
+              ttl-mode txl vala-mode vala-snippets vue-mode w3m
+              web-mode whole-line-or-region yaml-mode
+              yasnippet-snippets))
  '(prolog-program-name
    '(((getenv "EPROLOG") (eval (getenv "EPROLOG"))) (eclipse "eclipse")
      (mercury nil) (sicstus "sicstus") (swi "swipl") (gnu "gprolog")
