@@ -100,6 +100,22 @@
       )
   )
 
+
+(defun enable-proxy-for-packages ()
+  "Временно включить proxy для установки пакетов"
+  (interactive)
+(setq url-proxy-services '(("no_proxy" . "127\\.0\\.0\\.1")
+                           ("http" . "192.168.191.201:3128")
+                           ("https" . "192.168.191.201:3128")
+                           ("ftp" . "192.168.191.201:3128")))
+  (message "Proxy включен для установки пакетов"))
+
+(defun disable-proxy-after-packages ()
+  "Отключить proxy после установки пакетов"
+  (interactive)
+  (setq url-proxy-services nil)
+  (message "Proxy отключен"))
+
 (setq url-http-proxy-basic-auth-storage
       (list (list "172.27.100.5:4444"
                   (cons "titan.cyber"
