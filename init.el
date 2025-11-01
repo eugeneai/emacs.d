@@ -2237,6 +2237,56 @@
         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
   )
 
+
+(defun my-get-openai-api-key (api-key-env &optional silent)
+  "Получить API ключ DeepSeek по имени в api-key-env. Если SILENT не nil, не выводить сообщения, только возвращать ключ или nil. Возвращает API ключ или nil при ошибке."
+  (interactive)
+
+  (let ((api-key (getenv api-key-env)))
+    (cond
+     ((null api-key)
+      (unless silent
+        (message "❌ Значение не найдено в переменных среды"))
+      nil)
+
+     ((string-empty-p api-key)
+      (unless silent
+        (message "❌ Значение пусто"))
+      nil)
+
+     ((not (string-prefix-p "sk-" api-key))
+      (unless silent
+        (message "❌ Неверный формат API ключа"))
+      nil)
+
+     (t
+      (unless silent
+        (message "✅ API ключ загружен: %s..." (substring api-key 0 (min 10 (length api-key)))))
+      api-key))))
+
+(use-package gptel
+  ;; :defer 1
+  :config
+  (setq my-open-ai-api-key (my-get-openai-api-key "DEEPSEEK_API_KEY"))
+  (gptel-make-deepseek "DeepSeek"       ;Any name you want
+                       :stream t                           ;for streaming responses
+                       :key my-open-ai-api-key)               ;can be a function that returns the key
+
+  (setq gptel-model   'deepseek-chat     ;'deepseek-reasoner
+        gptel-backend (gptel-make-deepseek "DeepSeek"
+                                           :stream t
+                                           :key my-open-ai-api-key))
+
+  )
+
+
+  ;; gptel                          0.9.9          available    nongnu   Interact with ChatGPT or other LLMs
+  ;; gptel                          20250912.2351  available    melpa    Interact with ChatGPT or other LLMs
+  ;; gptel-aibo                     20250709.851   available    melpa    An AI Writing Assistant
+  ;; gptel-commit                   20250726.1448  available    melpa    Generate commit message with gptel
+  ;; gptel-fn-complete              20250317.1805  available    melpa    Complete the function at point using gptel
+  ;; gptel-magit                    20250520.833   available    melpa    Generate commit messages for magit using gptel
+
 (global-company-mode)
 
 (provide 'init)
