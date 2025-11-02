@@ -112,9 +112,8 @@
                company-web d-mode default-text-scale diminish
                drag-stuff elpy emmet-mode expand-region fiplr flx-ido
                flycheck-yamllint flymake-yaml forth-mode geiser
-               goto-last-change gptel haskell-mode helm-ag
-               helm-company helm-ispell helm-ls-git helm-lsp
-               helm-pydoc helm-swoop helm-themes helm-tramp
+               goto-last-change gptel haskell-mode helm-company
+               helm-ispell helm-ls-git helm-lsp helm-pydoc helm-tramp
                highlight-parentheses ido-vertical-mode impatient-mode
                jedi-direx julia-mode langtool lsp-haskell lsp-treemacs
                lsp-ui magit multiple-cursors nose oberon org-bullets
@@ -153,7 +152,7 @@
      (py-master-file . "/path/to/interactivetest.py")
      (whitespace-line-column . 80) (lexical-binding . t)))
  '(show-paren-mode t)
- '(tab-width 4)
+ '(tab-width 3)
  '(text-mode-hook '(turn-on-flyspell text-mode-hook-identify))
  '(tool-bar-mode nil)
  '(w3-honor-stylesheets t)

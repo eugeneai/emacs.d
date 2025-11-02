@@ -94,17 +94,33 @@
       (setq url-proxy-services '(("no_proxy" . "172.27.24.")
                                  ("http" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
                                  ("https" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
-                                 ("ftp" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")
-								 ))
-
+                                 ("ftp" . "titan.cyber:ghbdtnbr@172.27.100.5:4444")))
       )
   )
+
+
+(defun enable-proxy-for-packages ()
+  "Временно включить proxy для установки пакетов"
+  (interactive)
+(setq url-proxy-services '(("no_proxy" . "127\\.0\\.0\\.1")
+                           ("http" . "192.168.191.201:3128")
+                           ("https" . "192.168.191.201:3128")
+                           ("ftp" . "192.168.191.201:3128")))
+  (message "Proxy включен для установки пакетов"))
+
+(defun disable-proxy-after-packages ()
+  "Отключить proxy после установки пакетов"
+  (interactive)
+  (setq url-proxy-services nil)
+  (message "Proxy отключен"))
 
 (setq url-http-proxy-basic-auth-storage
       (list (list "172.27.100.5:4444"
                   (cons "titan.cyber"
                         (base64-encode-string "titan.cyber:ghbdtnbr")))))
 
+
+(enable-proxy-for-packages)
 
 ;; This package called package comes with Emacs.
 (require 'package)
@@ -293,7 +309,8 @@
 (setq x-select-enable-clipboard t)
 
 (use-package ag
-  :defer t)
+  :defer t
+)
 
 ;; Move things around intuitively.
 (use-package drag-stuff
@@ -770,9 +787,7 @@
 ;; optionally
 (use-package lsp-ui
   :commands lsp-ui-mode)
-;; if you are helm user
-(use-package helm-lsp
-  :commands helm-lsp-workspace-symbol)
+
 ;; if you are ivy user
 ;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 (use-package lsp-treemacs
@@ -794,21 +809,7 @@
 (use-package vue-mode
   :defer 1
   )
-;; (use-package lsp-treemacs)
-;; (use-package helm-lsp)
-;; (use-package hydra)
-;; (use-package helm-xref
-;;   :config
-;;   ; (define-key global-map [remap find-file] #'helm-find-files)
-;;   ; (define-key global-map [remap execute-extended-command] #'helm-M-x)
-;;   ; (define-key global-map [remap switch-to-buffer] #'helm-mini)
-;;   )
-;; (use-package dap-mode
-;;   :defer 1
-;;   :config
-;;   (require 'dap-chrome)
-;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-;;   (yas-global-mode))
+
 
 (setq gc-cons-threshold (* 100 1024 1024)
       read-process-output-max (* 1024 1024)
@@ -1410,6 +1411,14 @@
   (global-set-key (kbd "C-h r") 'helm-info-emacs)
   (global-set-key (kbd "C-h C-l") 'helm-locate-library)
   (global-set-key (kbd "C-x C-r") 'helm-recentf)
+
+  (global-set-key (kbd "M-i") 'helm-occur)
+  ;;(global-set-key (kbd "M-I") 'helm-occur-....)
+  (global-set-key (kbd "C-c M-i") 'helm-multi-occur-1)
+  ;;(global-set-key (kbd "C-x M-i") 'helm-multi-...)
+  (define-key global-map  (kbd "M-RET h a")  'helm-do-grep-ag)
+
+
   (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
   ;; shell history.
@@ -1456,6 +1465,15 @@
        (find-file-read-only . ido)))))
   )
 
+;; if you are helm user
+(use-package helm-lsp
+  :commands helm-lsp-workspace-symbol)
+
+(defun ag-helm ()
+  "Запуск ag вместе с helm"
+  (interactive)
+  (helm-do-grep-ag nil))
+
 (use-package helm-ls-git
   :config
   (global-set-key (kbd "C-<f7>") 'helm-ls-git-ls)
@@ -1463,8 +1481,6 @@
 
 (use-package helm-ispell)
 ;(use-package helm-git)
-(use-package helm-ag
-  :defer t)
 (use-package helm-company
   :defer t
   :config
@@ -1476,15 +1492,9 @@
   :config
   (define-key python-mode-map (kbd "C-c C-d") 'helm-pydoc))
 
-(use-package helm-swoop
-  :config
-  (global-set-key (kbd "M-i") 'helm-swoop)
-  (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
-  (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
-  (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
-  )
+;;;(use-package helm-themes)
+;; Use load-theme of helm
 
-(use-package helm-themes)
 
 ;; (use-package cursor-chg
 ;;   :config
@@ -2286,6 +2296,8 @@
   ;; gptel-commit                   20250726.1448  available    melpa    Generate commit message with gptel
   ;; gptel-fn-complete              20250317.1805  available    melpa    Complete the function at point using gptel
   ;; gptel-magit                    20250520.833   available    melpa    Generate commit messages for magit using gptel
+
+(disable-proxy-after-packages)
 
 (global-company-mode)
 
