@@ -106,22 +106,23 @@
  '(minibuffer-frame-alist '((width . 80) (height . 1)))
  '(mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . 0.5)))
  '(package-selected-packages
-   '(ac-ispell ace-jump-mode ag anzu auctex-latexmk babel better-defaults
-               browse-kill-ring clips-mode company-auctex company-flx
-               company-jedi company-tabnine company-web d-mode
-               default-text-scale diminish drag-stuff elpy emmet-mode
-               expand-region fiplr flx-ido forth-mode geiser
-               goto-last-change haskell-mode helm-ag helm-company
-               helm-ispell helm-ls-git helm-lsp helm-pydoc helm-swoop
-               helm-themes helm-tramp highlight-parentheses
-               ido-vertical-mode impatient-mode jedi-direx julia-mode
-               langtool lsp-haskell lsp-treemacs lsp-ui magit
-               multiple-cursors nose oberon org-bullets orgnav ox-twbs
-               page-break-lines pandoc-mode prettier projectile
-               py-autopep8 pyenv-mode rjsx-mode slime smart-mode-line
-               smex sparql-mode sr-speedbar swiper switch-window tide
-               ttl-mode txl vala-mode vala-snippets vue-mode w3m
-               web-mode whole-line-or-region yaml-mode
+   '(ac-ispell ace-jump-mode add-node-modules-path ag anzu auctex-latexmk
+               babel better-defaults browse-kill-ring clips-mode
+               company-auctex company-flx company-jedi company-tabnine
+               company-web d-mode default-text-scale diminish
+               drag-stuff elpy emmet-mode expand-region fiplr flx-ido
+               flycheck-yamllint flymake-yaml forth-mode geiser
+               goto-last-change gptel haskell-mode helm-ag
+               helm-company helm-ispell helm-ls-git helm-lsp
+               helm-pydoc helm-swoop helm-themes helm-tramp
+               highlight-parentheses ido-vertical-mode impatient-mode
+               jedi-direx julia-mode langtool lsp-haskell lsp-treemacs
+               lsp-ui magit multiple-cursors nose oberon org-bullets
+               orgnav ox-twbs page-break-lines pandoc-mode prettier
+               projectile py-autopep8 pyenv-mode rjsx-mode slime
+               smart-mode-line smex sparql-mode sr-speedbar swiper
+               switch-window tide ttl-mode txl vala-mode vala-snippets
+               vue-mode w3m web-mode whole-line-or-region yaml-mode
                yasnippet-snippets))
  '(prolog-program-name
    '(((getenv "EPROLOG") (eval (getenv "EPROLOG"))) (eclipse "eclipse")
@@ -152,7 +153,7 @@
      (py-master-file . "/path/to/interactivetest.py")
      (whitespace-line-column . 80) (lexical-binding . t)))
  '(show-paren-mode t)
- '(tab-width 3)
+ '(tab-width 4)
  '(text-mode-hook '(turn-on-flyspell text-mode-hook-identify))
  '(tool-bar-mode nil)
  '(w3-honor-stylesheets t)
@@ -163,12 +164,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :slant normal :weight semi-bold :height 177 :width normal :foundry "ADBO"))))
+ '(default ((t (:family "Source Code Pro" :slant normal :weight medium :height 203 :width normal :foundry "ADBO"))))
  '(company-preview ((t (:inherit default :background "medium blue" :foreground "darkgray"))))
  '(company-scrollbar-bg ((t (:background "#4ccc4ccc4ccc"))) t)
  '(company-scrollbar-fg ((t (:background "#3fff3fff3fff"))) t)
  '(company-tooltip ((t (:inherit default :background "gray30" :foreground "white"))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face :background "goldenrod" :foreground "black"))))
+ '(company-tooltip-scrollbar-thumb ((t (:background "#3fff3fff3fff"))))
+ '(company-tooltip-scrollbar-track ((t (:background "#4ccc4ccc4ccc"))))
  '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
  '(font-latex-verbatim-face ((t (:family "Fira Code" :foreground "burlywood"))))
  '(line-number ((t (:background "gray10" :foreground "gold" :slant normal :weight bold :height 1.1 :family "Ubuntu Mono"))))
