@@ -308,10 +308,6 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq x-select-enable-clipboard t)
 
-(use-package ag
-  :defer t
-)
-
 ;; Move things around intuitively.
 (use-package drag-stuff
   ; :defer t
@@ -1469,10 +1465,15 @@
 (use-package helm-lsp
   :commands helm-lsp-workspace-symbol)
 
-(defun ag-helm ()
-  "Запуск ag вместе с helm"
+(defun rg ()
+  "Запуск rg вместе с helm"
   (interactive)
   (helm-do-grep-ag nil))
+
+(defun ag ()
+  "Запуск rg вместе с helm"
+  (interactive)
+  (rg))
 
 (use-package helm-ls-git
   :config
