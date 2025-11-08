@@ -869,7 +869,10 @@
   :defer t
   :config
   (define-key markdown-mode-map (kbd "M-n") nil)
-  (define-key markdown-mode-map (kbd "M-p") nil))
+  (define-key markdown-mode-map (kbd "M-p") nil)
+  :bind
+  (:map markdown-mode-map
+         ("M-RET" . nil)))
 
 ;; (use-package markdown-mode+
 ;;   :defer t
@@ -2249,54 +2252,93 @@
   )
 
 
-(defun my-get-openai-api-key (api-key-env &optional silent)
-  "Получить API ключ DeepSeek по имени в api-key-env. Если SILENT не nil, не выводить сообщения, только возвращать ключ или nil. Возвращает API ключ или nil при ошибке."
-  (interactive)
+;;; DeepSeek API Key Configuration
 
-  (let ((api-key (getenv api-key-env)))
+(defun load-deepseek-api-key ()
+  "Load DEEPSEEK_API_KEY from various sources with proper newline handling."
+  (let ((api-key nil))
+    ;; 1. Check environment variable first
+    (setq api-key (getenv "DEEPSEEK_API_KEY"))
+
+    ;; 2. If not in environment, check ~/.deepseek_api_key file
+    (when (and (not api-key) (file-exists-p "~/.deepseek_api_key"))
+      (with-temp-buffer
+        (insert-file-contents "~/.deepseek_api_key")
+        (setq api-key (string-trim (buffer-string))) ; Remove newlines and whitespace
+        (message "Loaded DeepSeek API key from ~/.deepseek_api_key")))
+
+    ;; 3. If still not found, check shell config files
+    (when (not api-key)
+      (let ((shell-files '("~/.bashrc" "~/.bash_profile" "~/.zshrc" "~/.profile")))
+        (catch 'found
+          (dolist (file shell-files)
+            (when (file-exists-p file)
+              (with-temp-buffer
+                (insert-file-contents file)
+                (goto-char (point-min))
+                (when (re-search-forward "export DEEPSEEK_API_KEY=[\"']?\\([^\"'\n]+\\)[\"']?" nil t)
+                  (setq api-key (match-string 1))
+                  (message "Loaded DeepSeek API key from %s" file)
+                  (throw 'found t))))))))
+
+    ;; Return the key (or nil if not found)
+    api-key))
+
+(defun setup-deepseek-api-key ()
+  "Setup DeepSeek API key with proper error handling."
+  (let ((api-key (load-deepseek-api-key)))
+
     (cond
-     ((null api-key)
-      (unless silent
-        (message "❌ Значение не найдено в переменных среды"))
+     ((not api-key)
+      (message "❌ DeepSeek API key not found in any source")
       nil)
 
      ((string-empty-p api-key)
-      (unless silent
-        (message "❌ Значение пусто"))
-      nil)
-
-     ((not (string-prefix-p "sk-" api-key))
-      (unless silent
-        (message "❌ Неверный формат API ключа"))
+      (message "❌ DeepSeek API key is empty")
       nil)
 
      (t
-      (unless silent
-        (message "✅ API ключ загружен: %s..." (substring api-key 0 (min 10 (length api-key)))))
+      ;; Set both environment variable and gptel-api-key
+      (setenv "DEEPSEEK_API_KEY" api-key)
+      (setq gptel-api-key api-key)
+      (message "✅ DeepSeek API key configured successfully: %s..."
+               (substring api-key 0 (min 8 (length api-key))))
       api-key))))
 
+;; Initialize DeepSeek API key on startup
+(when (and (featurep 'gptel)
+           (not (getenv "DEEPSEEK_API_KEY")))
+  (setup-deepseek-api-key))
+
 (use-package gptel
-  ;; :defer 1
+  :defer 1
   :config
-  (setq my-open-ai-api-key (my-get-openai-api-key "DEEPSEEK_API_KEY"))
-  (gptel-make-deepseek "DeepSeek"       ;Any name you want
-                       :stream t                           ;for streaming responses
-                       :key my-open-ai-api-key)               ;can be a function that returns the key
+  ;; Ensure API key is loaded before setting up gptel
+  (unless (getenv "DEEPSEEK_API_KEY")
+    (setup-deepseek-api-key))
 
-  (setq gptel-model   'deepseek-chat     ;'deepseek-reasoner
-        gptel-backend (gptel-make-deepseek "DeepSeek"
-                                           :stream t
-                                           :key my-open-ai-api-key))
+  (let ((api-key (getenv "DEEPSEEK_API_KEY")))
+    (when api-key
+      (gptel-make-deepseek "DeepSeek"
+        :stream t
+        :key api-key)
 
-  )
+      (setq gptel-model 'deepseek-chat
+            gptel-backend (gptel-make-deepseek "DeepSeek"
+                            :stream t
+                            :key api-key))
+      (message "GPTel DeepSeek backend configured with API key")))
 
+  :bind
+  ("M-RET g s" . gptel-send)
+  ("M-RET g u s" . gptel-send))
 
-  ;; gptel                          0.9.9          available    nongnu   Interact with ChatGPT or other LLMs
-  ;; gptel                          20250912.2351  available    melpa    Interact with ChatGPT or other LLMs
-  ;; gptel-aibo                     20250709.851   available    melpa    An AI Writing Assistant
-  ;; gptel-commit                   20250726.1448  available    melpa    Generate commit message with gptel
-  ;; gptel-fn-complete              20250317.1805  available    melpa    Complete the function at point using gptel
-  ;; gptel-magit                    20250520.833   available    melpa    Generate commit messages for magit using gptel
+(use-package gptel-aibo
+  :ensure t
+  :bind
+  ("M-RET M-RET" . gptel-aibo-send)
+  ("M-RET a s" . gptel-aibo-send)
+  ("M-RET a s" . gptel-aibo-apply-last-suggestions))
 
 (disable-proxy-after-packages)
 
@@ -2304,3 +2346,29 @@
 
 (provide 'init)
 ;;; init.el ends here
+
+;; Все функции работают "из коробки" - просто продолжайте использовать Emacs как обычно, а я буду применять наиболее эффективные методы для выполнения ваших задач.
+
+;; \> При долгой работе gptel-aibo ты наченаешь терять UUID, м.б. увеличить размер контекста?
+
+;; Понимаю проблему! GPTel действительно может терять контекст при длинных сессиях. Есть несколько способов увеличить размер контекста:
+
+;; **1. Настройка размера контекста в GPTel:**
+;; ```elisp
+;; (setq gptel-max-tokens 4096)  ; или больше, в зависимости от модели
+;; ```
+
+;; **2. Использование модели с большим контекстом:**
+;; ```elisp
+;; (setq gptel-model "deepseek-chat")  ; или другая модель с большим контекстом
+;; ```
+
+;; **3. Включение режима "беседы" с сохранением истории:**
+;; ```elisp
+;; (setq gptel-track-context t)
+;; ```
+
+;; **4. Ручное управление контекстом через промпты:**
+;; Можно явно указывать в промптах важные части предыдущего контекста.
+
+;; Хотите, чтобы я создал файл с настройками для GPTel с оптимизированными параметрами для длинных сессий?

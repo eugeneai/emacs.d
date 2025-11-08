@@ -112,16 +112,17 @@
                company-web d-mode default-text-scale diminish
                drag-stuff elpy emmet-mode expand-region fiplr flx-ido
                flycheck-yamllint flymake-yaml forth-mode geiser
-               goto-last-change gptel haskell-mode helm-company
-               helm-ispell helm-ls-git helm-lsp helm-pydoc helm-tramp
-               highlight-parentheses ido-vertical-mode impatient-mode
-               jedi-direx julia-mode langtool lsp-haskell lsp-treemacs
-               lsp-ui magit multiple-cursors nose oberon org-bullets
-               orgnav ox-twbs page-break-lines pandoc-mode prettier
-               projectile py-autopep8 pyenv-mode rjsx-mode slime
-               smart-mode-line smex sparql-mode sr-speedbar swiper
-               switch-window tide ttl-mode txl vala-mode vala-snippets
-               vue-mode w3m web-mode whole-line-or-region yaml-mode
+               goto-last-change gptel gptel-aibo haskell-mode
+               helm-company helm-ispell helm-ls-git helm-lsp
+               helm-pydoc helm-tramp highlight-parentheses
+               ido-vertical-mode impatient-mode jedi-direx julia-mode
+               langtool lsp-haskell lsp-treemacs lsp-ui magit
+               multiple-cursors nose oberon org-bullets orgnav ox-twbs
+               page-break-lines pandoc-mode prettier projectile
+               py-autopep8 pyenv-mode rjsx-mode slime smart-mode-line
+               smex sparql-mode sr-speedbar swiper switch-window tide
+               ttl-mode txl vala-mode vala-snippets vue-mode w3m
+               web-mode whole-line-or-region yaml-mode
                yasnippet-snippets))
  '(prolog-program-name
    '(((getenv "EPROLOG") (eval (getenv "EPROLOG"))) (eclipse "eclipse")
