@@ -1127,7 +1127,21 @@
    ("\\.htm\\'"        . web-mode)
    ("\\.djhtml\\'"     . web-mode)
    ("\\.pt\\'"         . web-mode)
-   ))
+   )
+
+  ;; HTML-specific web-mode configuration
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-match "\\.html?$" (buffer-file-name))
+                (setq web-mode-markup-indent-offset 2)
+                (setq web-mode-css-indent-offset 2)
+                (setq web-mode-code-indent-offset 2)
+                (setq web-mode-style-padding 2)
+                (setq web-mode-script-padding 2)
+                (setq web-mode-block-padding 2)
+                (prettier-mode)
+                )))
+  )
 
 
 
