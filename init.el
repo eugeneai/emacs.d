@@ -942,8 +942,7 @@
                               (setq indent-tabs-mode nil)  ; Use spaces, not tabs
                               (flycheck-select-checker 'javascript-eslint)
                               (electric-indent-local-mode -1)  ; Better for AI-generated code
-                              ))
-  )
+                              )))
 
 ;; (use-package react-snippets
 ;;   :defer t)
@@ -1311,6 +1310,7 @@
    )
 
   ;; HTML-specific web-mode configuration
+  :config
   (add-hook 'web-mode-hook
             (lambda ()
               (when (string-match "\\.html?$" (buffer-file-name))
@@ -1321,9 +1321,7 @@
                 (setq web-mode-script-padding 2)
                 (setq web-mode-block-padding 2)
                 (prettier-mode)
-                )))
-  )
-
+                ))))
 
 
 ;; Inpation mode
