@@ -589,6 +589,7 @@
   (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
   (add-to-list 'company-backends 'company-jedi)
   (add-to-list 'company-backends 'company-racer)
+  (add-to-list 'company-backends 'company-tern)  ; JavaScript completion
   (setq company-dabbrev-downcase nil)
 )
 
@@ -730,27 +731,37 @@
 
 
 ;; Use a nice JavaScript mode.
-;; (use-package js2-mode
-;;   :disabled 1
-;;   :mode
-;;   (("\\.js\\'" . js2-mode)
-;;   ))
+(use-package js2-mode
+  :defer t
+  :mode
+  (("\\.js\\'" . js2-mode))
+  :config
+  (setq js2-basic-offset 4)
+  (setq js-indent-level 4)
+  (setq js2-strict-missing-semi-warning nil)  ; Less strict for AI-generated code
+  (add-hook 'js2-mode-hook
+            (lambda ()
+              (setq indent-tabs-mode nil)
+              (electric-indent-local-mode -1)
+              (prettier-mode)
+              ))
+  )
 
-
-(use-package tide
-  :defer t)
+;; (use-package tide
+;;   :defer t)
 
 (use-package rjsx-mode
   :defer t
   :mode ("\\.js\\'")
   :config
-  (setq js2-basic-offset 2)
+  (setq js2-basic-offset 4)  ; Increased for DeepSeek compatibility
+  (setq js-indent-level 4)
+  (setq tab-width 4)
   (add-hook 'rjsx-mode-hook (lambda ()
-                              ;; (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
-                              ; (my/use-eslint-from-mode-modules)
+                              (setq indent-tabs-mode nil)  ; Use spaces, not tabs
                               (flycheck-select-checker 'javascript-eslint)
+                              (electric-indent-local-mode -1)  ; Better for AI-generated code
                               ))
-  ; (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
   )
 
 ;; (use-package react-snippets
@@ -758,10 +769,11 @@
 
 (use-package emmet-mode
   :defer t
-  :hook (web-mode rjsx-mode)
+  :hook (web-mode rjsx-mode js2-mode)
   :config
   (add-hook 'emmet-mode-hook (lambda ()
-                               (setq emmet-indent-after-insert t))))
+                               (setq emmet-indent-after-insert t)
+                               (setq emmet-indentation 4))))
 
 (use-package mode-local
   :defer t
@@ -818,12 +830,13 @@
 (use-package prettier
   :defer t
   :config
-  ;; (setq prettier-js-args '(
-  ;;                          "--trailing-comma" "none"
-  ;;                          "--bracket-spacing" "false"
-  ;;                          ))
+  (setq prettier-js-args '(
+                           "--trailing-comma" "none"
+                           "--tab-width" "4"
+                           "--use-tabs" "false"
+                           "--print-width" "100"
+                           ))
   :hook ((js2-mode . prettier-mode)
-         (typescript-mode . prettier-mode)
          (rjsx-mode . prettier-mode)
          (css-mode . prettier-mode)
          (web-mode . prettier-mode))
@@ -2065,11 +2078,14 @@
 ;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
 ;; (add-hook 'rjsx-mode-hook #'setup-tide-mode)
 
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+;; JavaScript-specific web-mode configuration
 (add-hook 'web-mode-hook
           (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
-              ; (setup-tide-mode)
+            (when (string-equal "js" (file-name-extension buffer-file-name))
+              (setq web-mode-code-indent-offset 4)
+              (setq web-mode-markup-indent-offset 4)
+              (setq web-mode-css-indent-offset 4)
+              (setq web-mode-script-padding 2)
               (prettier-mode)
               )
             )
@@ -2079,8 +2095,8 @@
   '(progn
        (add-hook 'web-mode-hook #'add-node-modules-path)
        (add-hook 'web-mode-hook #'prettier-mode)
-       ;; (flycheck-add-mode 'typescript-tslint 'web-mode)
        ))
+
 ;; Work with git with magic ease.
 (use-package magit
   :defer t
@@ -2343,7 +2359,7 @@
   :bind
   ("M-RET M-RET" . gptel-aibo-send)
   ("M-RET a a" . gptel-aibo-send)
-  ("M-RET a s" . gptel-aibo-apply-last-suggestions)
+  ("M-RET a s" . gptel-aibo-apply-last-suggestions) ;; TODO настроить на работу C-u, M-X
   :config
   ;; Inherit context settings from gptel
   (defalias 'aibo 'gptel-aibo)
