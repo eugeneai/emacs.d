@@ -1084,7 +1084,7 @@
   (require 'company-css)
   (add-hook 'html-mode-hook 'visual-line-mode)
   (add-hook 'web-mode-hook 'visual-line-mode)
-  (add-hook 'js-mode-hook 'web-mode)
+  ;; (add-hook 'js-mode-hook 'web-mode)  ; Отключено - используем js2-mode/rjsx-mode для .js файлов
   (defun web-mode-flyspefll-verify ()
     (let ((f (get-text-property (- (point) 1) 'face)))
       (not (memq f '(web-mode-html-attr-value-face
@@ -1121,7 +1121,7 @@
    ("\\.hbs\\'"        . web-mode)
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
-   ("\\.js\\'"         . web-mode)
+   ; ("\\.js\\'"         . web-mode)  ; Убрано - используем js2-mode/rjsx-mode
    ; ("\\.jsx\\'"        . web-mode)
    ("\\.html\\'"       . web-mode)
    ("\\.htm\\'"        . web-mode)
