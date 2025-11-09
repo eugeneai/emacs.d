@@ -2288,9 +2288,8 @@
 
 (eval-after-load 'web-mode
   '(progn
-       (add-hook 'web-mode-hook #'add-node-modules-path)
-       (add-hook 'web-mode-hook #'prettier-mode)
-       ))
+     (add-hook 'web-mode-hook #'add-node-modules-path)
+     (add-hook 'web-mode-hook #'prettier-mode)))
 
 ;; Work with git with magic ease.
 (use-package magit
