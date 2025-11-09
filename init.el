@@ -593,64 +593,41 @@
   (setq company-dabbrev-downcase nil)
 )
 
-;; Elpy the Emacs Lisp Python Environment.
+;; Elpy the Emacs Lisp Python Environment - Enhanced Configuration
 (use-package elpy
   :defer t
+  :init
+  ;; Initialize elpy early for better performance
+  (elpy-enable)
   :config
-  (progn
-    ;; Use ipython if available.
-                                        ;(when (executable-find "ipython")
-                                        ;  (elpy-use-ipython))
-    ;; Don't use flymake if flycheck is available.
-    ;; (when (require 'flycheck nil t)
-    ;;   (setq elpy-modules
-    ;;         (delq 'elpy-module-flymake elpy-modules))
-    ;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
+  ;; Modern Python development setup
+  (setq elpy-modules '(elpy-module-sane-defaults
+                       elpy-module-company
+                       elpy-module-eldoc
+                       elpy-module-pyvenv
+                       elpy-module-flymake
+                       elpy-module-autodoc
+                       elpy-module-yasnippet
+                       elpy-module-django))
 
-    (setq elpy-modules '(elpy-module-sane-defaults
-                         elpy-module-company
-                         elpy-module-eldoc
-                         elpy-module-highlight-indentation
-                         elpy-module-pyvenv
-                         elpy-module-flymake
-                         elpy-module-autodoc
-                         elpy-module-yasnippet
-                         elpy-module-sane-defaults))
-    (elpy-enable)
-    (yas-reload-all)
+  ;; Use Jedi for better code intelligence
+  (setq elpy-rpc-backend "jedi")
 
-    ;(delq 'elpy-module-flymake elpy-modules)
-    (add-hook 'python-mode-hook
-              (lambda ()
-                (set (make-local-variable 'comment-inline-offset) 2)
-                (auto-complete-mode -1)))
+  ;; Configure Jedi for better performance
+  (setq jedi:complete-on-dot t)
+  (setq jedi:use-shortcuts t)
 
-    ;; Don't use highlight-indentation-mode.
-    (delete 'elpy-module-highlight-indentation elpy-modules)
-    ;; this is messed with by emacs if you let it...
-    (custom-set-variables
-     '(elpy-rpc-backend "jedi")
-     '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
-     '(help-at-pt-timer-delay 1.9)
-     '(tab-width 4))
-    ;; Elpy also installs yasnippets.
-    ;; Don't use tab for yasnippets, use shift-tab.
-    (define-key yas-minor-mode-map (kbd "<tab>") nil)
-    (define-key yas-minor-mode-map (kbd "TAB") nil)
-    (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
-    (defalias 'workon 'pyenv-workon)
-    (pyvenv-workon "elpy")
-    (add-hook 'elpy-mode-hook (lambda ()
-                                (electric-pair-mode nil)))
-    )
+  ;; Better virtual environment support
+  (setq elpy-rpc-virtualenv-path 'current)
+  (setq elpy-rpc-virtualenv-path-separator path-separator)
 
-  (defun annotate-pdb ()
-    (interactive)
-    (highlight-lines-matching-regexp "import pu?db")
-    (highlight-lines-matching-regexp "pdb.set_trace()"))
-  (add-hook 'python-mode-hook 'annotate-pdb)
+  ;; Improved code formatting
+  (setq elpy-formatter 'yapf)
+  (setq elpy-formatter-options '("--style=google"))
 
+  ;; Enhanced debugging support
   (defun python-add-breakpoint ()
+    "Add a breakpoint at current line."
     (interactive)
     (newline-and-indent)
     (insert "import pdb; pdb.set_trace()")
@@ -658,33 +635,152 @@
     (highlight-lines-matching-regexp "^[ ]*import pdb;"))
 
   (defun python-add-pubreakpoint ()
+    "Add a pudb breakpoint at current line."
     (interactive)
     (newline-and-indent)
     (insert "import pudb; pu.db")
     (newline-and-indent)
     (highlight-lines-matching-regexp "^[ ]*import pu?db;"))
 
-  (add-hook 'python-mode-hook '(lambda ()
-                                 (electric-indent-local-mode -1)
-                                 ))
+  (defun python-add-ipdb-breakpoint ()
+    "Add an ipdb breakpoint at current line."
+    (interactive)
+    (newline-and-indent)
+    (insert "import ipdb; ipdb.set_trace()")
+    (newline-and-indent)
+    (highlight-lines-matching-regexp "^[ ]*import ipdb;"))
 
-  :mode (("\\.py\\'" . elpy-mode))
+  ;; Enhanced debugging annotations
+  (defun annotate-debuggers ()
+    "Highlight debugger imports in Python files."
+    (interactive)
+    (highlight-lines-matching-regexp "import \\(pdb\\|pu?db\\|ipdb\\)")
+    (highlight-lines-matching-regexp "\\(pdb\\|pu?db\\|ipdb\\)\\.set_trace()"))
+
+  ;; Better code navigation
+  (defun elpy-goto-definition-other-window ()
+    "Go to definition in other window."
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively 'elpy-goto-definition)))
+
+  ;; Enhanced testing integration
+  (defun elpy-test-current-file ()
+    "Run tests for current file."
+    (interactive)
+    (elpy-test-run (elpy-test-at-point)))
+
+  (defun elpy-test-current-module ()
+    "Run tests for current module."
+    (interactive)
+    (elpy-test-run (elpy-test-discover-runner-args)))
+
+  ;; Improved documentation lookup
+  (defun elpy-doc-current-symbol ()
+    "Show documentation for symbol at point."
+    (interactive)
+    (elpy-doc (elpy-symbol-at-point)))
+
+  ;; Smart import management
+  (defun elpy-import-from-module (module symbol)
+    "Import SYMBOL from MODULE."
+    (interactive "sModule: \nsSymbol: ")
+    (save-excursion
+      (goto-char (point-min))
+      (when (re-search-forward (concat "^import \\|^from " module) nil t)
+        (goto-char (point-min)))
+      (insert (format "from %s import %s\n" module symbol))))
+
+  ;; Enhanced code folding
+  (defun elpy-toggle-fold ()
+    "Toggle code folding at point."
+    (interactive)
+    (hs-toggle-hiding))
+
+  ;; Better interactive Python
+  (defun elpy-shell-switch-to-shell ()
+    "Switch to Python shell buffer."
+    (interactive)
+    (pop-to-buffer (elpy-shell-get-or-create-buffer)))
+
+  ;; Configure Python hooks
+  (add-hook 'python-mode-hook
+            (lambda ()
+              ;; Better indentation
+              (setq python-indent-offset 4)
+              (setq tab-width 4)
+
+              ;; Enable modern features
+              (electric-pair-mode -1)  ; Disable for better control
+              (electric-indent-local-mode -1)
+
+              ;; Enable code folding
+              (hs-minor-mode 1)
+
+              ;; Enable flycheck if available
+              (when (featurep 'flycheck)
+                (flycheck-mode 1))
+
+              ;; Auto-annotate debuggers
+              (annotate-debuggers)
+
+              ;; Better comment handling
+              (set (make-local-variable 'comment-inline-offset) 2)))
+
+  ;; Configure yasnippet for Python
+  (with-eval-after-load 'yasnippet
+    (define-key yas-minor-mode-map (kbd "<tab>") nil)
+    (define-key yas-minor-mode-map (kbd "TAB") nil)
+    (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand))
+
+  ;; Virtual environment setup
+  (defalias 'workon 'pyenv-workon)
+  (when (executable-find "pyenv")
+    (pyvenv-workon "elpy"))
+
+  :mode (("\\.py\\'" . python-mode))
   :bind (:map elpy-mode-map
               ("M-RET f c" . elpy-format-code)
+              ("M-RET f f" . elpy-format-code)
               ("M-RET e n" . next-error)
               ("M-RET e p" . previous-error)
               ("M-RET b d" . python-add-breakpoint)
               ("M-RET b u" . python-add-pubreakpoint)
-              )
-  ;; pip install -U yapf==0.40.1
+              ("M-RET b i" . python-add-ipdb-breakpoint)
+              ("M-RET g d" . elpy-goto-definition)
+              ("M-RET g D" . elpy-goto-definition-other-window)
+              ("M-RET t f" . elpy-test-current-file)
+              ("M-RET t m" . elpy-test-current-module)
+              ("M-RET d s" . elpy-doc-current-symbol)
+              ("M-RET s s" . elpy-shell-switch-to-shell)
+              ("M-RET f o" . elpy-toggle-fold)
+              ("C-c C-d" . elpy-doc)
+              ("C-c C-z" . elpy-shell-switch-to-shell))
   )
 
+;; Enhanced Python code formatting
 (use-package py-autopep8
   :defer t
   :config
+  (setq py-autopep8-options '("--max-line-length=100"
+                              "--aggressive"
+                              "--aggressive"))
   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
   )
 
+;; Additional Python formatting with Black
+(use-package python-black
+  :defer t
+  :if (executable-find "black")
+  :config
+  (setq python-black-extra-args '("--line-length=100"
+                                  "--skip-string-normalization"))
+  (add-hook 'elpy-mode-hook 'python-black-on-save-mode)
+  :bind (:map elpy-mode-map
+              ("M-RET f b" . python-black-buffer))
+  )
+
+;; Enhanced Python testing with multiple test frameworks
 (use-package nose
   :defer t
   :after elpy
@@ -699,22 +795,70 @@
   :config
   (progn
     (add-to-list 'nose-project-root-files "setup.cfg")
-    (setq nose-use-verbose nil))
+    (add-to-list 'nose-project-root-files "pyproject.toml")
+    (add-to-list 'nose-project-root-files "tox.ini")
+    (setq nose-use-verbose t)  ; Show more details
+    (setq nose-verbose t))
   :bind
   (:map elpy-mode-map
         ("M-RET t a" . nosetests-all)
+        ("M-RET t n" . nosetests-one)
+        ("M-RET t m" . nosetests-module)
+        ("M-RET t s" . nosetests-suite)
         ("<XF86Calculator>" . nosetests-all)
         )
   )
 
+;; Pytest integration for modern Python testing
+(use-package python-pytest
+  :defer t
+  :after elpy
+  :if (executable-find "pytest")
+  :config
+  (setq python-pytest-arguments '("--verbose" "--tb=short"))
+  :bind (:map elpy-mode-map
+              ("M-RET t p" . python-pytest-dispatch)
+              ("M-RET t f" . python-pytest-file-dwim)
+              ("M-RET t t" . python-pytest-function-dwim))
+  )
+
+;; Enhanced Python virtual environment management
 (use-package pyenv-mode
   :if (executable-find "pyenv")
   :defer t
-  ;:after elpy
+  :after elpy
   :config
-  ;(add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
   (add-hook 'elpy-mode-hook (lambda () (pyenv-mode 1)))
   (require 'pyenv-mode-auto)
+
+  ;; Better virtual environment detection
+  (setq pyenv-mode-set-version-on-activate t)
+  (setq pyenv-mode-version-alist '((python-mode . "~/.pyenv/version")))
+
+  ;; Auto-activate virtual environments
+  (defun pyenv-auto-activate ()
+    "Auto-activate pyenv virtual environment based on .python-version file."
+    (when (and (executable-find "pyenv")
+               (file-exists-p (expand-file-name ".python-version" (projectile-project-root))))
+      (pyenv-mode-set (string-trim (with-temp-buffer
+                                     (insert-file-contents ".python-version")
+                                     (buffer-string))))))
+
+  (add-hook 'projectile-after-switch-project-hook 'pyenv-auto-activate)
+  )
+
+;; Poetry integration for modern Python dependency management
+(use-package poetry
+  :defer t
+  :if (executable-find "poetry")
+  :after elpy
+  :config
+  (add-hook 'python-mode-hook 'poetry-tracking-mode)
+  :bind (:map elpy-mode-map
+              ("M-RET p i" . poetry-install)
+              ("M-RET p a" . poetry-add)
+              ("M-RET p r" . poetry-remove)
+              ("M-RET p s" . poetry-shell))
   )
 
 ;; (use-package pyenv-mode-auto
