@@ -2318,6 +2318,10 @@
   (unless (getenv "DEEPSEEK_API_KEY")
     (setup-deepseek-api-key))
 
+  ;; Increase context size for longer sessions
+  (setq gptel-max-tokens 8192)  ; Double the default context size
+  (setq gptel-track-context t)  ; Track conversation context
+
   (let ((api-key (getenv "DEEPSEEK_API_KEY")))
     (when api-key
       (gptel-make-deepseek "DeepSeek"
@@ -2341,9 +2345,13 @@
   ("M-RET a a" . gptel-aibo-send)
   ("M-RET a s" . gptel-aibo-apply-last-suggestions)
   :config
+  ;; Inherit context settings from gptel
   (defalias 'aibo 'gptel-aibo)
   (defalias 'aibo-send 'gptel-aibo-send)
   (defalias 'aibo-apply-last-suggestions 'gptel-aibo-apply-last-suggestions)
+
+  ;; Additional aibo-specific context settings
+  (setq gptel-aibo-max-context-lines 50)  ; Keep more context lines
   )
 
 
