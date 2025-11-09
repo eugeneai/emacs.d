@@ -156,8 +156,9 @@
 ;; which also installs diminish.
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
-(unless (package-installed-p 'dininish)
+(unless (package-installed-p 'diminish)
   (package-install 'diminish))
+
 (setq use-package-verbose t)
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -2337,8 +2338,14 @@
   :ensure t
   :bind
   ("M-RET M-RET" . gptel-aibo-send)
-  ("M-RET a s" . gptel-aibo-send)
-  ("M-RET a s" . gptel-aibo-apply-last-suggestions))
+  ("M-RET a a" . gptel-aibo-send)
+  ("M-RET a s" . gptel-aibo-apply-last-suggestions)
+  :config
+  (defalias 'aibo 'gptel-aibo)
+  (defalias 'aibo-send 'gptel-aibo-send)
+  (defalias 'aibo-apply-last-suggestions 'gptel-aibo-apply-last-suggestions)
+  )
+
 
 (disable-proxy-after-packages)
 
