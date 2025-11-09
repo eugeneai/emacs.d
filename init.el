@@ -621,9 +621,30 @@
   (setq elpy-rpc-virtualenv-path 'current)
   (setq elpy-rpc-virtualenv-path-separator path-separator)
 
-  ;; Improved code formatting
+  ;; Improved code formatting with version check
   (setq elpy-formatter 'yapf)
   (setq elpy-formatter-options '("--style=google"))
+
+  ;; Ensure yapf version 0.40.1 is installed
+  (defun ensure-yapf-version ()
+    "Check if yapf version 0.40.1 is installed, install if not."
+    (interactive)
+    (let ((yapf-version (shell-command-to-string "python -m yapf --version 2>/dev/null | head -1 | awk '{print $2}'")))
+      (setq yapf-version (string-trim yapf-version))
+      (if (string-empty-p yapf-version)
+          (progn
+            (message "yapf not found. Installing yapf==0.40.1...")
+            (shell-command "pip install -U yapf==0.40.1"))
+        (unless (string= yapf-version "0.40.1")
+          (message "yapf version %s found. Installing yapf==0.40.1..." yapf-version)
+          (shell-command "pip install -U yapf==0.40.1")))))
+
+  ;; Check yapf version on Python mode activation
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (when (and (executable-find "python")
+                         (not (getenv "VIRTUAL_ENV")))  ; Only check in global environment
+                (ensure-yapf-version))))
 
   ;; Enhanced debugging support
   (defun python-add-breakpoint ()
@@ -738,10 +759,26 @@
   (when (executable-find "pyenv")
     (pyvenv-workon "elpy"))
 
+  ;; Install yapf in virtual environment when activated
+  (defun install-yapf-in-venv ()
+    "Install yapf==0.40.1 in the current virtual environment."
+    (interactive)
+    (when (and (executable-find "python")
+               (getenv "VIRTUAL_ENV"))
+      (let ((default-directory (getenv "VIRTUAL_ENV")))
+        (shell-command "pip install -U yapf==0.40.1")
+        (message "yapf==0.40.1 installed in virtual environment"))))
+
+  ;; Auto-install yapf when switching virtual environments
+  (advice-add 'pyvenv-workon :after
+              (lambda (&rest _)
+                (run-at-time "2 sec" nil 'install-yapf-in-venv)))
+
   :mode (("\\.py\\'" . python-mode))
   :bind (:map elpy-mode-map
               ("M-RET f c" . elpy-format-code)
               ("M-RET f f" . elpy-format-code)
+              ("M-RET f y" . ensure-yapf-version)  ; Manual yapf version check
               ("M-RET e n" . next-error)
               ("M-RET e p" . previous-error)
               ("M-RET b d" . python-add-breakpoint)
