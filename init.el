@@ -925,6 +925,10 @@
               (setq indent-tabs-mode nil)
               (electric-indent-local-mode -1)
               (prettier-mode)
+              ;; Automatically enable js2-jsx-mode for JSX files
+              (when (and (string-match "\\.jsx?\\'" (buffer-file-name))
+                         (fboundp 'js2-jsx-mode))
+                (js2-jsx-mode 1))
               ))
   )
 
