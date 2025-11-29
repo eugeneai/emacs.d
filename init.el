@@ -891,7 +891,7 @@
 (global-set-key (kbd "C-c m") 'normal-font-mode)
 
 ;; ============================================================================
-;; Final Initialization
+;; GPTel Configuration
 ;; ============================================================================
 
 ;;; DeepSeek API Key Configuration
