@@ -77,7 +77,7 @@
 ;; Настроить приоритет репозиториев
 (setq package-archive-priorities
       '(("gnu" . 10)
-        ("melpa-stable" . 5)
+        ("melpa-stable" . 50)
         ("melpa" . 0)))
 
 (package-initialize)
