@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;;; Configuration --- Summary
 ;;; Commentary:
 ;; Modern Emacs configuration for 2024-2025
@@ -657,14 +658,31 @@
   (interactive)
   (if (and (buffer-file-name)
            (locate-dominating-file (buffer-file-name) ".git"))
-      (let ((default-directory (locate-dominating-file (buffer-file-name) ".git")))
-        (shell-command
-         (format "git difftool --no-prompt HEAD -- %s &"
-                 (file-relative-name (buffer-file-name) default-directory)))
+      (let ((default-directory (locate-dominating-file (buffer-file-name) ".git"))
+            (relative-path (file-relative-name (buffer-file-name) default-directory)))
+        (async-shell-command
+         (format "git difftool --no-prompt HEAD -- %s " relative-path)
+         nil ; не создавать буфер
+         nil) ; не отображать буфер
         (message "📊 Opening difftool for current file..."))
     (message "❌ Not in a git repository")))
 
+(defun external-difftool-current-file-prevversion ()
+  "Open current file in external diff tool against previous version (HEAD~1)."
+  (interactive)
+  (if (and (buffer-file-name)
+           (locate-dominating-file (buffer-file-name) ".git"))
+      (let ((default-directory (locate-dominating-file (buffer-file-name) ".git"))
+            (relative-path (file-relative-name (buffer-file-name) default-directory)))
+        (async-shell-command
+         (format "git difftool --no-prompt HEAD~1 HEAD -- %s " relative-path)
+         nil ; не создавать буфер
+         nil) ; не отображать буфер
+        (message "📊 Opening difftool against previous version (HEAD~1)..."))
+    (message "❌ Not in a git repository")))
+
 (global-set-key (kbd "M-RET g d") 'external-difftool-current-file)
+(global-set-key (kbd "M-RET g p") 'external-difftool-current-file-prevversion)
 
 ;; ;; Явно загрузить makefile-mode
 ;; (require 'makefile-mode)
@@ -995,6 +1013,10 @@
   (setq gptel-aibo-max-context-lines 50)  ; Keep more context lines
   )
 
+;;(use-package agent-shell
+;;  :ensure t
+;;  :config
+;;  (add-to-list 'exec-path "~/.opencode/bin/"))
 
 ;; ============================================================================
 ;; Final Initialization
