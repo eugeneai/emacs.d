@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -18,16 +19,8 @@
  '(bookmark-default-file "/home/eugeneai/.emacs.d/bookmarks.bmk")
  '(column-number-mode t)
  '(company-backends
-   '(company-jedi
-     (company-auctex-macros company-auctex-symbols
-                            company-auctex-environments)
-     company-auctex-bibs company-auctex-labels company-bbdb
-     company-eclim company-semantic company-clang company-xcode
-     company-cmake company-capf company-files
-     (company-dabbrev-code company-gtags company-etags
-                           company-keywords)
-     company-oddmuse company-dabbrev))
- '(company-eclim-executable "/usr/lib/eclipse/eclim")
+   '((company-capf company-dabbrev-code company-keywords) company-files
+     company-dabbrev))
  '(custom-safe-themes
    '("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088"
      "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476"
@@ -106,15 +99,16 @@
  '(minibuffer-frame-alist '((width . 80) (height . 1)))
  '(mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . 0.5)))
  '(package-selected-packages
-   '(auctex better-defaults company deadgrep default-text-scale diminish
-            doom-modeline drag-stuff embark-consult expand-region
-            flycheck gptel gptel-aibo haskell-mode helm js2-mode magit
-            marginalia markdown-mode multiple-cursors orderless
-            page-break-lines pdf-tools projectile python-black
-            python-mode rainbow-delimiters reverse-im rg switch-window
-            ttl-mode typescript-mode vertico web-mode
-            whole-line-or-region xkbswitch yaml-mode
-            yasnippet-snippets))
+   '(agent-shell auctex better-defaults company deadgrep
+                 default-text-scale diminish doom-modeline drag-stuff
+                 embark-consult expand-region flycheck gptel
+                 gptel-aibo haskell-mode helm js2-mode magit
+                 marginalia markdown-mode multiple-cursors orderless
+                 page-break-lines pdf-tools projectile python-black
+                 python-mode rainbow-delimiters reverse-im rg
+                 switch-window ttl-mode typescript-mode vertico
+                 web-mode whole-line-or-region xkbswitch yaml-mode
+                 yasnippet-snippets))
  '(prolog-program-name
    '(((getenv "EPROLOG") (eval (getenv "EPROLOG"))) (eclipse "eclipse")
      (mercury nil) (sicstus "sicstus") (swi "swipl") (gnu "gprolog")

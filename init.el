@@ -410,6 +410,19 @@
 ;; Theme - using your existing theme
 (load-theme 'eugeneai-theme t)
 
+;; Разделение GUI и терминала: в tty шрифты/размеры не работают, поэтому
+;; все графические настройки — только под графическим фреймом.
+(defun my/graphical-ui ()
+  "Украшения, имеющие смысл только в графическом фрейме."
+  (when (display-graphic-p)
+    (set-face-attribute 'default nil :family "Source Code Pro" :height 193)))
+
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (with-selected-frame frame (my/graphical-ui))))
+  (my/graphical-ui))
+
 ;; Modeline
 (use-package doom-modeline
   :ensure t
@@ -499,15 +512,18 @@
 ;; Environment Setup
 ;; ============================================================================
 
-;; PATH configuration
-(setenv "PATH"
-        (concat
-         "/home/eugeneai/.local/bin" path-separator
-         "/home/eugeneai/.cabal/bin" path-separator
-         "/home/eugeneai/.ghcup/bin" path-separator
-         "/home/eugeneai/.nix-profile/bin" path-separator
-         "/nix/var/nix/profiles/default/bin" path-separator
-         (getenv "PATH")))
+;; PATH configuration: /nix пути были бы битые, если nix не установлен,
+;; поэтому добавляем только реально существующие каталоги.
+(defun my/add-to-exec-path (dir)
+  "Добавить DIR в exec-path и PATH, если каталог существует."
+  (when (file-directory-p dir)
+    (add-to-list 'exec-path dir)
+    (setenv "PATH" (concat dir path-separator (getenv "PATH")))))
+
+(dolist (dir '("~/.local/bin" "~/.cabal/bin" "~/.ghcup/bin"
+               "~/.opencode/bin" "~/.nix-profile/bin"
+               "/nix/var/nix/profiles/default/bin"))
+  (my/add-to-exec-path dir))
 
 ;; Backup configuration
 (defvar --backup-directory (concat user-emacs-directory "backups"))
@@ -605,12 +621,18 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
+;; C-a — в начале строки уходит на отступ; внутри minibuffer это ломает
+;; навигацию по вводу, поэтому для minibuffer-local-map оставлен стандарт.
 (defun beginning-of-line-or-indentation ()
   "Move to beginning of line, or indentation."
   (interactive)
   (if (bolp)
       (back-to-indentation)
     (beginning-of-line)))
+
+(global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
+(keymap-set minibuffer-local-map "C-a" 'beginning-of-line)
+(keymap-set minibuffer-local-completion-map "C-a" 'beginning-of-line)
 
 (defun unfill-paragraph ()
   "Take a multi-line paragraph and make it into a single line of text."
@@ -763,23 +785,35 @@
 ;; Custom Newline Bindings
 ;; ============================================================================
 
-;; C-o behaves like C-j (newline with indent)
-(global-set-key (kbd "C-o") 'newline-and-indent)
-
-;; M-o inserts newline above current line
-(defun open-line-above ()
-  "Insert a new line above the current line and indent it."
+;; C-o — открыть строку под текущей, M-o — над текущей (обе с отступом,
+;; на «правильном» начале строки). Перед открытием курсор уезжает на отступ,
+;; как в electric-indent-контексте, поэтому новая строка встаёт правильно.
+(defun open-line-below ()
+  "Открыть новую строку под текущей, с отступом."
   (interactive)
-  (unless (bolp)
-    (beginning-of-line))
-  (newline)
-  (forward-line -1)
-  (indent-according-to-mode))
+  (back-to-indentation)
+  (open-line 1)
+  (forward-line 1)
+  (indent-according-to-mode)
+  (back-to-indentation))
 
-(global-set-key (kbd "M-o") 'open-line-above)
+(defun open-line-above ()
+  "Открыть новую строку над текущей, с отступом."
+  (interactive)
+  (back-to-indentation)
+  (open-line 1)
+  (indent-according-to-mode)
+  (back-to-indentation))
 
-;; Optional: Also bind to standard Emacs keys for consistency
-(global-set-key (kbd "C-j") 'newline-and-indent)  ; Ensure C-j does the same
+(keymap-global-set "C-o" 'open-line-below)
+(keymap-global-set "M-o" 'open-line-above)
+
+;; C-o в minibuffer — стандартный open-line: там строки без отступов,
+;; а в поле ввода open-line должен работать для «дырок» в тексте.
+(keymap-set minibuffer-local-map "C-o" 'open-line)
+(keymap-set minibuffer-local-completion-map "C-o" 'open-line)
+
+;; C-j оставлен стандартным (newline-and-indent с учётом electric-indent).
 
 ;; ============================================================================
 ;; Russian Layout Fix
@@ -872,7 +906,6 @@
 ;; ============================================================================
 
 ;; Navigation
-(global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
 (global-set-key (kbd "C-|") 'beginning-of-buffer)
 (global-set-key (kbd "C-}") 'end-of-buffer)
 
@@ -882,6 +915,8 @@
 
 ;; Utility
 (global-set-key (kbd "C-x e") 'erase-buffer)
+;; C-z как undo: отбирает фоновый режим, но ближе к привычному по Ctrl-Z.
+;; Обратимо: (global-unset-key (kbd "C-z")) вернёт стандарт.
 (global-set-key (kbd "C-z") 'undo)
 
 (global-set-key (kbd "C-x C-\\") 'consult-mark)
@@ -890,7 +925,17 @@
 (global-set-key (kbd "C-c +") 'text-scale-increase)
 (global-set-key (kbd "C-c -") 'text-scale-decrease)
 (global-set-key (kbd "C-c 0") 'text-scale-adjust)
-(global-set-key (kbd "M-i") 'helm-occur)
+;; M-i — список совпадений текущего поиска/символа (раньше был helm-occur,
+;; но helm не подключён в конфиге; consult уже используется для поиска).
+(defun my/occur-at-point ()
+  "Показать совпадения по символу под курсором (или спросить)."
+  (interactive)
+  (if (and (derived-mode-p 'prog-mode 'text-mode)
+           (thing-at-point 'symbol))
+      (consult-line (thing-at-point 'symbol t))
+    (consult-line)))
+
+(global-set-key (kbd "M-i") 'my/occur-at-point)
 
 ;; Предустановленные режимы
 (defun big-font-mode ()
@@ -907,7 +952,6 @@
 
 (global-set-key (kbd "C-c b") 'big-font-mode)
 (global-set-key (kbd "C-c m") 'normal-font-mode)
-
 ;; ============================================================================
 ;; GPTel Configuration
 ;; ============================================================================
@@ -1017,6 +1061,71 @@
 ;;  :ensure t
 ;;  :config
 ;;  (add-to-list 'exec-path "~/.opencode/bin/"))
+
+;; ============================================================================
+;; Org-mode (тексты, статьи, заметки)
+;; ============================================================================
+
+(use-package org
+  :ensure nil
+  :mode (("\\.org\\'" . org-mode))
+  :bind (:map org-mode-map
+              ("C-c l" . org-store-link)
+              ("C-c a" . org-agenda)
+              ("C-c c" . org-capture))
+  :hook ((org-mode . visual-line-mode)
+         (org-mode . (lambda () (setq-local line-spacing 0.15))))
+  :config
+  (setq org-directory "~/org"
+        org-default-notes-file (expand-file-name "notes.org" org-directory)
+        org-startup-folded 'showeverything
+        org-startup-indented t
+        org-adapt-indentation nil
+        org-hide-leading-stars t
+        org-return-follows-link t
+        org-use-speed-commands t
+        org-ellipsis " ▾"
+        org-todo-keywords '((sequence "TODO" "NEXT" "WAIT" "|" "DONE" "CANCEL"))
+        org-log-done 'time
+        org-confirm-babel-evaluate 'y-or-n-p
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-fontify-quote-and-verse-blocks t
+        org-clock-persist t
+        org-agenda-files (and (file-directory-p "~/org")
+                              (directory-files "~/org" t "\\.org\\'"))
+        org-capture-templates
+        '(("t" "Задача" entry (file org-default-notes-file)
+           "* TODO %?\n  %U\n")))
+  (org-clock-persistence-insinuate))
+
+;; Выделенный для org каталог должен существовать — создаём один раз.
+(unless (file-directory-p "~/org")
+  (make-directory "~/org" t))
+
+;; ============================================================================
+;; Недавние файлы / точки в файлах
+;; ============================================================================
+
+(use-package save-place
+  :ensure nil
+  :demand t
+  :init (save-place-mode 1))
+
+;; ============================================================================
+;; Undo: история на диск и группировка правок
+;; ============================================================================
+
+(use-package undo-fu
+  :bind (("C-_" . undo-fu-only-undo)
+         ("C-z" . undo-fu-only-undo)
+         ("M-_" . undo-fu-only-redo)))
+
+(use-package undo-fu-session
+  :init (undo-fu-session-global-mode 1)
+  :config
+  (setq undo-fu-session-directory (expand-file-name "undo-fu" user-emacs-directory)
+        undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
 
 ;; ============================================================================
 ;; Final Initialization
