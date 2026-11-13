@@ -474,13 +474,15 @@
   :ensure nil
   :config
   (setq bookmark-default-file "~/.emacs.d/private/bookmarks.txt"
+        ;; 1 = сохранять закладки в файл после каждого изменения
         bookmark-save-flag 1
         bookmark-version-control t
         bookmark-sort-flag t
         bookmark-use-annotations t)
 
-  ;; Auto-save functionality
-  (add-hook 'kill-emacs-hook 'bookmark-save)
+  ;; Технически это делает сам bookmark-save-flag, но явный хук не мешает —
+  ;; и покрывает случаи, когда флаг сбросили (например, в minibuffer).
+  (add-hook 'kill-emacs-hook #'bookmark-save)
 
   ;; Smart bookmark naming
   (defun my/smart-bookmark-set ()
@@ -506,7 +508,38 @@
 
 ;; Optional: Consult integration for even better UX
 (with-eval-after-load 'consult
-  (global-set-key (kbd "C-<f1>") 'consult-bookmark))
+  (keymap-global-set "C-<f1>" 'consult-bookmark))
+
+;; ============================================================================
+;; Аббревиатуры и автоматическое сохранение
+;; ============================================================================
+
+;; Аббревиатуры: global-abbrev-table — общие; сохраняются в private/abbrev_defs.
+(setq abbrev-file-name "~/.emacs.d/private/abbrev_defs"
+      save-abbrevs 'silently
+      abbrev-all-caps nil)
+
+(require 'abbrev)
+(add-hook 'text-mode-hook #'abbrev-mode)
+
+;; На старте молча загружаем, если файл есть; abbrevs-changed сбрасывается,
+;; чтобы не перезаписывать файл без нужды.
+(when (file-exists-p abbrev-file-name)
+  (quietly-read-abbrev-file abbrev-file-name)
+  (setq abbrevs-changed nil))
+
+;; При выходе — сохранять, если что-то менялось.
+(defun my/save-abbrevs-on-exit ()
+  "Сохранить аббревиатуры, если они менялись в этой сессии."
+  (when (and abbrevs-changed (fboundp 'write-abbrev-file))
+    (write-abbrev-file abbrev-file-name)
+    (setq abbrevs-changed nil)))
+
+(add-hook 'kill-emacs-hook #'my/save-abbrevs-on-exit)
+
+;; Современная «почти та же» функция для текстов — подсказки из словаря
+;; и yasnippet'ов уже работают через company; abbrev остаётся для ручных
+;; сокращений вроде «пм → по-моему».
 
 ;; ============================================================================
 ;; Environment Setup
@@ -543,8 +576,10 @@
   :init
   (savehist-mode)
   :config
+  ;; savehist сохраняет bookmark-alist (сам bookmark-save снят: файл закладок
+  ;; должен оставаться в своём формате, а не в форме Lisp-переменной).
   (setq savehist-additional-variables
-        '(search-ring regexp-search-ring)
+        '(search-ring regexp-search-ring bookmark-alist)
         savehist-autosave-interval 60
         savehist-file "~/.emacs.d/private/savehist.txt"))
 
