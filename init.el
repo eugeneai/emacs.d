@@ -785,25 +785,22 @@
 ;; Custom Newline Bindings
 ;; ============================================================================
 
-;; C-o — открыть строку под текущей, M-o — над текущей (обе с отступом,
-;; на «правильном» начале строки). Перед открытием курсор уезжает на отступ,
-;; как в electric-indent-контексте, поэтому новая строка встаёт правильно.
+;; C-o — перейти в конец строки и нажать Enter (newline-and-indent),
+;; M-o — перейти в начало строки и нажать Enter; строка открывается над текущей.
+;; Отступ новой строки даёт electric-indent-mode / indent-according-to-mode.
 (defun open-line-below ()
-  "Открыть новую строку под текущей, с отступом."
+  "Новая строка под текущей: в конец строки + RET с отступом."
   (interactive)
-  (back-to-indentation)
-  (open-line 1)
-  (forward-line 1)
-  (indent-according-to-mode)
-  (back-to-indentation))
+  (end-of-visual-line)
+  (newline-and-indent))
 
 (defun open-line-above ()
-  "Открыть новую строку над текущей, с отступом."
+  "Новая строка над текущей: в начало строки + RET с отступом."
   (interactive)
   (back-to-indentation)
-  (open-line 1)
-  (indent-according-to-mode)
-  (back-to-indentation))
+  (newline)
+  (forward-line -1)
+  (indent-according-to-mode))
 
 (keymap-global-set "C-o" 'open-line-below)
 (keymap-global-set "M-o" 'open-line-above)
@@ -1107,10 +1104,8 @@
 ;; Недавние файлы / точки в файлах
 ;; ============================================================================
 
-(use-package save-place
-  :ensure nil
-  :demand t
-  :init (save-place-mode 1))
+(require 'saveplace)
+(save-place-mode 1)
 
 ;; ============================================================================
 ;; Undo: история на диск и группировка правок
