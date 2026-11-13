@@ -56,32 +56,34 @@
    ((vectorp key) (key-description key))
    (t (format "%s" key))))
 
-(defun my-keys/scan-bind (spec)
-  "Разобрать :bind SPEC — список пар или плейлист с :map."
+(defun my-keys/scan-bind-item (item &optional in-map)
+  "Разобрать один элемент :bind ITEM (пара или список)."
   (cond
-   ((null spec) nil)
-   ((eq (car spec) :map)
-    (my-keys/scan-bind (cddr spec)))
-   ;; Плотная пара ("клавиша" . команда): (cdr spec) — символ.
-   ((and (consp spec) (stringp (car spec)))
-    (my-keys/mark (car spec)))
-   ((consp (car spec))
-    (my-keys/mark-if-literal (car (car spec)))
-    (my-keys/scan-bind (cdr spec)))
-   (t nil)))
+   ;; (:map KMAP ("key" . cmd) ...) — раскрываем вложенный плейлист.
+   ((and (eq (car-safe item) :map) (not in-map))
+    (mapc (lambda (x) (my-keys/scan-bind-item x t)) (cddr item)))
+   ;; ("key" . cmd) и ("key" cmd) — плотная или обычная пара.
+   ((and (consp item) (stringp (car item)))
+    (my-keys/mark (car item)))
+   ;; Список пар.
+   ((consp item)
+    (mapc #'my-keys/scan-bind-item item))))
+
+(defun my-keys/scan-bind (spec)
+  "Разобрать значение :bind (список элементов)."
+  (my-keys/scan-bind-item spec))
 
 (defun my-keys/scan-plist (args)
-  "Разобрать аргументы use-package: :bind, :bind-keymap."
+  "Разобрать аргументы use-package: :bind и :bind-keymap."
   (let ((rest args))
-    (while (and rest (consp rest))
+    (while (consp rest)
       (cond
-       ;; Плотная пара ("C-x o" . command) — остаток плейлиста :bind.
-       ((and (stringp (car rest)) (not (keywordp (car rest))))
-        (my-keys/mark (car rest))
-        (setq rest nil))
        ((eq (car rest) :bind)
-        (my-keys/scan-bind (cdr rest))
-        (setq rest nil))
+        (my-keys/scan-bind (cadr rest))
+        (setq rest (cdr (cdr rest))))
+       ((eq (car rest) :bind-keymap)
+        (my-keys/scan-bind (cadr rest))
+        (setq rest (cdr (cdr rest))))
        (t (setq rest (cdr rest)))))))
 
 (defun my-keys/scan-forms (forms)
