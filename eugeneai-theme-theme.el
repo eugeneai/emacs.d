@@ -44,10 +44,12 @@
                         (t (:background "SteelBlue4" :foreground "white"))))
  '(highlight ((((type tty)) (:background "yellow" :foreground "red"))
               (t (:background "yellow" :foreground "black"))))
+ ;; foreground обязателен: без него hl-line/isearch наследуют :foreground от
+ ;; highlight/hl-line-родственных лиц и текст сливается с фоном.
  '(hl-line ((((type tty)) (:background "gray95" :foreground "black"))
-            (t (:inherit highlight :background "black"))))
+            (t (:background "black" :foreground "LightCyan3"))))
  '(lazy-highlight ((((type tty)) (:background "yellow" :foreground "red"))
-                   (t (:inherit highlight))))
+                   (t (:background "yellow" :foreground "black"))))
  '(isearch ((((type tty)) (:background "yellow" :foreground "red"))
             (t (:background "orange3" :foreground "black"))))
  '(match ((((type tty)) (:background "yellow" :foreground "red"))
