@@ -1158,8 +1158,23 @@
         undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
 
 ;; ============================================================================
-;; Final Initialization
+;; Справочник клавиш (генерируется из этого файла)
 ;; ============================================================================
+;;
+;; my-keybindings.el умеет собрать ~/.emacs.d/keybindings.md по биндингам,
+;; заданным в init.el. Команда: M-x my-keys/generate.
+;; Автоматически после загрузки — только если файл ещё не создан
+;; (или был изменён init.el). Чтобы не тормозить старт, генерируем отложенно.
+
+(use-package my-keybindings
+  :ensure nil
+  :load-path "~/.emacs.d"
+  :defer 2
+  :config
+  (when (or (not (file-exists-p my-keys/output))
+            (file-newer-than-file-p my-keys/managed my-keys/output))
+    (ignore-errors (my-keys/generate))))
+
 
 ;; Enable global auto-revert mode
 (global-auto-revert-mode t)
